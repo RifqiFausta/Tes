@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LKPD Digital: Regresi Linear Sederhana</title>
+  
+  <!-- Load Script Resmi API GeoGebra -->
+  <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+
+  <style>
+    :root {
+      --primary-color: #1e3a8a;
+      --secondary-color: #3b82f6;
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-color: #1e293b;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: var(--primary-color);
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      margin: 0 0 8px 0;
+      font-size: 1.6rem;
+    }
+
+    header p {
+      margin: 0;
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: var(--primary-color);
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 8px;
+    }
+
+    /* Container Respon GeoGebra */
+    #ggb-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #ffffff;
+      border-radius: 8px;
+      padding: 10px;
+      overflow-x: auto;
+    }
+
+    .instruction-list {
+      padding-left: 20px;
+    }
+
+    .instruction-list li {
+      margin-bottom: 8px;
+    }
+
+    .question-box {
+      background-color: #eff6ff;
+      border-left: 4px solid var(--secondary-color);
+      padding: 12px 16px;
+      margin-top: 12px;
+      border-radius: 0 8px 8px 0;
+    }
+
+    textarea {
+      width: 100%;
+      height: 60px;
+      margin-top: 8px;
+      padding: 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- Header LKPD -->
+  <header>
+    <h1>LEMBAR KERJA PESERTA DIDIK (LKPD) DIGITAL</h1>
+    <p><strong>Mata Pelajaran:</strong> Matematika SMA (Fase F) | <strong>Topik:</strong> Statistika Bivariat (Regresi Linear Sederhana)</p>
+  </header>
+
+  <!-- Kartu Panduan Aktivitas -->
+  <div class="card">
+    <h3>📌 Orientasi Masalah & Petunjuk Aktivitas (Durasi: 45 Menit)</h3>
+    <p><strong>Studi Kasus:</strong> Apakah durasi penggunaan ponsel cerdas (<em>Screen Time</em>) di malam hari memengaruhi kualitas tidur seseorang?</p>
+    <ol class="instruction-list">
+      <li>Amati sebaran data bivariat antara <strong>Screen Time (Jam)</strong> dan <strong>Kualitas Tidur (Skala 0–100)</strong> pada GeoGebra Applet di bawah ini.</li>
+      <li>Gunakan fitur/tombol interaktif di dalam GeoGebra untuk menampilkan <strong>Diagram Pencar</strong> dan <strong>Garis Regresi Presisi</strong>.</li>
+      <li>Catat persamaan garis regresi $y = ax + b$ yang muncul, lalu diskusikan pertanyaan di bagian bawah bersama kelompokmu!</li>
+    </ol>
+  </div>
+
+  <!-- Kartu GeoGebra Applet -->
+  <div class="card">
+    <h3>📊 Eksplorasi Interaktif GeoGebra</h3>
+    <div id="ggb-wrapper">
+      <div id="ggb-element"></div>
+    </div>
+  </div>
+
+  <!-- Kartu Pertanyaan Diskusi -->
+  <div class="card">
+    <h3>✍️ Diskusi Konseptual</h3>
+    
+    <div class="question-box">
+      <label><strong>Pertanyaan 1: Persamaan Regresi</strong><br>
+      Tuliskan persamaan garis regresi $y = ax + b$ yang kamu peroleh dari applet GeoGebra!</label>
+      <textarea placeholder="Contoh: y = -6.45x + 88.20"></textarea>
+    </div>
+
+    <div class="question-box">
+      <label><strong>Pertanyaan 2: Interpretasi Slope (Kemiringan Garis)</strong><br>
+      Nilai $b$ (slope) yang diperoleh bernilai negatif. Apa artinya nilai tersebut jika waktu penggunaan HP seseorang bertambah 1 jam?</label>
+      <textarea placeholder="Jelaskan hubungan antara penambahan 1 jam screen time terhadap nilai kualitas tidur..."></textarea>
+    </div>
+
+    <div class="question-box">
+      <label><strong>Pertanyaan 3: Interpretasi Intercept (Titik Potong)</strong><br>
+      Apa arti nilai $a$ (intercept) dalam kasus nyata ini jika seorang siswa sama sekali tidak menggunakan HP ($x = 0$ jam)?</label>
+      <textarea placeholder="Jelaskan prediksi kualitas tidur jika screen time bernilai 0 jam..."></textarea>
+    </div>
+  </div>
+
+  <footer>
+    <p>© Media Pembelajaran Matematika SMA Fase F - GitHub Pages & GeoGebra Integration</p>
+  </footer>
+
+</div>
+
+<!-- Script Inisialisasi GeoGebra -->
+<script>
+  // Konfigurasi Embed GeoGebra
+  var params = {
+    "appName": "classic",
+    "width": 850,
+    "height": 480,
+    "showToolBar": false,
+    "showAlgebraInput": false,
+    "showMenuBar": false,
+    // Kamu bisa mengganti material_id ini dengan ID Material GeoGebra milikmu sendiri
+    // Atau memakai applet default di bawah yang akan memuat tampilan Spreadsheet & Graphics
+    "material_id": "R4s2P7M3", 
+    "borderColor": "#ffffff",
+    "customToolbar": "0"
+  };
+
+  var applet = new GGBApplet(params, true);
+  
+  window.addEventListener("load", function() { 
+    applet.inject('ggb-element'); 
+  });
+</script>
+
+</body>
+</html>
