@@ -189,9 +189,9 @@
                 <th>x</th>
                 <th>y</th>
                 <th>(x - x̄)</th>
-                <th>(y - ȳ)</th>
+                <th>(y - ȳ)</th>
                 <th>(x - x̄)²</th>
-                <th>(x - x̄)(y - ȳ)</th>
+                <th>(x - x̄)(y - ȳ)</th>
               </tr>
             </thead>
             <tbody>
@@ -238,8 +238,8 @@
                 <td>350</td>
                 <td><input type="number" step="any" placeholder="Σ"></td>
                 <td><input type="number" step="any" placeholder="Σ"></td>
-                <td><input type="number" id="userSSxx" step="any" placeholder="SSxx"></td>
-                <td><input type="number" id="userSSxy" step="any" placeholder="SSxy"></td>
+                <td><input type="number" id="userSSxx" step="any" placeholder="SSxx" oninput="syncInput('userSSxx', 'inputSSxx')"></td>
+                <td><input type="number" id="userSSxy" step="any" placeholder="SSxy" oninput="syncInput('userSSxy', 'inputSSxy')"></td>
               </tr>
             </tfoot>
           </table>
@@ -248,15 +248,15 @@
         <div class="formula-box">
           <div class="formula-row">
             <span>Rata-rata x (x̄): <strong>4</strong></span>
-            <span>Rata-rata y (ȳ): <strong>70</strong></span>
+            <span>Rata-rata y (ȳ): <strong>70</strong></span>
           </div>
           <div class="formula-row">
             <span>Masukkan nilai SSxx hasil hitunganmu:</span>
-            <input type="number" id="inputSSxx" placeholder="SSxx">
+            <input type="number" id="inputSSxx" placeholder="SSxx" oninput="syncInput('inputSSxx', 'userSSxx')">
           </div>
           <div class="formula-row">
             <span>Masukkan nilai SSxy hasil hitunganmu:</span>
-            <input type="number" id="inputSSxy" placeholder="SSxy">
+            <input type="number" id="inputSSxy" placeholder="SSxy" oninput="syncInput('inputSSxy', 'userSSxy')">
           </div>
         </div>
 
@@ -287,6 +287,9 @@
 </div>
 
 <script>
+  // Simpan instance API GeoGebra secara global
+  let ggbApi = null;
+
   // Data sampel titik (x, y)
   const dataPoints = [
     {x: 2, y: 60},
@@ -296,18 +299,25 @@
     {x: 6, y: 80}
   ];
 
-  // Callback saat Applet GeoGebra selesai di-load
+  // Callback saat Applet GeoGebra selesai dimuat
   function ggbOnInit(api) {
+    ggbApi = api;
+    
     // Setting tampilan koordinat kartesius
-    ggbApplet.setCoordSystem(0, 8, 40, 90);
+    ggbApi.setCoordSystem(0, 8, 40, 90);
     
     // Plot titik-titik sampel otomatis ke GeoGebra (Scatter Plot)
     dataPoints.forEach((pt, index) => {
       let label = String.fromCharCode(65 + index); // Titik A, B, C, D, E
-      ggbApplet.evalCommand(`${label} = (${pt.x}, ${pt.y})`);
-      ggbApplet.setColor(label, 37, 99, 235); // Warna biru
-      ggbApplet.setPointSize(label, 5);
+      ggbApi.evalCommand(`${label} = (${pt.x}, ${pt.y})`);
+      ggbApi.setColor(label, 37, 99, 235); // Warna biru
+      ggbApi.setPointSize(label, 5);
     });
+  }
+
+  // Fungsi sinkronisasi input angka otomatis antara tabel dan kotak rumus
+  function syncInput(sourceId, targetId) {
+    document.getElementById(targetId).value = document.getElementById(sourceId).value;
   }
 
   function cekPersamaan() {
@@ -316,8 +326,8 @@
     var xBar = 4;
     var yBar = 70;
 
-    if (isNaN(ssxx) || isNaN(ssxy)) {
-      alert("Harap isi nilai SSxx dan SSxy terlebih dahulu!");
+    if (isNaN(ssxx) || isNaN(ssxy) || ssxx === 0) {
+      alert("Harap masukkan nilai SSxx dan SSxy dengan benar terlebih dahulu!");
       return;
     }
 
@@ -328,11 +338,11 @@
     document.getElementById("resultBox").innerHTML = 
       "Persamaan Regresimu:<br><strong>y = " + a.toFixed(2) + " + " + b.toFixed(2) + "x</strong>";
 
-    // Plot garis regresi otomatis ke dalam GeoGebra!
-    if (window.ggbApplet) {
-      ggbApplet.evalCommand(`f(x) = ${a} + ${b} * x`);
-      ggbApplet.setColor('f', 220, 38, 38); // Garis warna merah
-      ggbApplet.setLineThickness('f', 3);
+    // Plot garis regresi otomatis ke dalam GeoGebra
+    if (ggbApi) {
+      ggbApi.evalCommand(`f(x) = ${a} + ${b} * x`);
+      ggbApi.setColor('f', 220, 38, 38); // Garis warna merah
+      ggbApi.setLineThickness('f', 3);
     }
   }
 
