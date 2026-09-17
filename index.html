@@ -173,19 +173,15 @@
 
 <!-- Script Inisialisasi GeoGebra -->
 <script>
-  // Konfigurasi Embed GeoGebra
   var params = {
     "appName": "classic",
     "width": 850,
-    "height": 480,
+    "height": 500,
     "showToolBar": false,
     "showAlgebraInput": false,
     "showMenuBar": false,
-    // Kamu bisa mengganti material_id ini dengan ID Material GeoGebra milikmu sendiri
-    // Atau memakai applet default di bawah yang akan memuat tampilan Spreadsheet & Graphics
-    "material_id": "R4s2P7M3", 
-    "borderColor": "#ffffff",
-    "customToolbar": "0"
+    "material_id": "XUkhCJRj", // ID Material resmi untuk eksplorasi regresi linear
+    "borderColor": "#ffffff"
   };
 
   var applet = new GGBApplet(params, true);
@@ -194,6 +190,6 @@
     applet.inject('ggb-element'); 
   });
 </script>
-
+  
 </body>
 </html>
