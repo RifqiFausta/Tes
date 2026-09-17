@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LKPD Digital: Eksplorasi Regresi Linear</title>
+  <title>E-LKM Digital: Eksplorasi Regresi Linear</title>
 
   <!-- Script API GeoGebra -->
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
@@ -17,77 +17,78 @@
       --text-color: #0f172a;
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
       margin: 0;
-      padding: 20px;
+      padding: 12px;
       line-height: 1.5;
     }
 
+    /* Memenuhi layar kiri-kanan dengan padding minimal */
     .container {
-      max-width: 1200px;
+      width: 100%;
+      max-width: 100%;
       margin: 0 auto;
     }
 
     header {
       background: linear-gradient(135deg, #1e3a8a, #3b82f6);
       color: white;
-      padding: 20px;
+      padding: 16px 20px;
       border-radius: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    header h1 { margin: 0 0 6px 0; font-size: 1.6rem; }
-    header p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
+    header h1 { margin: 0 0 4px 0; font-size: 1.5rem; }
+    header p { margin: 0; opacity: 0.9; font-size: 0.9rem; }
 
-<!-- KARTU PETUNJUK E-LKM -->
-<div class="card" style="border-left: 5px solid var(--secondary-color);">
-  <h2 style="margin-bottom: 8px;">📌 Petunjuk Pengerjaan E-LKM</h2>
-  <ol style="margin: 0; padding-left: 20px; font-size: 0.9rem; color: #334155;">
-    <li><strong>Langkah 1:</strong> Lengkapi kolom putih pada tabel untuk menghitung nilai $SS_{xx}$ dan $SS_{xy}$.</li>
-    <li><strong>Langkah 2:</strong> Masukkan nilai $SS_{xx}$ dan $SS_{xy}$ ke kotak bawah tabel, lalu klik tombol <em>"Cek Persamaan"</em>.</li>
-    <li><strong>Langkah 3:</strong> Amati garis regresi merah yang muncul di GeoGebra dan diskusikan makna nilai kemiringannya (slope) bersama kelompokmu!</li>
-  </ol>
-</div>
-    
+    /* Layout Responsif: Auto Stack di HP/Tablet, 2 Kolom di PC */
     .grid-layout {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 20px;
+      gap: 16px;
     }
 
     @media (min-width: 992px) {
       .grid-layout {
-        grid-template-columns: 1.2fr 0.8fr;
+        grid-template-columns: 1fr 1fr; /* Membagi 50% - 50% di layar PC */
       }
     }
 
     .card {
       background: var(--card-bg);
-      padding: 20px;
+      padding: 16px;
       border-radius: 12px;
       border: 1px solid #e2e8f0;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
 
     .card h2 {
       margin-top: 0;
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: var(--primary-color);
       border-bottom: 2px solid #f1f5f9;
       padding-bottom: 8px;
     }
 
+    /* Tabel Responsif dengan Scroll Horisontal untuk HP */
     .table-container {
+      width: 100%;
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     table {
       width: 100%;
+      min-width: 500px; /* Mencegah tabel terhimpit parah di HP */
       border-collapse: collapse;
       font-size: 0.85rem;
       margin-bottom: 12px;
@@ -95,7 +96,7 @@
 
     th, td {
       border: 1px solid #cbd5e1;
-      padding: 6px;
+      padding: 6px 4px;
       text-align: center;
     }
 
@@ -105,7 +106,8 @@
     }
 
     input[type="number"] {
-      width: 55px;
+      width: 100%;
+      max-width: 60px;
       padding: 4px;
       border: 1px solid #94a3b8;
       border-radius: 4px;
@@ -124,13 +126,15 @@
       padding: 12px;
       border-radius: 8px;
       margin-top: 10px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
 
     .formula-row {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
       margin-bottom: 8px;
     }
 
@@ -142,17 +146,23 @@
       border-radius: 8px;
       font-weight: bold;
       text-align: center;
-      font-size: 1.05rem;
+      font-size: 1rem;
       margin-top: 12px;
     }
 
+    /* Pembungkus GeoGebra Responsif Penuh */
     #ggb-wrapper {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 100%;
+      height: 480px; /* Tinggi optimal untuk eksplorasi grafik */
       background: #ffffff;
       border-radius: 8px;
-      min-height: 450px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
+    }
+
+    #ggb-element {
+      width: 100%;
+      height: 100%;
     }
 
     button {
@@ -165,6 +175,7 @@
       font-weight: 600;
       width: 100%;
       margin-top: 10px;
+      font-size: 0.95rem;
     }
 
     button:hover {
@@ -177,9 +188,19 @@
 <div class="container">
   
   <header>
-    <h1>LKPD DIGITAL: KONSTRUKSI REGRESI LINEAR SEDERHANA</h1>
+    <h1>E-LKM DIGITAL: REGRESI LINEAR SEDERHANA</h1>
     <p>Matematika SMA Kelas 11 (Fase F) | Durasi: 45 Menit</p>
   </header>
+
+  <!-- PETUNJUK PENGERJAAN E-LKM -->
+  <div class="card" style="border-left: 5px solid var(--secondary-color);">
+    <h2 style="margin-bottom: 6px;">📌 Petunjuk Pengerjaan E-LKM</h2>
+    <ol style="margin: 0; padding-left: 18px; font-size: 0.88rem; color: #334155;">
+      <li><strong>Langkah 1:</strong> Hitung dan lengkapi kolom putih kosong pada tabel di bawah ini.</li>
+      <li><strong>Langkah 2:</strong> Masukkan nilai total $SS_{xx}$ dan $SS_{xy}$ hasil hitunganmu ke dalam kotak rumus.</li>
+      <li><strong>Langkah 3:</strong> Klik tombol <em>"Cek Persamaan Regresi & Gambar Garis"</em> untuk memverifikasi garis regresinya di GeoGebra.</li>
+    </ol>
+  </div>
 
   <div class="grid-layout">
     
@@ -187,8 +208,8 @@
     <div>
       <div class="card">
         <h2>1. Pengolahan Data Mandiri</h2>
-        <p style="font-size: 0.85rem; color: #475569;">
-          Data variabel x dan y sudah disediakan. Hitung dan isikan nilai turunan pada kolom putih kosong di bawah ini!
+        <p style="font-size: 0.82rem; color: #475569; margin-bottom: 10px;">
+          Data variabel $x$ (Screen Time) dan $y$ (Kualitas Tidur) sudah disediakan.
         </p>
 
         <div class="table-container">
@@ -243,7 +264,7 @@
             </tbody>
             <tfoot>
               <tr style="font-weight: bold; background-color: #f1f5f9;">
-                <td colspan="1">Σ (Total)</td>
+                <td>Σ</td>
                 <td>20</td>
                 <td>350</td>
                 <td><input type="number" step="any" placeholder="Σ"></td>
@@ -261,11 +282,11 @@
             <span>Rata-rata y (ȳ): <strong>70</strong></span>
           </div>
           <div class="formula-row">
-            <span>Masukkan nilai SSxx hasil hitunganmu:</span>
+            <span>Nilai SSxx:</span>
             <input type="number" id="inputSSxx" placeholder="SSxx" oninput="syncInput('inputSSxx', 'userSSxx')">
           </div>
           <div class="formula-row">
-            <span>Masukkan nilai SSxy hasil hitunganmu:</span>
+            <span>Nilai SSxy:</span>
             <input type="number" id="inputSSxy" placeholder="SSxy" oninput="syncInput('inputSSxy', 'userSSxy')">
           </div>
         </div>
@@ -273,7 +294,7 @@
         <button onclick="cekPersamaan()">Cek Persamaan Regresi & Gambar Garis</button>
 
         <div class="result-box" id="resultBox">
-          Persamaan y = a + bx akan muncul di sini setelah kamu isi!
+          Persamaan y = a + bx akan muncul di sini!
         </div>
       </div>
     </div>
@@ -282,8 +303,8 @@
     <div>
       <div class="card">
         <h2>2. Verifikasi Grafis di GeoGebra</h2>
-        <p style="font-size: 0.85rem; color: #475569;">
-          Titik data (scatter plot) sudah diplot otomatis. Tekan tombol di samping kiri untuk menggambar garis regresinya!
+        <p style="font-size: 0.82rem; color: #475569; margin-bottom: 10px;">
+          Data (scatter plot) sudah diplot otomatis. Garis regresi akan muncul saat tombol ditekan.
         </p>
 
         <div id="ggb-wrapper">
@@ -297,10 +318,8 @@
 </div>
 
 <script>
-  // Simpan instance API GeoGebra secara global
   let ggbApi = null;
 
-  // Data sampel titik (x, y)
   const dataPoints = [
     {x: 2, y: 60},
     {x: 3, y: 65},
@@ -309,23 +328,21 @@
     {x: 6, y: 80}
   ];
 
-  // Callback saat Applet GeoGebra selesai dimuat
   function ggbOnInit(api) {
     ggbApi = api;
     
-    // Setting tampilan koordinat kartesius
+    // Set tampilan skala grafik agar pas di layar
     ggbApi.setCoordSystem(0, 8, 40, 90);
     
-    // Plot titik-titik sampel otomatis ke GeoGebra (Scatter Plot)
+    // Plot titik scatter plot
     dataPoints.forEach((pt, index) => {
-      let label = String.fromCharCode(65 + index); // Titik A, B, C, D, E
+      let label = String.fromCharCode(65 + index);
       ggbApi.evalCommand(`${label} = (${pt.x}, ${pt.y})`);
-      ggbApi.setColor(label, 37, 99, 235); // Warna biru
+      ggbApi.setColor(label, 37, 99, 235);
       ggbApi.setPointSize(label, 5);
     });
   }
 
-  // Fungsi sinkronisasi input angka otomatis antara tabel dan kotak rumus
   function syncInput(sourceId, targetId) {
     document.getElementById(targetId).value = document.getElementById(sourceId).value;
   }
@@ -344,25 +361,23 @@
     var b = ssxy / ssxx;
     var a = yBar - (b * xBar);
 
-    // Tampilkan teks persamaan regresi
     document.getElementById("resultBox").innerHTML = 
       "Persamaan Regresimu:<br><strong>y = " + a.toFixed(2) + " + " + b.toFixed(2) + "x</strong>";
 
-    // Plot garis regresi otomatis ke dalam GeoGebra
     if (ggbApi) {
       ggbApi.evalCommand(`f(x) = ${a} + ${b} * x`);
-      ggbApi.setColor('f', 220, 38, 38); // Garis warna merah
+      ggbApi.setColor('f', 220, 38, 38);
       ggbApi.setLineThickness('f', 3);
     }
   }
 
-  // API Embed GeoGebra Classic
+  // Parameter GeoGebra yang Dioptimalisasi untuk Responsif & Tanpa Keyboard Bawaan
   var params = {
     "appName": "classic",
-    "width": 450,
-    "height": 450,
+    "scaleContainerClass": "ggb-wrapper", // Otomatis scaling mengikuti kontainer
+    "allowScale": true,
     "showToolBar": false,
-    "showAlgebraInput": true,
+    "showAlgebraInput": false, // Menghilangkan panel aljabar & keyboard bawah yang bikin sempit
     "showMenuBar": false,
     "borderColor": "#ffffff",
     "appletOnLoad": ggbOnInit
