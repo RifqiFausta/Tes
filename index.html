@@ -152,13 +152,14 @@
 
     /* Pembungkus GeoGebra Responsif Penuh */
     #ggb-wrapper {
-      width: 100%;
-      height: 480px; /* Tinggi optimal untuk eksplorasi grafik */
-      background: #ffffff;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid #cbd5e1;
-    }
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: auto;
+  }
 
     #ggb-element {
       width: 100%;
@@ -371,14 +372,16 @@
     }
   }
 
-  // Parameter GeoGebra yang Dioptimalisasi untuk Responsif & Tanpa Keyboard Bawaan
+// Parameter GeoGebra Lengkap dengan Toolbar & Tanpa Keyboard Bawaan
   var params = {
     "appName": "classic",
-    "scaleContainerClass": "ggb-wrapper", // Otomatis scaling mengikuti kontainer
-    "allowScale": true,
-    "showToolBar": false,
-    "showAlgebraInput": false, // Menghilangkan panel aljabar & keyboard bawah yang bikin sempit
-    "showMenuBar": false,
+    "width": 600,
+    "height": 500,
+    "showToolBar": true,         // Munculkan toolbar atas (tombol titik, garis, dll)
+    "showAlgebraInput": true,    // Munculkan algebra view di sebelah kiri
+    "showMenuBar": false,        // Menu bar utama disembunyikan agar tetap rapi
+    "enableLabelDrags": false,
+    "enableShiftDragZoom": true,
     "borderColor": "#ffffff",
     "appletOnLoad": ggbOnInit
   };
