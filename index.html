@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-LKM Digital: Eksplorasi Regresi Linear</title>
+  <title>E-LKM Digital: Regresi Linear Sederhana</title>
 
-  <!-- Script API GeoGebra -->
+  <!-- API Resmi GeoGebra -->
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
 
   <style>
@@ -15,22 +15,20 @@
       --bg-color: #f8fafc;
       --card-bg: #ffffff;
       --text-color: #0f172a;
+      --accent-color: #059669;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-color);
       margin: 0;
-      padding: 12px;
+      padding: 16px;
       line-height: 1.5;
     }
 
-    /* Memenuhi layar kiri-kanan dengan padding minimal */
     .container {
       width: 100%;
       max-width: 100%;
@@ -40,35 +38,34 @@
     header {
       background: linear-gradient(135deg, #1e3a8a, #3b82f6);
       color: white;
-      padding: 16px 20px;
+      padding: 20px;
       border-radius: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
-    header h1 { margin: 0 0 4px 0; font-size: 1.5rem; }
-    header p { margin: 0; opacity: 0.9; font-size: 0.9rem; }
+    header h1 { margin: 0 0 6px 0; font-size: 1.6rem; }
+    header p { margin: 0; opacity: 0.95; font-size: 0.95rem; }
 
-    /* Layout Responsif: Auto Stack di HP/Tablet, 2 Kolom di PC */
     .grid-layout {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 20px;
     }
 
     @media (min-width: 992px) {
       .grid-layout {
-        grid-template-columns: 1fr 1fr; /* Membagi 50% - 50% di layar PC */
+        grid-template-columns: 1fr 1fr;
       }
     }
 
     .card {
       background: var(--card-bg);
-      padding: 16px;
+      padding: 20px;
       border-radius: 12px;
       border: 1px solid #e2e8f0;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      margin-bottom: 16px;
+      margin-bottom: 20px;
     }
 
     .card h2 {
@@ -77,9 +74,24 @@
       color: var(--primary-color);
       border-bottom: 2px solid #f1f5f9;
       padding-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    /* Tabel Responsif dengan Scroll Horisontal untuk HP */
+    /* Scaffolding & Alur Penalaran */
+    .scaffold-box {
+      background-color: #f0f9ff;
+      border-left: 4px solid var(--secondary-color);
+      padding: 12px 16px;
+      margin-bottom: 15px;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+    }
+
+    .scaffold-box strong { color: var(--primary-color); }
+
+    /* Tabel Responsif & Input */
     .table-container {
       width: 100%;
       overflow-x: auto;
@@ -88,7 +100,7 @@
 
     table {
       width: 100%;
-      min-width: 500px; /* Mencegah tabel terhimpit parah di HP */
+      min-width: 550px;
       border-collapse: collapse;
       font-size: 0.85rem;
       margin-bottom: 12px;
@@ -96,74 +108,53 @@
 
     th, td {
       border: 1px solid #cbd5e1;
-      padding: 6px 4px;
+      padding: 6px;
       text-align: center;
     }
 
-    th {
-      background-color: #f1f5f9;
-      color: #334155;
-    }
+    th { background-color: #f1f5f9; color: #334155; }
 
-    input[type="number"] {
+    input[type="number"], textarea, select {
       width: 100%;
-      max-width: 60px;
-      padding: 4px;
+      padding: 6px;
       border: 1px solid #94a3b8;
       border-radius: 4px;
-      text-align: center;
       font-size: 0.85rem;
+      font-family: inherit;
     }
 
-    input[type="number"]:focus {
-      border-color: var(--secondary-color);
-      outline: 2px solid #bfdbfe;
+    input[type="number"] { text-align: center; }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
     }
 
-    .formula-box {
-      background-color: #eff6ff;
-      border: 1px solid #bfdbfe;
+    /* Bantuan Kalkulasi */
+    .calc-box {
+      background-color: #ecfdf5;
+      border: 1px solid #a7f3d0;
       padding: 12px;
       border-radius: 8px;
       margin-top: 10px;
+    }
+
+    .calc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
       font-size: 0.88rem;
     }
 
-    .formula-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 8px;
-    }
-
-    .result-box {
-      background-color: #ecfdf5;
-      border: 1px solid #a7f3d0;
-      color: #065f46;
-      padding: 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      text-align: center;
-      font-size: 1rem;
-      margin-top: 12px;
-    }
-
-    /* Pembungkus GeoGebra Responsif Penuh */
     #ggb-wrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #ffffff;
-    border-radius: 8px;
-    overflow: auto;
-  }
-
-    #ggb-element {
       width: 100%;
-      height: 100%;
+      min-height: 520px;
+      background: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #cbd5e1;
     }
 
     button {
@@ -177,10 +168,23 @@
       width: 100%;
       margin-top: 10px;
       font-size: 0.95rem;
+      transition: background 0.2s;
     }
 
-    button:hover {
-      background-color: var(--primary-color);
+    button:hover { background-color: var(--primary-color); }
+
+    .btn-calc {
+      background-color: var(--accent-color);
+    }
+    .btn-calc:hover { background-color: #047857; }
+
+    .badge {
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
     }
   </style>
 </head>
@@ -189,28 +193,46 @@
 <div class="container">
   
   <header>
-    <h1>E-LKM DIGITAL: REGRESI LINEAR SEDERHANA</h1>
-    <p>Matematika SMA Kelas 11 (Fase F) | Durasi: 45 Menit</p>
+    <h1>E-LKM DIGITAL: EXPLORER REGRESI LINEAR SEDERHANA</h1>
+    <p>Mata Pelajaran: Matematika SMA (Fase F) | Media Integratif Eksplorasi Data & Penalaran Bivariat</p>
   </header>
 
-  <!-- PETUNJUK PENGERJAAN E-LKM -->
+  <!-- FITUR 6: SCAFFOLDING BERTAHAP & PETUNJUK -->
   <div class="card" style="border-left: 5px solid var(--secondary-color);">
-    <h2 style="margin-bottom: 6px;">📌 Petunjuk Pengerjaan E-LKM</h2>
-    <ol style="margin: 0; padding-left: 18px; font-size: 0.88rem; color: #334155;">
-      <li><strong>Langkah 1:</strong> Hitung dan lengkapi kolom putih kosong pada tabel di bawah ini.</li>
-      <li><strong>Langkah 2:</strong> Masukkan nilai total $SS_{xx}$ dan $SS_{xy}$ hasil hitunganmu ke dalam kotak rumus.</li>
-      <li><strong>Langkah 3:</strong> Klik tombol <em>"Cek Persamaan Regresi & Gambar Garis"</em> untuk memverifikasi garis regresinya di GeoGebra.</li>
-    </ol>
+    <h2>📌 Alur Belajar & Petunjuk E-LKM</h2>
+    <div class="scaffold-box">
+      <strong>Langkah Berurutan:</strong>
+      <ol style="margin: 5px 0 0 0; padding-left: 20px;">
+        <li><strong>Formulasi Strategi:</strong> Pahami fenomena bivariat pada Bagian 1.</li>
+        <li><strong>Eksplorasi & Manipulasi Data:</strong> Amati diagram pencar di GeoGebra (Bagian 2) dan coba ubah posisi titik data.</li>
+        <li><strong>Hitung & Verifikasi:</strong> Gunakan bantuan kalkulator otomatis jika data desimal terlalu panjang.</li>
+        <li><strong>Interpretasi & Kolaborasi:</strong> Jelaskan makna matematis dari garis regresi dan siapkan bahan presentasi kelompok.</li>
+      </ol>
+    </div>
   </div>
 
   <div class="grid-layout">
     
-    <!-- KOLOM KIRI: TABEL ISIAN SISWA -->
+    <!-- KOLOM KIRI: ANALISIS, ALUR PENALARAN & RUANG INTERPRETASI -->
     <div>
+      
+      <!-- FITUR 6: ALUR PENALARAN & STRATEGI -->
       <div class="card">
-        <h2>1. Pengolahan Data Mandiri</h2>
-        <p style="font-size: 0.82rem; color: #475569; margin-bottom: 10px;">
-          Data variabel $x$ (Screen Time) dan $y$ (Kualitas Tidur) sudah disediakan.
+        <h2>1. Alur Penalaran & Skenario Masalah <span class="badge">Tahap 1</span></h2>
+        <div class="scaffold-box">
+          <strong>Studi Kasus:</strong> Peneliti mengamati hubungan antara <em>Screen Time Malam Hari (Jam)</em> terhadap <em>Skala Kualitas Tidur (0–100)</em>.
+        </div>
+        
+        <label style="font-size: 0.88rem; font-weight: 600;">Pertanyaan Pengarah 1 (Prediksi Awal):</label>
+        <p style="font-size: 0.82rem; color: #475569; margin: 2px 0 6px 0;">Menurut prediksimu, jika seseorang menambah screen time-nya, apakah kualitas tidurnya cenderung naik atau turun? Mengapa?</p>
+        <textarea id="prediksiAwal" placeholder="Tuliskan dugaannya di sini..."></textarea>
+      </div>
+
+      <!-- FITUR 1, 4 & 5: EKSPLORASI DATA, BANTUAN KALKULASI & SCAFFOLDING -->
+      <div class="card">
+        <h2>2. Pengolahan Data & Bantuan Kalkulasi <span class="badge">Tahap 2</span></h2>
+        <p style="font-size: 0.82rem; color: #475569;">
+          Data bivariat riil di bawah memuat angka desimal. Kamu bisa menghitung manual atau gunakan <strong>Bantuan Kalkulasi Auto-Fill</strong> untuk mempercepat perhitungan.
         </p>
 
         <div class="table-container">
@@ -218,95 +240,99 @@
             <thead>
               <tr>
                 <th>No</th>
-                <th>x</th>
-                <th>y</th>
+                <th>x (Jam)</th>
+                <th>y (Skor)</th>
                 <th>(x - x̄)</th>
                 <th>(y - ȳ)</th>
                 <th>(x - x̄)²</th>
                 <th>(x - x̄)(y - ȳ)</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>1</td><td>2</td><td>60</td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-              </tr>
-              <tr>
-                <td>2</td><td>3</td><td>65</td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-              </tr>
-              <tr>
-                <td>3</td><td>4</td><td>70</td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-              </tr>
-              <tr>
-                <td>4</td><td>5</td><td>75</td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-              </tr>
-              <tr>
-                <td>5</td><td>6</td><td>80</td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-                <td><input type="number" step="any" placeholder="..."></td>
-              </tr>
+            <tbody id="tableBody">
+              <!-- Data dimasukkan via JS -->
             </tbody>
             <tfoot>
               <tr style="font-weight: bold; background-color: #f1f5f9;">
-                <td>Σ</td>
-                <td>20</td>
-                <td>350</td>
-                <td><input type="number" step="any" placeholder="Σ"></td>
-                <td><input type="number" step="any" placeholder="Σ"></td>
-                <td><input type="number" id="userSSxx" step="any" placeholder="SSxx" oninput="syncInput('userSSxx', 'inputSSxx')"></td>
-                <td><input type="number" id="userSSxy" step="any" placeholder="SSxy" oninput="syncInput('userSSxy', 'inputSSxy')"></td>
+                <td>Total (Σ)</td>
+                <td id="sumX">20</td>
+                <td id="sumY">350</td>
+                <td>0</td>
+                <td>0</td>
+                <td><input type="number" id="userSSxx" placeholder="SSxx" oninput="syncInputs('userSSxx', 'inputSSxx')"></td>
+                <td><input type="number" id="userSSxy" placeholder="SSxy" oninput="syncInputs('userSSxy', 'inputSSxy')"></td>
               </tr>
             </tfoot>
           </table>
         </div>
 
-        <div class="formula-box">
-          <div class="formula-row">
-            <span>Rata-rata x (x̄): <strong>4</strong></span>
-            <span>Rata-rata y (ȳ): <strong>70</strong></span>
+        <button class="btn-calc" onclick="hitungOtomatisTabel()">⚡ Bantuan Kalkulasi Desimal Otomatis</button>
+
+        <div class="calc-box">
+          <div class="calc-row">
+            <span>Rata-rata x̄ = <strong>4.0</strong></span>
+            <span>Rata-rata ȳ = <strong>70.0</strong></span>
           </div>
-          <div class="formula-row">
+          <div class="calc-row">
             <span>Nilai SSxx:</span>
-            <input type="number" id="inputSSxx" placeholder="SSxx" oninput="syncInput('inputSSxx', 'userSSxx')">
+            <input type="number" id="inputSSxx" placeholder="SSxx" style="max-width: 120px;" oninput="syncInputs('inputSSxx', 'userSSxx')">
           </div>
-          <div class="formula-row">
+          <div class="calc-row">
             <span>Nilai SSxy:</span>
-            <input type="number" id="inputSSxy" placeholder="SSxy" oninput="syncInput('inputSSxy', 'userSSxy')">
+            <input type="number" id="inputSSxy" placeholder="SSxy" style="max-width: 120px;" oninput="syncInputs('inputSSxy', 'userSSxy')">
           </div>
         </div>
 
-        <button onclick="cekPersamaan()">Cek Persamaan Regresi & Gambar Garis</button>
+        <button onclick="plotRegresi()">Gambarkan Garis Regresi di GeoGebra</button>
 
-        <div class="result-box" id="resultBox">
-          Persamaan y = a + bx akan muncul di sini!
+        <div class="calc-box" id="resultBox" style="text-align: center; font-weight: bold; margin-top: 10px; background: #f0fdf4;">
+          Persamaan Regresi $y = a + bx$ akan muncul di sini.
         </div>
       </div>
+
+      <!-- FITUR 7: RUANG INTERPRETASI KONSEP -->
+      <div class="card">
+        <h2>3. Ruang Interpretasi Konsep <span class="badge">Tahap 3</span></h2>
+        <div class="scaffold-box">
+          <strong>Perhatian:</strong> Jangan hanya fokus pada angka! Jelaskan arti matematis dari hasil persamaan regresi yang kamu dapatkan.
+        </div>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 0.88rem; font-weight: 600;">A. Interpretasi Slope / Kemiringan ($b$):</label>
+          <textarea id="interpSlope" placeholder="Apa arti nilai b bagi kualitas tidur jika Screen Time bertambah 1 jam?"></textarea>
+        </div>
+
+        <div>
+          <label style="font-size: 0.88rem; font-weight: 600;">B. Interpretasi Intercept ($a$):</label>
+          <textarea id="interpIntercept" placeholder="Apa arti nilai a jika seseorang tidak menggunakan HP sama sekali (0 jam)?"></textarea>
+        </div>
+      </div>
+
+      <!-- FITUR 8: AKTIVITAS KOLABORATIF & PRESENTASI -->
+      <div class="card">
+        <h2>4. Aktivitas Kolaboratif & Diskusi Kelompok <span class="badge">Tahap 4</span></h2>
+        <p style="font-size: 0.82rem; color: #475569;">Diskusikan bersama kelompokmu untuk menyusun kesimpulan akhir presentasi:</p>
+        
+        <div style="margin-bottom: 10px;">
+          <label style="font-size: 0.85rem; font-weight: 600;">Nama Anggota Kelompok:</label>
+          <input type="text" id="namaKelompok" placeholder="Contoh: Kelompok 1 (Budi, Ani, Siti)">
+        </div>
+
+        <div style="margin-bottom: 10px;">
+          <label style="font-size: 0.85rem; font-weight: 600;">Rangkuman Kesimpulan untuk Presentasi Kelas:</label>
+          <textarea id="rangkumanPresentasi" placeholder="Tuliskan poin penting yang akan disampaikan saat presentasi..."></textarea>
+        </div>
+      </div>
+
     </div>
 
-    <!-- KOLOM KANAN: GEOGEBRA (SCATTER PLOT & GARIS REGRESI) -->
+    <!-- KOLOM KANAN: GEOGEBRA (DIAGRAM PENCAR & MANIPULASI PARAMETER) -->
     <div>
-      <div class="card">
-        <h2>2. Verifikasi Grafis di GeoGebra</h2>
-        <p style="font-size: 0.82rem; color: #475569; margin-bottom: 10px;">
-          Data (scatter plot) sudah diplot otomatis. Garis regresi akan muncul saat tombol ditekan.
-        </p>
+      <!-- FITUR 2 & 3: VISUALISASI DIAGRAM PENCAR & MANIPULASI DATA/PARAMETER -->
+      <div class="card" style="position: sticky; top: 10px;">
+        <h2>2. Visualisasi Diagram Pencar & Manipulasi Data</h2>
+        <div class="scaffold-box">
+          <strong>Uji Manipulasi Data:</strong> Kamu dapat menggeser titik-titik pada grafik GeoGebra secara langsung untuk mengamati bagaimana arah garis regresi berubah jika terdapat pencilan (outlier)!
+        </div>
 
         <div id="ggb-wrapper">
           <div id="ggb-element"></div>
@@ -321,41 +347,89 @@
 <script>
   let ggbApi = null;
 
+  // Dataset Riil
   const dataPoints = [
-    {x: 2, y: 60},
-    {x: 3, y: 65},
-    {x: 4, y: 70},
-    {x: 5, y: 75},
-    {x: 6, y: 80}
+    {x: 2.0, y: 60.0},
+    {x: 3.0, y: 65.0},
+    {x: 4.0, y: 70.0},
+    {x: 5.0, y: 75.0},
+    {x: 6.0, y: 80.0}
   ];
 
+  // Render Tabel Isian saat pertama load
+  function renderTable() {
+    const tbody = document.getElementById("tableBody");
+    tbody.innerHTML = "";
+    dataPoints.forEach((pt, i) => {
+      tbody.innerHTML += `
+        <tr>
+          <td>${i+1}</td>
+          <td>${pt.x}</td>
+          <td>${pt.y}</td>
+          <td><input type="number" id="dx_${i}" step="any" placeholder="..."></td>
+          <td><input type="number" id="dy_${i}" step="any" placeholder="..."></td>
+          <td><input type="number" id="sqx_${i}" step="any" placeholder="..."></td>
+          <td><input type="number" id="dxy_${i}" step="any" placeholder="..."></td>
+        </tr>
+      `;
+    });
+  }
+
+  // Callback Inisialisasi GeoGebra
   function ggbOnInit(api) {
     ggbApi = api;
-    
-    // Set tampilan skala grafik agar pas di layar
     ggbApi.setCoordSystem(0, 8, 40, 90);
     
-    // Plot titik scatter plot
+    // Render Diagram Pencar
     dataPoints.forEach((pt, index) => {
       let label = String.fromCharCode(65 + index);
       ggbApi.evalCommand(`${label} = (${pt.x}, ${pt.y})`);
       ggbApi.setColor(label, 37, 99, 235);
-      ggbApi.setPointSize(label, 5);
+      ggbApi.setPointSize(label, 6);
     });
   }
 
-  function syncInput(sourceId, targetId) {
-    document.getElementById(targetId).value = document.getElementById(sourceId).value;
+  // FITUR 4: Bantuan Kalkulasi Desimal Otomatis
+  function hitungOtomatisTabel() {
+    let xBar = 4.0;
+    let yBar = 70.0;
+    let ssxx = 0;
+    let ssxy = 0;
+
+    dataPoints.forEach((pt, i) => {
+      let dx = pt.x - xBar;
+      let dy = pt.y - yBar;
+      let sqx = dx * dx;
+      let dxy = dx * dy;
+
+      ssxx += sqx;
+      ssxy += dxy;
+
+      document.getElementById(`dx_${i}`).value = dx.toFixed(2);
+      document.getElementById(`dy_${i}`).value = dy.toFixed(2);
+      document.getElementById(`sqx_${i}`).value = sqx.toFixed(2);
+      document.getElementById(`dxy_${i}`).value = dxy.toFixed(2);
+    });
+
+    document.getElementById("userSSxx").value = ssxx.toFixed(2);
+    document.getElementById("userSSxy").value = ssxy.toFixed(2);
+    document.getElementById("inputSSxx").value = ssxx.toFixed(2);
+    document.getElementById("inputSSxy").value = ssxy.toFixed(2);
   }
 
-  function cekPersamaan() {
+  function syncInputs(idSource, idTarget) {
+    document.getElementById(idTarget).value = document.getElementById(idSource).value;
+  }
+
+  // Fitur Plot Garis Regresi
+  function plotRegresi() {
     var ssxx = parseFloat(document.getElementById("inputSSxx").value);
     var ssxy = parseFloat(document.getElementById("inputSSxy").value);
-    var xBar = 4;
-    var yBar = 70;
+    var xBar = 4.0;
+    var yBar = 70.0;
 
     if (isNaN(ssxx) || isNaN(ssxy) || ssxx === 0) {
-      alert("Harap masukkan nilai SSxx dan SSxy dengan benar terlebih dahulu!");
+      alert("Harap isi atau gunakan Bantuan Kalkulasi untuk SSxx dan SSxy!");
       return;
     }
 
@@ -363,24 +437,23 @@
     var a = yBar - (b * xBar);
 
     document.getElementById("resultBox").innerHTML = 
-      "Persamaan Regresimu:<br><strong>y = " + a.toFixed(2) + " + " + b.toFixed(2) + "x</strong>";
+      `Persamaan Regresi:<br><span style="color: #059669; font-size: 1.1rem;">y = ${a.toFixed(2)} + ${b.toFixed(2)}x</span>`;
 
     if (ggbApi) {
       ggbApi.evalCommand(`f(x) = ${a} + ${b} * x`);
       ggbApi.setColor('f', 220, 38, 38);
-      ggbApi.setLineThickness('f', 3);
+      ggbApi.setLineThickness('f', 4);
     }
   }
 
-// Parameter GeoGebra Lengkap dengan Toolbar & Tanpa Keyboard Bawaan
+  // Embed GeoGebra Lengkap Toolbar Aktif & Responsif
   var params = {
     "appName": "classic",
     "width": 600,
     "height": 500,
-    "showToolBar": true,         // Munculkan toolbar atas (tombol titik, garis, dll)
-    "showAlgebraInput": true,    // Munculkan algebra view di sebelah kiri
-    "showMenuBar": false,        // Menu bar utama disembunyikan agar tetap rapi
-    "enableLabelDrags": false,
+    "showToolBar": true,         // Toolbar tombol GeoGebra muncul penuh
+    "showAlgebraInput": true,    // Algebra view aktif
+    "showMenuBar": false,
     "enableShiftDragZoom": true,
     "borderColor": "#ffffff",
     "appletOnLoad": ggbOnInit
@@ -388,6 +461,7 @@
 
   var applet = new GGBApplet(params, true);
   window.addEventListener("load", function() { 
+    renderTable();
     applet.inject('ggb-element'); 
   });
 </script>
