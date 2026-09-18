@@ -148,14 +148,17 @@
 <script>
   let ggbApi = null;
 
-  // Callback Inisialisasi GeoGebra
+  // Callback saat GeoGebra Selesai Dimuat
   function ggbOnInit(api) {
     ggbApi = api;
 
-    // Set Tampilan Koordinat Grafik
+    // 1. Memaksa GeoGebra Membuka Tampilan SPREADSHEET dan GRAPHICS (Kombinasi "SG")
+    ggbApi.setPerspective("SG"); 
+
+    // 2. Set Tampilan Koordinat Grafik
     ggbApi.setCoordSystem(0, 8, 40, 90);
 
-    // Isikan data awal x dan y ke sel Spreadsheet GeoGebra bawaan secara otomatis
+    // 3. Masukkan Data x dan y ke Sel Spreadsheet GeoGebra secara Otomatis
     const dataX = [2, 3, 4, 5, 6];
     const dataY = [60, 65, 70, 75, 80];
 
@@ -164,7 +167,7 @@
       ggbApi.setValue(`B${i+1}`, dataY[i]);
     }
 
-    // Plot Titik Data Scatter Plot
+    // 4. Plot Titik Data Scatter Plot di Grafik
     dataX.forEach((x, index) => {
       let y = dataY[index];
       let label = String.fromCharCode(65 + index); // Titik A, B, C, D, E
@@ -173,7 +176,7 @@
       ggbApi.setPointSize(label, 6);
     });
 
-    // Buat Garis Regresi Interaktif yang Bisa Digerak-gerakkan oleh Siswa
+    // 5. Buat Garis Regresi Interaktif yang Bisa Digerak-gerakkan Siswa
     ggbApi.evalCommand(`P1 = (2, 60)`);
     ggbApi.evalCommand(`P2 = (6, 80)`);
     ggbApi.setColor('P1', 220, 38, 38);
@@ -187,9 +190,8 @@
   // Configurations GeoGebra Embed
   var params = {
     "appName": "classic",
-    "width": 1100,
+    "width": 1150,
     "height": 550,
-    "showPerspectivePanel": true, // Memungkinkan siswa membuka/tutup Spreadsheet & Graphics
     "showToolBar": true,
     "showAlgebraInput": true,
     "showMenuBar": false,
@@ -203,6 +205,5 @@
     applet.inject('ggb-element'); 
   });
 </script>
-
 </body>
 </html>
