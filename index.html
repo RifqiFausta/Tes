@@ -15,7 +15,6 @@
       --bg-color: #f8fafc;
       --card-bg: #ffffff;
       --text-color: #0f172a;
-      --accent-color: #059669;
     }
 
     * { box-sizing: border-box; }
@@ -74,72 +73,76 @@
       color: var(--primary-color);
       border-bottom: 2px solid #f1f5f9;
       padding-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
-    /* Scaffolding & Alur Penalaran */
     .scaffold-box {
       background-color: #f0f9ff;
       border-left: 4px solid var(--secondary-color);
       padding: 12px 16px;
       margin-bottom: 15px;
       border-radius: 0 8px 8px 0;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
     }
 
-    .scaffold-box strong { color: var(--primary-color); }
-
-    /* Tabel Responsif & Input */
-    .table-container {
+    /* Tampilan Tabel Spreadsheet */
+    .spreadsheet-container {
       width: 100%;
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    table {
-      width: 100%;
-      min-width: 550px;
-      border-collapse: collapse;
-      font-size: 0.85rem;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
       margin-bottom: 12px;
     }
 
-    th, td {
+    table.spreadsheet {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Consolas', 'Courier New', monospace;
+      font-size: 0.85rem;
+    }
+
+    table.spreadsheet th, table.spreadsheet td {
       border: 1px solid #cbd5e1;
-      padding: 6px;
+      padding: 4px;
       text-align: center;
     }
 
-    th { background-color: #f1f5f9; color: #334155; }
+    table.spreadsheet th {
+      background-color: #e2e8f0;
+      color: #334155;
+      font-weight: bold;
+    }
 
-    input[type="number"], textarea, select {
+    table.spreadsheet td.header-col {
+      background-color: #f1f5f9;
+      font-weight: bold;
+      color: #475569;
+    }
+
+    table.spreadsheet input {
       width: 100%;
-      padding: 6px;
-      border: 1px solid #94a3b8;
-      border-radius: 4px;
-      font-size: 0.85rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      text-align: center;
       font-family: inherit;
+      font-size: 0.85rem;
+      padding: 4px;
     }
 
-    input[type="number"] { text-align: center; }
-
-    textarea {
-      resize: vertical;
-      min-height: 60px;
+    table.spreadsheet input:focus {
+      background-color: #eff6ff;
+      box-shadow: inset 0 0 0 2px var(--secondary-color);
     }
 
-    /* Bantuan Kalkulasi */
-    .calc-box {
-      background-color: #ecfdf5;
-      border: 1px solid #a7f3d0;
+    .formula-box {
+      background-color: #eff6ff;
+      border: 1px solid #bfdbfe;
       padding: 12px;
       border-radius: 8px;
       margin-top: 10px;
     }
 
-    .calc-row {
+    .formula-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -150,7 +153,7 @@
 
     #ggb-wrapper {
       width: 100%;
-      min-height: 520px;
+      min-height: 500px;
       background: #ffffff;
       border-radius: 8px;
       overflow: hidden;
@@ -161,30 +164,25 @@
       background-color: var(--secondary-color);
       color: white;
       border: none;
-      padding: 10px 16px;
+      padding: 12px 16px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
       width: 100%;
       margin-top: 10px;
       font-size: 0.95rem;
-      transition: background 0.2s;
     }
 
     button:hover { background-color: var(--primary-color); }
 
-    .btn-calc {
-      background-color: var(--accent-color);
-    }
-    .btn-calc:hover { background-color: #047857; }
-
-    .badge {
-      background: #e0e7ff;
-      color: #3730a3;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
+    textarea {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #94a3b8;
+      border-radius: 6px;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 60px;
     }
   </style>
 </head>
@@ -194,144 +192,155 @@
   
   <header>
     <h1>E-LKM DIGITAL: EXPLORER REGRESI LINEAR SEDERHANA</h1>
-    <p>Mata Pelajaran: Matematika SMA (Fase F) | Media Integratif Eksplorasi Data & Penalaran Bivariat</p>
+    <p>Mata Pelajaran: Matematika SMA (Fase F) | Pengolahan Spreadsheet & Visualisasi Garis Interaktif</p>
   </header>
 
-  <!-- FITUR 6: SCAFFOLDING BERTAHAP & PETUNJUK -->
+  <!-- PETUNJUK E-LKM -->
   <div class="card" style="border-left: 5px solid var(--secondary-color);">
-    <h2>📌 Alur Belajar & Petunjuk E-LKM</h2>
-    <div class="scaffold-box">
-      <strong>Langkah Berurutan:</strong>
+    <h2>📌 Petunjuk Pengerjaan E-LKM</h2>
+    <div class="scaffold-box" style="margin-bottom:0;">
+      <strong>Cara Menggunakan Spreadsheet & GeoGebra:</strong>
       <ol style="margin: 5px 0 0 0; padding-left: 20px;">
-        <li><strong>Formulasi Strategi:</strong> Pahami fenomena bivariat pada Bagian 1.</li>
-        <li><strong>Eksplorasi & Manipulasi Data:</strong> Amati diagram pencar di GeoGebra (Bagian 2) dan coba ubah posisi titik data.</li>
-        <li><strong>Hitung & Verifikasi:</strong> Gunakan bantuan kalkulator otomatis jika data desimal terlalu panjang.</li>
-        <li><strong>Interpretasi & Kolaborasi:</strong> Jelaskan makna matematis dari garis regresi dan siapkan bahan presentasi kelompok.</li>
+        <li>Gunakan tabel spreadsheet di bawah untuk menghitung nilai deviasi dan perkaliannya. Kamu bisa gunakan formula seperti <code>=B2-4</code>, <code>=D2*E2</code>, atau <code>=SUM(F2:F6)</code>.</li>
+        <li>Tekan Enter di sel mana saja untuk mengevaluasi rumus.</li>
+        <li>Masukkan nilai total $SS_{xx}$ dan $SS_{xy}$ pada kotak hasil lalu klik <strong>"Generate Garis Regresi Interaktif"</strong>.</li>
+        <li>Geser titik kontrol pada garis regresi merah di GeoGebra untuk mengeksplorasi kemiringannya.</li>
       </ol>
     </div>
   </div>
 
   <div class="grid-layout">
     
-    <!-- KOLOM KIRI: ANALISIS, ALUR PENALARAN & RUANG INTERPRETASI -->
+    <!-- KOLOM KIRI: SPREADSHEET & RUMUS -->
     <div>
-      
-      <!-- FITUR 6: ALUR PENALARAN & STRATEGI -->
       <div class="card">
-        <h2>1. Alur Penalaran & Skenario Masalah <span class="badge">Tahap 1</span></h2>
-        <div class="scaffold-box">
-          <strong>Studi Kasus:</strong> Peneliti mengamati hubungan antara <em>Screen Time Malam Hari (Jam)</em> terhadap <em>Skala Kualitas Tidur (0–100)</em>.
-        </div>
-        
-        <label style="font-size: 0.88rem; font-weight: 600;">Pertanyaan Pengarah 1 (Prediksi Awal):</label>
-        <p style="font-size: 0.82rem; color: #475569; margin: 2px 0 6px 0;">Menurut prediksimu, jika seseorang menambah screen time-nya, apakah kualitas tidurnya cenderung naik atau turun? Mengapa?</p>
-        <textarea id="prediksiAwal" placeholder="Tuliskan dugaannya di sini..."></textarea>
-      </div>
+        <h2>1. Pengolahan Data Spreadsheet</h2>
 
-      <!-- FITUR 1, 4 & 5: EKSPLORASI DATA, BANTUAN KALKULASI & SCAFFOLDING -->
-      <div class="card">
-        <h2>2. Pengolahan Data & Bantuan Kalkulasi <span class="badge">Tahap 2</span></h2>
-        <p style="font-size: 0.82rem; color: #475569;">
-          Data bivariat riil di bawah memuat angka desimal. Kamu bisa menghitung manual atau gunakan <strong>Bantuan Kalkulasi Auto-Fill</strong> untuk mempercepat perhitungan.
-        </p>
-
-        <div class="table-container">
-          <table>
+        <div class="spreadsheet-container">
+          <table class="spreadsheet">
             <thead>
               <tr>
-                <th>No</th>
-                <th>x (Jam)</th>
-                <th>y (Skor)</th>
-                <th>(x - x̄)</th>
-                <th>(y - ȳ)</th>
-                <th>(x - x̄)²</th>
-                <th>(x - x̄)(y - ȳ)</th>
+                <th style="width: 35px;"></th>
+                <th>A (No)</th>
+                <th>B (x)</th>
+                <th>C (y)</th>
+                <th>D (x - x̄)</th>
+                <th>E (y - ȳ)</th>
+                <th>F (x - x̄)²</th>
+                <th>G (x - x̄)(y - ȳ)</th>
               </tr>
             </thead>
-            <tbody id="tableBody">
-              <!-- Data dimasukkan via JS -->
+            <tbody>
+              <!-- Row 1 (Header Index 1) -->
+              <tr>
+                <td class="header-col">1</td>
+                <td>1</td><td>2</td><td>60</td>
+                <td><input type="text" id="cell_D1" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_E1" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_F1" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_G1" placeholder="" onchange="evalCell(this)"></td>
+              </tr>
+              <!-- Row 2 -->
+              <tr>
+                <td class="header-col">2</td>
+                <td>2</td><td>3</td><td>65</td>
+                <td><input type="text" id="cell_D2" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_E2" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_F2" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_G2" placeholder="" onchange="evalCell(this)"></td>
+              </tr>
+              <!-- Row 3 -->
+              <tr>
+                <td class="header-col">3</td>
+                <td>3</td><td>4</td><td>70</td>
+                <td><input type="text" id="cell_D3" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_E3" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_F3" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_G3" placeholder="" onchange="evalCell(this)"></td>
+              </tr>
+              <!-- Row 4 -->
+              <tr>
+                <td class="header-col">4</td>
+                <td>4</td><td>5</td><td>75</td>
+                <td><input type="text" id="cell_D4" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_E4" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_F4" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_G4" placeholder="" onchange="evalCell(this)"></td>
+              </tr>
+              <!-- Row 5 -->
+              <tr>
+                <td class="header-col">5</td>
+                <td>5</td><td>6</td><td>80</td>
+                <td><input type="text" id="cell_D5" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_E5" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_F5" placeholder="" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_G5" placeholder="" onchange="evalCell(this)"></td>
+              </tr>
             </tbody>
             <tfoot>
-              <tr style="font-weight: bold; background-color: #f1f5f9;">
-                <td>Total (Σ)</td>
-                <td id="sumX">20</td>
-                <td id="sumY">350</td>
-                <td>0</td>
-                <td>0</td>
-                <td><input type="number" id="userSSxx" placeholder="SSxx" oninput="syncInputs('userSSxx', 'inputSSxx')"></td>
-                <td><input type="number" id="userSSxy" placeholder="SSxy" oninput="syncInputs('userSSxy', 'inputSSxy')"></td>
+              <tr>
+                <td class="header-col">Σ</td>
+                <td>Total</td>
+                <td>20</td>
+                <td>350</td>
+                <td><input type="text" id="cell_D6" placeholder="Σ" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_E6" placeholder="Σ" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_F6" placeholder="Σ SSxx" onchange="evalCell(this)"></td>
+                <td><input type="text" id="cell_G6" placeholder="Σ SSxy" onchange="evalCell(this)"></td>
               </tr>
             </tfoot>
           </table>
         </div>
 
-        <button class="btn-calc" onclick="hitungOtomatisTabel()">⚡ Bantuan Kalkulasi Desimal Otomatis</button>
-
-        <div class="calc-box">
-          <div class="calc-row">
+        <div class="formula-box">
+          <div class="formula-row">
             <span>Rata-rata x̄ = <strong>4.0</strong></span>
             <span>Rata-rata ȳ = <strong>70.0</strong></span>
           </div>
-          <div class="calc-row">
-            <span>Nilai SSxx:</span>
-            <input type="number" id="inputSSxx" placeholder="SSxx" style="max-width: 120px;" oninput="syncInputs('inputSSxx', 'userSSxx')">
+          <div class="formula-row">
+            <span>Masukkan Nilai Total SSxx:</span>
+            <input type="number" id="inputSSxx" placeholder="SSxx" style="width: 120px; padding: 4px; text-align: center;">
           </div>
-          <div class="calc-row">
-            <span>Nilai SSxy:</span>
-            <input type="number" id="inputSSxy" placeholder="SSxy" style="max-width: 120px;" oninput="syncInputs('inputSSxy', 'userSSxy')">
+          <div class="formula-row">
+            <span>Masukkan Nilai Total SSxy:</span>
+            <input type="number" id="inputSSxy" placeholder="SSxy" style="width: 120px; padding: 4px; text-align: center;">
           </div>
         </div>
 
-        <button onclick="plotRegresi()">Gambarkan Garis Regresi di GeoGebra</button>
+        <button onclick="generateGarisRegresi()">Generate Garis Regresi Interaktif di GeoGebra</button>
 
-        <div class="calc-box" id="resultBox" style="text-align: center; font-weight: bold; margin-top: 10px; background: #f0fdf4;">
-          Persamaan Regresi y = a + bx akan muncul di sini.
+        <div class="formula-box" id="resultBox" style="text-align: center; font-weight: bold; margin-top: 10px; background: #ecfdf5; color: #065f46;">
+          Persamaan $y = a + bx$ akan muncul di sini.
         </div>
       </div>
 
-      <!-- FITUR 7: RUANG INTERPRETASI KONSEP -->
+      <!-- RUANG INTERPRETASI & PRESENTASI -->
       <div class="card">
-        <h2>3. Ruang Interpretasi Konsep <span class="badge">Tahap 3</span></h2>
-        <div class="scaffold-box">
-          <strong>Perhatian:</strong> Jangan hanya fokus pada angka! Jelaskan arti matematis dari hasil persamaan regresi yang kamu dapatkan.
+        <h2>2. Ruang Interpretasi Konsep & Presentasi</h2>
+
+        <div style="margin-bottom: 12px;">
+          <label style="font-size: 0.88rem; font-weight: 600;">A. Interpretasi Slope / Kemiringan ($b$):</label>
+          <textarea placeholder="Jelaskan arti nilai b bagi variabel y saat variabel x bertambah 1 unit..."></textarea>
         </div>
 
         <div style="margin-bottom: 12px;">
-          <label style="font-size: 0.88rem; font-weight: 600;">A. Interpretasi Slope / Kemiringan (b):</label>
-          <textarea id="interpSlope" placeholder="Apa arti nilai b bagi kualitas tidur jika Screen Time bertambah 1 jam?"></textarea>
+          <label style="font-size: 0.88rem; font-weight: 600;">B. Interpretasi Intercept ($a$):</label>
+          <textarea placeholder="Jelaskan arti nilai a saat variabel x bernilai 0..."></textarea>
         </div>
 
         <div>
-          <label style="font-size: 0.88rem; font-weight: 600;">B. Interpretasi Intercept (a):</label>
-          <textarea id="interpIntercept" placeholder="Apa arti nilai a jika seseorang tidak menggunakan HP sama sekali (0 jam)?"></textarea>
+          <label style="font-size: 0.88rem; font-weight: 600;">C. Kesimpulan Kelompok untuk Presentasi:</label>
+          <textarea placeholder="Rangkuman hasil diskusi kelompok yang siap disampaikan di depan kelas..."></textarea>
         </div>
       </div>
-
-      <!-- FITUR 8: AKTIVITAS KOLABORATIF & PRESENTASI -->
-      <div class="card">
-        <h2>4. Aktivitas Kolaboratif & Diskusi Kelompok <span class="badge">Tahap 4</span></h2>
-        <p style="font-size: 0.82rem; color: #475569;">Diskusikan bersama kelompokmu untuk menyusun kesimpulan akhir presentasi:</p>
-        
-        <div style="margin-bottom: 10px;">
-          <label style="font-size: 0.85rem; font-weight: 600;">Nama Anggota Kelompok:</label>
-          <input type="text" id="namaKelompok" placeholder="Contoh: Kelompok 1 (Budi, Ani, Siti)">
-        </div>
-
-        <div style="margin-bottom: 10px;">
-          <label style="font-size: 0.85rem; font-weight: 600;">Rangkuman Kesimpulan untuk Presentasi Kelas:</label>
-          <textarea id="rangkumanPresentasi" placeholder="Tuliskan poin penting yang akan disampaikan saat presentasi..."></textarea>
-        </div>
-      </div>
-
     </div>
 
-    <!-- KOLOM KANAN: GEOGEBRA (DIAGRAM PENCAR & MANIPULASI PARAMETER) -->
+    <!-- KOLOM KANAN: GEOGEBRA GARIS INTERAKTIF -->
     <div>
-      <!-- FITUR 2 & 3: VISUALISASI DIAGRAM PENCAR & MANIPULASI DATA/PARAMETER -->
       <div class="card" style="position: sticky; top: 10px;">
-        <h2>2. Visualisasi Diagram Pencar & Manipulasi Data</h2>
+        <h2>3. Visualisasi GeoGebra Interaktif</h2>
         <div class="scaffold-box">
-          <strong>Uji Manipulasi Data:</strong> Kamu dapat menggeser titik-titik pada grafik GeoGebra secara langsung untuk mengamati bagaimana arah garis regresi berubah jika terdapat pencilan (outlier)!
+          <strong>Eksplorasi Garis:</strong> Titik-titik data (A-E) dan garis regresi yang dihasilkan dapat digeser/digerakkan langsung di kanvas untuk melihat perubahan persamaannya secara dinamis.
         </div>
 
         <div id="ggb-wrapper">
@@ -347,89 +356,88 @@
 <script>
   let ggbApi = null;
 
-  // Dataset Riil
-  const dataPoints = [
-    {x: 2.0, y: 60.0},
-    {x: 3.0, y: 65.0},
-    {x: 4.0, y: 70.0},
-    {x: 5.0, y: 75.0},
-    {x: 6.0, y: 80.0}
-  ];
+  // Data awal x dan y untuk rujukan formula spreadsheet
+  const spreadsheetData = {
+    'B1': 2, 'C1': 60,
+    'B2': 3, 'C2': 65,
+    'B3': 4, 'C3': 70,
+    'B4': 5, 'C4': 75,
+    'B5': 6, 'C5': 80
+  };
 
-  // Render Tabel Isian saat pertama load
-  function renderTable() {
-    const tbody = document.getElementById("tableBody");
-    tbody.innerHTML = "";
-    dataPoints.forEach((pt, i) => {
-      tbody.innerHTML += `
-        <tr>
-          <td>${i+1}</td>
-          <td>${pt.x}</td>
-          <td>${pt.y}</td>
-          <td><input type="number" id="dx_${i}" step="any" placeholder="..."></td>
-          <td><input type="number" id="dy_${i}" step="any" placeholder="..."></td>
-          <td><input type="number" id="sqx_${i}" step="any" placeholder="..."></td>
-          <td><input type="number" id="dxy_${i}" step="any" placeholder="..."></td>
-        </tr>
-      `;
-    });
+  // Evaluator Formula Sederhana untuk Spreadsheet (=SUM, =, Perkalian, Pengurangan)
+  function evalCell(inputEl) {
+    let val = inputEl.value.trim();
+    if (!val.startsWith('=')) return;
+
+    try {
+      let expr = val.substring(1).toUpperCase();
+
+      // Handle =SUM(X1:X2)
+      if (expr.startsWith('SUM(') && expr.endsWith(')')) {
+        let range = expr.substring(4, expr.length - 1).split(':');
+        if (range.length === 2) {
+          let col = range[0].charAt(0);
+          let startRow = parseInt(range[0].substring(1));
+          let endRow = parseInt(range[1].substring(1));
+          let sum = 0;
+          for (let r = startRow; r <= endRow; r++) {
+            let cellVal = parseFloat(document.getElementById(`cell_${col}${r}`)?.value) || 0;
+            sum += cellVal;
+          }
+          inputEl.value = sum.toFixed(2);
+          return;
+        }
+      }
+
+      // Replace nama cell (seperti B1, C1, D1) dengan nilainya
+      expr = expr.replace(/([A-G][1-6])/g, function(match) {
+        if (spreadsheetData[match] !== undefined) {
+          return spreadsheetData[match];
+        }
+        let el = document.getElementById(`cell_${match}`);
+        return el ? (parseFloat(el.value) || 0) : 0;
+      });
+
+      // Eval matematis aman
+      let result = Function(`'use strict'; return (${expr})`)();
+      inputEl.value = Number.isInteger(result) ? result : result.toFixed(2);
+
+    } catch (e) {
+      console.log("Formula Error:", e);
+    }
   }
 
-  // Callback Inisialisasi GeoGebra
+  // Callback saat GeoGebra Siap
   function ggbOnInit(api) {
     ggbApi = api;
     ggbApi.setCoordSystem(0, 8, 40, 90);
-    
-    // Render Diagram Pencar
-    dataPoints.forEach((pt, index) => {
-      let label = String.fromCharCode(65 + index);
-      ggbApi.evalCommand(`${label} = (${pt.x}, ${pt.y})`);
-      ggbApi.setColor(label, 37, 99, 235);
-      ggbApi.setPointSize(label, 6);
+
+    // Plot Scatter Plot Awal
+    const initialPoints = [
+      {label: 'A', x: 2, y: 60},
+      {label: 'B', x: 3, y: 65},
+      {label: 'C', x: 4, y: 70},
+      {label: 'D', x: 5, y: 75},
+      {label: 'E', x: 6, y: 80}
+    ];
+
+    initialPoints.forEach(pt => {
+      ggbApi.evalCommand(`${pt.label} = (${pt.x}, ${pt.y})`);
+      ggbApi.setColor(pt.label, 37, 99, 235);
+      ggbApi.setPointSize(pt.label, 6);
     });
   }
 
-  // FITUR 4: Bantuan Kalkulasi Desimal Otomatis
-  function hitungOtomatisTabel() {
-    let xBar = 4.0;
-    let yBar = 70.0;
-    let ssxx = 0;
-    let ssxy = 0;
-
-    dataPoints.forEach((pt, i) => {
-      let dx = pt.x - xBar;
-      let dy = pt.y - yBar;
-      let sqx = dx * dx;
-      let dxy = dx * dy;
-
-      ssxx += sqx;
-      ssxy += dxy;
-
-      document.getElementById(`dx_${i}`).value = dx.toFixed(2);
-      document.getElementById(`dy_${i}`).value = dy.toFixed(2);
-      document.getElementById(`sqx_${i}`).value = sqx.toFixed(2);
-      document.getElementById(`dxy_${i}`).value = dxy.toFixed(2);
-    });
-
-    document.getElementById("userSSxx").value = ssxx.toFixed(2);
-    document.getElementById("userSSxy").value = ssxy.toFixed(2);
-    document.getElementById("inputSSxx").value = ssxx.toFixed(2);
-    document.getElementById("inputSSxy").value = ssxy.toFixed(2);
-  }
-
-  function syncInputs(idSource, idTarget) {
-    document.getElementById(idTarget).value = document.getElementById(idSource).value;
-  }
-
-  // Fitur Plot Garis Regresi
-  function plotRegresi() {
+  // Generate Garis Regresi Interaktif (Dapat Digerak-gerakkan)
+  function generateGarisRegresi() {
     var ssxx = parseFloat(document.getElementById("inputSSxx").value);
     var ssxy = parseFloat(document.getElementById("inputSSxy").value);
     var xBar = 4.0;
     var yBar = 70.0;
 
     if (isNaN(ssxx) || isNaN(ssxy) || ssxx === 0) {
-      alert("Harap isi atau gunakan Bantuan Kalkulasi untuk SSxx dan SSxy!");
+      alert("Harap masukkan nilai total SSxx dan SSxy dari spreadsheet!");
       return;
     }
 
@@ -437,22 +445,41 @@
     var a = yBar - (b * xBar);
 
     document.getElementById("resultBox").innerHTML = 
-      `Persamaan Regresi:<br><span style="color: #059669; font-size: 1.1rem;">y = ${a.toFixed(2)} + ${b.toFixed(2)}x</span>`;
+      `Persamaan Garis Regresi:<br><span style="color: #059669; font-size: 1.1rem;">y = ${a.toFixed(2)} + ${b.toFixed(2)}x</span>`;
 
     if (ggbApi) {
-      ggbApi.evalCommand(`f(x) = ${a} + ${b} * x`);
+      // Hapus garis f jika sudah ada sebelumnya
+      ggbApi.deleteObject('f');
+      ggbApi.deleteObject('P1');
+      ggbApi.deleteObject('P2');
+
+      // Buat 2 Titik Kontrol Interaktif di atas garis agar garis BISA DIGERAKKAN/DIGESER siswa
+      let y1 = a + (b * 2);
+      let y2 = a + (b * 6);
+      
+      ggbApi.evalCommand(`P1 = (2, ${y1})`);
+      ggbApi.evalCommand(`P2 = (6, ${y2})`);
+      
+      // Styling Titik Kontrol Garis (Warna Merah Interaktif)
+      ggbApi.setColor('P1', 220, 38, 38);
+      ggbApi.setColor('P2', 220, 38, 38);
+      ggbApi.setPointSize('P1', 5);
+      ggbApi.setPointSize('P2', 5);
+
+      // Gambar Garis yang Menghubungkan Kedua Titik Kontrol Tersebut
+      ggbApi.evalCommand(`f = Line(P1, P2)`);
       ggbApi.setColor('f', 220, 38, 38);
-      ggbApi.setLineThickness('f', 4);
+      ggbApi.setLineThickness('f', 3);
     }
   }
 
-  // Embed GeoGebra Lengkap Toolbar Aktif & Responsif
+  // Parameters GeoGebra Full Interaktif
   var params = {
     "appName": "classic",
     "width": 600,
     "height": 500,
-    "showToolBar": true,         // Toolbar tombol GeoGebra muncul penuh
-    "showAlgebraInput": true,    // Algebra view aktif
+    "showToolBar": true,
+    "showAlgebraInput": true,
     "showMenuBar": false,
     "enableShiftDragZoom": true,
     "borderColor": "#ffffff",
@@ -461,7 +488,6 @@
 
   var applet = new GGBApplet(params, true);
   window.addEventListener("load", function() { 
-    renderTable();
     applet.inject('ggb-element'); 
   });
 </script>
