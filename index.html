@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-LKM Digital: Regresi Linear Sederhana</title>
+  <title>LKPD Digital: Eksplorasi Regresi Linear</title>
 
   <!-- Script API GeoGebra -->
   <script src="https://www.geogebra.org/apps/deployggb.js"></script>
@@ -28,7 +28,11 @@
       line-height: 1.5;
     }
 
-    .container { width: 100%; max-width: 100%; margin: 0 auto; }
+    .container {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+    }
 
     header {
       background: linear-gradient(135deg, #1e3a8a, #3b82f6);
@@ -36,10 +40,23 @@
       padding: 20px;
       border-radius: 12px;
       margin-bottom: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
     }
 
     header h1 { margin: 0 0 6px 0; font-size: 1.6rem; }
-    header p { margin: 0; opacity: 0.95; font-size: 0.95rem; }
+    header p { margin: 0; opacity: 0.9; font-size: 0.95rem; }
+
+    .grid-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    @media (min-width: 992px) {
+      .grid-layout {
+        grid-template-columns: 1fr 1fr; /* Membagi 2 kolom seimbang (Kiri: Spreadsheet, Kanan: Grafik) */
+      }
+    }
 
     .card {
       background: var(--card-bg);
@@ -52,39 +69,84 @@
 
     .card h2 {
       margin-top: 0;
-      font-size: 1.15rem;
+      font-size: 1.2rem;
       color: var(--primary-color);
       border-bottom: 2px solid #f1f5f9;
       padding-bottom: 8px;
     }
 
-    .scaffold-box {
-      background-color: #f0f9ff;
-      border-left: 4px solid var(--secondary-color);
-      padding: 12px 16px;
-      margin-bottom: 15px;
-      border-radius: 0 8px 8px 0;
-      font-size: 0.88rem;
-    }
-
-    /* Container GeoGebra Layar Penuh */
-    #ggb-wrapper {
+    /* Container untuk Applet GeoGebra */
+    .ggb-wrapper {
       width: 100%;
-      min-height: 550px;
+      height: 480px;
       background: #ffffff;
       border-radius: 8px;
       overflow: hidden;
       border: 1px solid #cbd5e1;
     }
 
+    .formula-box {
+      background-color: #eff6ff;
+      border: 1px solid #bfdbfe;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .formula-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    input[type="number"] {
+      width: 90px;
+      padding: 6px;
+      border: 1px solid #94a3b8;
+      border-radius: 4px;
+      text-align: center;
+      font-size: 0.88rem;
+    }
+
+    .result-box {
+      background-color: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+      font-size: 1.05rem;
+      margin-top: 12px;
+    }
+
+    button {
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 10px;
+      font-size: 0.95rem;
+    }
+
+    button:hover {
+      background-color: var(--primary-color);
+    }
+
     textarea {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       border: 1px solid #94a3b8;
       border-radius: 6px;
       font-family: inherit;
       resize: vertical;
-      min-height: 70px;
+      min-height: 60px;
     }
   </style>
 </head>
@@ -93,117 +155,184 @@
 <div class="container">
   
   <header>
-    <h1>E-LKM DIGITAL: REGRESI LINEAR SEDERHANA</h1>
-    <p>Matematika SMA Kelas 11 (Fase F) | Integrasi GeoGebra Spreadsheet & Garis Interaktif</p>
+    <h1>LKPD DIGITAL: KONSTRUKSI REGRESI LINEAR SEDERHANA</h1>
+    <p>Matematika SMA Kelas 11 (Fase F) | Integrasi GeoGebra Spreadsheet & Graphical View</p>
   </header>
 
-  <!-- PETUNJUK PENGERJAAN E-LKM -->
-  <div class="card" style="border-left: 5px solid var(--secondary-color);">
-    <h2>📌 Petunjuk Pengerjaan E-LKM</h2>
-    <div class="scaffold-box" style="margin-bottom:0;">
-      <strong>Cara Menggunakan Embed Spreadsheet & Grafik GeoGebra:</strong>
-      <ol style="margin: 5px 0 0 0; padding-left: 20px;">
-        <li>Gunakan tampilan <strong>Spreadsheet GeoGebra</strong> di sebelah kiri untuk mengolah data desimal. Murid dapat mengetik rumus Excel standar seperti <code>=SUM(D1:D5)</code> atau <code>=B1*C1</code> langsung di sel tabel.</li>
-        <li>Amati tampilan <strong>Grafik (Graphics)</strong> di sebelah kanan. Titik data dan garis regresi interaktif dapat digeser/digerakkan langsung.</li>
-        <li>Tuliskan hasil interpretasi matematis kelompokmu pada kolom pertanyaan di bawah.</li>
-      </ol>
+  <div class="grid-layout">
+    
+    <!-- KOLOM KIRI: SPREADSHEET GEOGEBRA BAWAAN -->
+    <div>
+      <div class="card">
+        <h2>1. Pengolahan Data (Spreadsheet GeoGebra)</h2>
+        <p style="font-size: 0.85rem; color: #475569;">
+          Gunakan spreadsheet di bawah ini untuk menghitung deviasi dan perkaliannya. Kamu dapat menggunakan rumus formula bawaan (contoh: <code>=A2-4</code> atau <code>=SUM(C2:C6)</code>).
+        </p>
+
+        <!-- Applet Kiri: Hanya Tampilan Spreadsheet -->
+        <div class="ggb-wrapper">
+          <div id="ggb-spreadsheet"></div>
+        </div>
+
+        <div class="formula-box">
+          <div class="formula-row">
+            <span>Rata-rata x (x̄): <strong>4</strong></span>
+            <span>Rata-rata y (ȳ): <strong>70</strong></span>
+          </div>
+          <div class="formula-row">
+            <span>Masukkan nilai SSxx hasil hitunganmu:</span>
+            <input type="number" id="inputSSxx" step="any" placeholder="SSxx">
+          </div>
+          <div class="formula-row">
+            <span>Masukkan nilai SSxy hasil hitunganmu:</span>
+            <input type="number" id="inputSSxy" step="any" placeholder="SSxy">
+          </div>
+        </div>
+
+        <button onclick="cekPersamaan()">Cek Persamaan Regresi & Gambar Garis</button>
+
+        <div class="result-box" id="resultBox">
+          Persamaan y = a + bx akan muncul di sini setelah kamu isi!
+        </div>
+      </div>
     </div>
+
+    <!-- KOLOM KANAN: GEOGEBRA GRAPHICS (SCATTER PLOT & GARIS REGRESI) -->
+    <div>
+      <div class="card">
+        <h2>2. Verifikasi Grafis di GeoGebra</h2>
+        <p style="font-size: 0.85rem; color: #475569;">
+          Titik data (scatter plot) sudah diplot otomatis. Garis regresi akan muncul setelah tombol di samping kiri ditekan!
+        </p>
+
+        <!-- Applet Kanan: Hanya Tampilan Grafik Kartesius -->
+        <div class="ggb-wrapper">
+          <div id="ggb-graphics"></div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- EMBED GEOGEBRA SPREADSHEET + GRAPHICS -->
+  <!-- RUANG INTERPRETASI KELOMPOK -->
   <div class="card">
-    <h2>1. Pengolahan Data Spreadsheet & Visualisasi Grafis</h2>
-    <div id="ggb-wrapper">
-      <div id="ggb-element"></div>
-    </div>
-  </div>
-
-  <!-- RUANG INTERPRETASI & PRESENTASI -->
-  <div class="card">
-    <h2>2. Ruang Interpretasi Konsep & Presentasi Kelompok</h2>
-
-    <div style="margin-bottom: 15px;">
-      <label style="font-size: 0.9rem; font-weight: 600;">A. Tuliskan Persamaan Garis Regresi $y = a + bx$ yang Diperoleh:</label>
-      <textarea placeholder="Contoh: y = 50.00 + 5.00x"></textarea>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <label style="font-size: 0.9rem; font-weight: 600;">B. Interpretasi Slope / Kemiringan ($b$):</label>
+    <h2>3. Ruang Interpretasi Konsep</h2>
+    <div style="margin-bottom: 12px;">
+      <label style="font-size: 0.88rem; font-weight: 600;">A. Interpretasi Slope / Kemiringan ($b$):</label>
       <textarea placeholder="Jelaskan arti nilai b bagi variabel y saat variabel x bertambah 1 unit..."></textarea>
     </div>
-
-    <div style="margin-bottom: 15px;">
-      <label style="font-size: 0.9rem; font-weight: 600;">C. Interpretasi Intercept ($a$):</label>
-      <textarea placeholder="Jelaskan arti nilai a saat variabel x bernilai 0..."></textarea>
-    </div>
-
     <div>
-      <label style="font-size: 0.9rem; font-weight: 600;">D. Kesimpulan Kelompok untuk Presentasi:</label>
-      <textarea placeholder="Rangkuman hasil diskusi kelompok yang siap disampaikan saat presentasi..."></textarea>
+      <label style="font-size: 0.88rem; font-weight: 600;">B. Interpretasi Intercept ($a$):</label>
+      <textarea placeholder="Jelaskan arti nilai a saat variabel x bernilai 0..."></textarea>
     </div>
   </div>
 
 </div>
 
 <script>
-  let ggbApi = null;
+  let ggbSpreadsheetApi = null;
+  let ggbGraphicsApi = null;
 
-  // Callback saat GeoGebra Selesai Dimuat
-  function ggbOnInit(api) {
-    ggbApi = api;
+  // Data sampel awal
+  const dataPoints = [
+    {x: 2, y: 60},
+    {x: 3, y: 65},
+    {x: 4, y: 70},
+    {x: 5, y: 75},
+    {x: 6, y: 80}
+  ];
 
-    // 1. Memaksa GeoGebra Membuka Tampilan SPREADSHEET dan GRAPHICS (Kombinasi "SG")
-    ggbApi.setPerspective("SG"); 
+  // Callback Inisialisasi Applet Kiri (Spreadsheet)
+  function initSpreadsheet(api) {
+    ggbSpreadsheetApi = api;
+    ggbSpreadsheetApi.setPerspective("S"); // Memaksa hanya menampilkan Spreadsheet View
 
-    // 2. Set Tampilan Koordinat Grafik
-    ggbApi.setCoordSystem(0, 8, 40, 90);
+    // 1. Isikan Header Keterangan Kolom
+    ggbSpreadsheetApi.setTextValue("A1", "x");
+    ggbSpreadsheetApi.setTextValue("B1", "y");
+    ggbSpreadsheetApi.setTextValue("C1", "x - x̄");
+    ggbSpreadsheetApi.setTextValue("D1", "y - ȳ");
+    ggbSpreadsheetApi.setTextValue("E1", "(x - x̄)²");
+    ggbSpreadsheetApi.setTextValue("F1", "(x - x̄)(y - ȳ)");
+    ggbSpreadsheetApi.setTextValue("A7", "Total (Σ)");
 
-    // 3. Masukkan Data x dan y ke Sel Spreadsheet GeoGebra secara Otomatis
-    const dataX = [2, 3, 4, 5, 6];
-    const dataY = [60, 65, 70, 75, 80];
-
-    for (let i = 0; i < dataX.length; i++) {
-      ggbApi.setValue(`A${i+1}`, dataX[i]);
-      ggbApi.setValue(`B${i+1}`, dataY[i]);
-    }
-
-    // 4. Plot Titik Data Scatter Plot di Grafik
-    dataX.forEach((x, index) => {
-      let y = dataY[index];
-      let label = String.fromCharCode(65 + index); // Titik A, B, C, D, E
-      ggbApi.evalCommand(`${label} = (${x}, ${y})`);
-      ggbApi.setColor(label, 37, 99, 235);
-      ggbApi.setPointSize(label, 6);
+    // 2. Isikan Data Sampel x dan y ke Baris 2-6
+    dataPoints.forEach((pt, index) => {
+      let row = index + 2;
+      ggbSpreadsheetApi.setValue(`A${row}`, pt.x);
+      ggbSpreadsheetApi.setValue(`B${row}`, pt.y);
     });
-
-    // 5. Buat Garis Regresi Interaktif yang Bisa Digerak-gerakkan Siswa
-    ggbApi.evalCommand(`P1 = (2, 60)`);
-    ggbApi.evalCommand(`P2 = (6, 80)`);
-    ggbApi.setColor('P1', 220, 38, 38);
-    ggbApi.setColor('P2', 220, 38, 38);
-    
-    ggbApi.evalCommand(`f = Line(P1, P2)`);
-    ggbApi.setColor('f', 220, 38, 38);
-    ggbApi.setLineThickness('f', 4);
   }
 
-  // Configurations GeoGebra Embed
-  var params = {
+  // Callback Inisialisasi Applet Kanan (Graphics)
+  function initGraphics(api) {
+    ggbGraphicsApi = api;
+    ggbGraphicsApi.setPerspective("G"); // Memaksa hanya menampilkan Graphics View
+    ggbGraphicsApi.setCoordSystem(0, 8, 40, 90);
+
+    // Plot Scatter Plot Titik A-E
+    dataPoints.forEach((pt, index) => {
+      let label = String.fromCharCode(65 + index);
+      ggbGraphicsApi.evalCommand(`${label} = (${pt.x}, ${pt.y})`);
+      ggbGraphicsApi.setColor(label, 37, 99, 235);
+      ggbGraphicsApi.setPointSize(label, 6);
+    });
+  }
+
+  // Fungsi saat tombol "Cek Persamaan" Ditekan
+  function cekPersamaan() {
+    var ssxx = parseFloat(document.getElementById("inputSSxx").value);
+    var ssxy = parseFloat(document.getElementById("inputSSxy").value);
+    var xBar = 4;
+    var yBar = 70;
+
+    if (isNaN(ssxx) || isNaN(ssxy) || ssxx === 0) {
+      alert("Harap masukkan nilai SSxx dan SSxy dari hasil hitungan spreadsheet-mu!");
+      return;
+    }
+
+    var b = ssxy / ssxx;
+    var a = yBar - (b * xBar);
+
+    document.getElementById("resultBox").innerHTML = 
+      "Persamaan Regresimu:<br><strong>y = " + a.toFixed(2) + " + " + b.toFixed(2) + "x</strong>";
+
+    // Gambar Garis Regresi di Applet Kanan (Graphics)
+    if (ggbGraphicsApi) {
+      ggbGraphicsApi.evalCommand(`f(x) = ${a} + ${b} * x`);
+      ggbGraphicsApi.setColor('f', 220, 38, 38);
+      ggbGraphicsApi.setLineThickness('f', 4);
+    }
+  }
+
+  // Setup Applet 1: Spreadsheet (Kiri)
+  var paramsSpreadsheet = {
     "appName": "classic",
-    "width": 1150,
-    "height": 550,
-    "showToolBar": true,
-    "showAlgebraInput": true,
+    "width": 550,
+    "height": 460,
+    "showToolBar": false,
+    "showAlgebraInput": false,
     "showMenuBar": false,
-    "enableShiftDragZoom": true,
-    "borderColor": "#ffffff",
-    "appletOnLoad": ggbOnInit
+    "appletOnLoad": initSpreadsheet
   };
 
-  var applet = new GGBApplet(params, true);
+  // Setup Applet 2: Graphics (Kanan)
+  var paramsGraphics = {
+    "appName": "classic",
+    "width": 550,
+    "height": 460,
+    "showToolBar": true,
+    "showAlgebraInput": false,
+    "showMenuBar": false,
+    "enableShiftDragZoom": true,
+    "appletOnLoad": initGraphics
+  };
+
   window.addEventListener("load", function() { 
-    applet.inject('ggb-element'); 
+    new GGBApplet(paramsSpreadsheet, true).inject('ggb-spreadsheet'); 
+    new GGBApplet(paramsGraphics, true).inject('ggb-graphics'); 
   });
 </script>
+
 </body>
 </html>
