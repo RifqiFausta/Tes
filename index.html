@@ -427,7 +427,7 @@
                   Segmen residuum
                 </label>
                 <label class="flex items-center gap-1.5 cursor-pointer">
-                  <input type="checkbox" id="chkResidSq" class="accent-orange-600">
+                  <input type="checkbox" id="chkResidSq" checked class="accent-orange-600">
                   Kotak kuadrat residuum (e²)
                 </label>
               </div>
@@ -1280,16 +1280,21 @@
       ggbApi.setVisible('aReg', false);
       ggbApi.setVisible('bReg', false);
 
-      // Faktor agar e² tampak sebagai persegi sungguhan di layar meski skala sumbu X dan Y berbeda:
-      // kSq = (satuan X per piksel) / (satuan Y per piksel). Sisi persegi = |e| satuan Y = |e|·kSq satuan X.
-      ggbApi.evalCommand('kSq = ((x(Corner(2)) - x(Corner(1))) / x(Corner(5))) / ((y(Corner(4)) - y(Corner(1))) / y(Corner(5)))');
-      let k = ggbApi.getValue('kSq');
-      if (!isFinite(k) || k <= 0) {
-        // Cadangan bila ukuran view belum terbaca: hitung dari ukuran applet (480 x 440)
-        k = ((view.xMax - view.xMin) / 480) / ((view.yMax - view.yMin) / 440);
-        ggbApi.evalCommand(`kSq = ${gnum(k)}`);
-      }
+      // Faktor koreksi rasio sumbu agar sisi kotak tampak persegi pada layar.
+      // Tidak menggunakan Corner(), Square(), atau perintah GeoGebra yang
+      // berpotensi tidak didukung oleh applet.
+      const xRange = Number(view.xMax - view.xMin);
+      const yRange = Number(view.yMax - view.yMin);
+      const appletW = 480;
+      const appletH = 440;
+      let kSq = (xRange / appletW) / (yRange / appletH);
+      if (!isFinite(kSq) || kSq <= 0) kSq = 1;
+      ggbApi.evalCommand(`kSq = ${gnum(kSq)}`);
       ggbApi.setVisible('kSq', false);
+
+      // Kotak kuadrat dibuat langsung dari ruas residuum P-Q.
+      // Kotak dibuat dengan Polygon agar kompatibel dengan GeoGebra Classic/web.
+      // sehingga tidak bergantung pada perhitungan skala layar (kSq).
 
       const colors = { r: [234, 88, 12], e: [124, 58, 237] };
 
@@ -1301,15 +1306,21 @@
           const Q = `P${t}_{${i}}`;   // titik prediksi (x_i, ŷ_i)
           const S = `S${t}_{${i}}`;   // segmen residuum
           const K = `K${t}_{${i}}`;   // kotak kuadrat residuum
+          const T = `T${t}_{${i}}`;   // label nilai kuadrat residuum (e²)
           const yHat = t === 'r'
             ? `aReg + bReg * x(${P})`
             : `cIntercept + mSlope * x(${P})`;
-          const side = `abs(y(${P}) - y(${Q})) * kSq`;
           const [R, G, B] = colors[t];
 
           ggbApi.evalCommand(`${Q} = (x(${P}), ${yHat})`);
           ggbApi.evalCommand(`${S} = Segment(${P}, ${Q})`);
+          // P-Q adalah panjang residual |e|. Buat persegi secara manual
+          // dengan sisi yang dikoreksi terhadap rasio skala sumbu GeoGebra.
+          const side = `abs(y(${P}) - y(${Q})) * kSq`;
           ggbApi.evalCommand(`${K} = Polygon({${P}, (x(${P}) + ${side}, y(${P})), (x(${P}) + ${side}, y(${Q})), ${Q}})`);
+
+          // Nilai numerik e² ditampilkan di dekat kotak dan ikut berubah saat slider digeser.
+          ggbApi.evalCommand(`${T} = Text("e² = " + ((y(${P}) - y(${Q}))^2), (x(${Q}) + 0.15, (y(${P}) + y(${Q})) / 2))`);
 
           ggbApi.setColor(Q, R, G, B);
           ggbApi.setPointSize(Q, 4);
@@ -1324,6 +1335,9 @@
           ggbApi.setFilling(K, 0.2);
           ggbApi.setLineThickness(K, 2);
           ggbApi.setLabelVisible(K, false);
+
+          ggbApi.setColor(T, R, G, B);
+          ggbApi.setLabelVisible(T, false);
         });
       });
 
@@ -1349,6 +1363,8 @@
             ggbApi.setVisible(`P${t}_{${i}}`, active && showSeg);
             ggbApi.setVisible(`S${t}_{${i}}`, active && showSeg);
             ggbApi.setVisible(`K${t}_{${i}}`, active && showSq);
+            // Nilai e² mengikuti kotak residuum yang sedang dipilih.
+            ggbApi.setVisible(`T${t}_{${i}}`, active && showSq);
           } catch (err) { /* objek mungkin belum ada */ }
         });
       }
