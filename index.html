@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="id"><head>
+<html lang="id">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LKPD Digital: Regresi Linear Interaktif (Satset &amp; Ringan)</title>
@@ -87,6 +88,7 @@
       cursor: crosshair;
       pointer-events: auto;
       z-index: 25;
+      touch-action: none;
     }
 
     /* Selection rectangle for drag fill */
@@ -95,17 +97,12 @@
       border: 1px dashed #2563eb !important;
     }
 
-    /* Prevent the browser from interpreting the fill drag as page scrolling. */
-    #fill-handle {
-      touch-action: none;
-    }
-
     body.is-drag-filling,
     body.is-drag-filling * {
       cursor: crosshair !important;
     }
 
-    /* Kolom residu (H–J): terisi otomatis, tidak bisa diedit */
+    /* Kolom residuum (H–J): terisi otomatis, tidak bisa diedit */
     .sheet-table th.auto-col {
       background-color: #ffedd5;
       color: #9a3412;
@@ -147,11 +144,30 @@
         <div>
           <h1 class="text-xl md:text-2xl font-bold tracking-tight mb-1">LKPD DIGITAL: EKSPLORASI REGRESI LINEAR</h1>
           <p class="text-blue-100 text-xs md:text-sm opacity-95">
-            Spreadsheet interaktif: Ketik angka, klik sel saat memasukkan rumus (diawali <code>=</code>), tarik <i>drag handle</i>, dan lihat garis regresi GeoGebra ter-update seketika!
+            Spreadsheet interaktif: Ketik angka, klik sel saat memasukkan rumus (diawali <code>=</code>), tarik <i>drag handle</i>, dan lihat garis regresi GeoGebra!
           </p>
         </div>
       </div>
     </header>
+
+    <!-- IDENTITAS MURID -->
+    <section class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3" aria-labelledby="identityHeading">
+      <h2 id="identityHeading" class="text-base md:text-lg font-bold text-blue-900">Identitas Murid</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div class="space-y-1">
+          <label for="studentName" class="block text-xs font-semibold text-slate-700">Nama lengkap</label>
+          <input id="studentName" type="text" autocomplete="name" required placeholder="Masukkan nama lengkap" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+        <div class="space-y-1">
+          <label for="studentNumber" class="block text-xs font-semibold text-slate-700">Nomor absen</label>
+          <input id="studentNumber" type="number" min="1" step="1" required placeholder="Nomor absen" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+        <div class="space-y-1">
+          <label for="studentClass" class="block text-xs font-semibold text-slate-700">Kelas</label>
+          <input id="studentClass" type="text" required placeholder="Contoh: XI F8" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+      </div>
+    </section>
 
     <!-- Main Grid Layout -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
@@ -199,7 +215,7 @@
                   <th style="width: 110px;">F<br><span class="text-[10px] font-normal text-slate-500">(X − x̄)²</span></th>
                   <th style="width: 130px;">G<br><span class="text-[10px] font-normal text-slate-500">(X − x̄)(Y − ȳ)</span></th>
                   <th class="auto-col" style="width: 110px;">H<br><span class="text-[10px] font-normal text-orange-700">Prediksi (Ŷ)</span></th>
-                  <th class="auto-col" style="width: 130px;">I<br><span class="text-[10px] font-normal text-orange-700">residu (e = Y − Ŷ)</span></th>
+                  <th class="auto-col" style="width: 130px;">I<br><span class="text-[10px] font-normal text-orange-700">Residuum (e = Y − Ŷ)</span></th>
                   <th class="auto-col" style="width: 120px;">J<br><span class="text-[10px] font-normal text-orange-700">Kuadrat (e²)</span></th>
                 </tr>
               </thead>
@@ -295,7 +311,7 @@
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">
-              <span>🔬</span> 4. Eksperimen residu
+              <span>🔬</span> 4. Eksperimen Residuum
             </h2>
             <span id="residStatus" class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 border border-slate-200">
               🔒 Terbuka setelah Langkah 2 benar
@@ -303,8 +319,8 @@
           </div>
 
           <p class="text-xs text-slate-600 leading-relaxed">
-            <strong>residu</strong> adalah selisih antara nilai Y hasil pengamatan dan nilai Ŷ hasil prediksi garis,
-            yaitu <em>e<sub>i</sub> = y<sub>i</sub> − ŷ<sub>i</sub></em>. Di GeoGebra, residu tampak sebagai
+            <strong>Residuum</strong> adalah selisih antara nilai Y hasil pengamatan dan nilai Ŷ hasil prediksi garis,
+            yaitu <em>e<sub>i</sub> = y<sub>i</sub> − ŷ<sub>i</sub></em>. Di GeoGebra, residuum tampak sebagai
             segmen putus-putus dari setiap titik data menuju garis. Kolom H–J pada spreadsheet menghitungnya otomatis.
           </p>
 
@@ -312,7 +328,7 @@
             <div class="font-bold text-blue-950 text-xs md:text-sm">Panduan Eksperimen</div>
             <ol class="list-decimal list-inside space-y-1 text-xs text-slate-700 leading-relaxed">
               <li>Lihat baris <em>Total</em> pada kolom I dan J di spreadsheet. Catat nilai Σe dan Σe² (SSE).</li>
-              <li>Di panel GeoGebra, centang <strong>Kotak kuadrat residu</strong> untuk melihat e² sebagai luas persegi.</li>
+              <li>Di panel GeoGebra, centang <strong>Kotak kuadrat residuum</strong> untuk melihat e² sebagai luas persegi.</li>
               <li>Pilih <strong>Garis eksplorasi</strong>, lalu geser slider m dan c. Amati Σe² garis Anda dan bandingkan dengan Σe² garis regresi.</li>
             </ol>
           </div>
@@ -320,7 +336,7 @@
           <div class="space-y-4">
             <div class="space-y-1.5">
               <label for="refleksiResid1" class="block text-xs font-semibold text-slate-700">
-                1. Apa yang terjadi pada panjang garis residu ketika posisi garis mendekati kumpulan titik data?
+                1. Apa yang terjadi pada panjang garis residuum ketika posisi garis mendekati kumpulan titik data?
               </label>
               <textarea id="refleksiResid1" rows="3" placeholder="Tuliskan pengamatanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
             </div>
@@ -334,7 +350,7 @@
 
             <div class="space-y-1.5">
               <label for="refleksiResid3" class="block text-xs font-semibold text-slate-700">
-                3. Mengapa kita perlu mengkuadratkan nilai residu (e²) alih-alih hanya menjumlahkan nilai residu biasa (e)?
+                3. Mengapa kita perlu mengkuadratkan nilai residuum (e²) alih-alih hanya menjumlahkan nilai residuum biasa (e)?
               </label>
               <p class="text-[11px] text-slate-500">
                 Petunjuk: letakkan garis mendatar (m = 0) dengan c di sekitar ȳ, lalu bandingkan Σe dan Σe².
@@ -343,15 +359,22 @@
             </div>
           </div>
 
-          <div class="bg-blue-50/80 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-900 space-y-2">
+          <div class="flex items-center justify-between pt-2">
+                <button type="button" onclick="goToReflection()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1.5">
+          <span>Lanjut ke Refleksi</span>
+          <span>➔</span>
+        </button>
+      </div>
+
+          <div id="conceptSummary" class="hidden bg-blue-50/80 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-900 space-y-2">
             <div class="font-bold flex items-center gap-1">📌 Rangkuman Konsep</div>
             <div>
-              <span class="font-semibold">Rumus residu:</span>
+              <span class="font-semibold">Rumus residuum:</span>
               <span class="block text-center text-sm font-bold py-1"><em>e<sub>i</sub> = y<sub>i</sub> − ŷ<sub>i</sub></em></span>
             </div>
             <div>
               <span class="font-semibold">Prinsip best fit:</span>
-              garis regresi disebut garis terbaik (<em>line of best fit</em>) karena menghasilkan jumlah kuadrat residu paling kecil:
+              garis regresi disebut garis terbaik (<em>line of best fit</em>) karena menghasilkan jumlah kuadrat residuum paling kecil:
               <span class="block text-center text-sm font-bold py-1">Σe² → minimum</span>
             </div>
           </div>
@@ -374,7 +397,7 @@
           </div>
           <div id="explorationPanel" class="hidden bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
             <h3 class="text-sm font-bold text-blue-900 flex items-center gap-2">
-              <span>🎚️</span> Eksplorasi Kemiringan &amp; Letak Garis
+              <span>🎚️️</span> Eksplorasi Kemiringan &amp; Letak Garis
             </h3>
             <p class="text-xs text-slate-500">
               Geser slider di bawah ini untuk mengubah kemiringan dan letak garis biru putus-putus (garis eksplorasi Anda). Bandingkan dengan garis regresi merah (garis terbaik hasil perhitungan).
@@ -401,14 +424,14 @@
               <span id="persamaanEksplorasi" class="text-sm font-bold block mt-1">Y = 0.00X + 0.00</span>
             </div>
 
-            <!-- Panel residu -->
+            <!-- Panel Residuum -->
             <div id="residualPanel" class="p-3 bg-orange-50/70 rounded-xl border border-orange-200 space-y-3">
               <h4 class="text-xs font-bold text-orange-800 flex items-center gap-1.5">
-                <span>📏</span> residu: selisih data terhadap garis
+                <span>📏</span> Residuum: selisih data terhadap garis
               </h4>
 
               <div class="space-y-1.5 text-xs text-slate-700">
-                <div class="font-semibold">Ukur residu terhadap:</div>
+                <div class="font-semibold">Ukur residuum terhadap:</div>
                 <label class="flex items-center gap-2 cursor-pointer">
                   <input type="radio" name="residTarget" value="reg" checked class="accent-orange-600">
                   <span class="inline-block w-3 h-3 rounded-full" style="background:#ea580c"></span>
@@ -424,11 +447,11 @@
               <div class="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-slate-700">
                 <label class="flex items-center gap-1.5 cursor-pointer">
                   <input type="checkbox" id="chkResidSeg" checked class="accent-orange-600">
-                  Segmen residu
+                  Segmen residuum
                 </label>
                 <label class="flex items-center gap-1.5 cursor-pointer">
                   <input type="checkbox" id="chkResidSq" checked class="accent-orange-600">
-                  Kotak kuadrat residu (e²)
+                  Kotak kuadrat residuum (e²)
                 </label>
               </div>
 
@@ -474,15 +497,174 @@
       </div>
 
     </div>
+
+    <!-- SEKSI MARI REFLEKSI! (ASSESSMENT AS LEARNING) & SUBMIT LKPD -->
+    <section id="reflectionSection" class="hidden bg-white p-5 md:p-6 rounded-2xl border border-indigo-200 shadow-md space-y-5">
+      <div class="border-b border-indigo-100 pb-3">
+        <h2 class="text-lg md:text-xl font-extrabold text-indigo-900 flex items-center gap-2">
+          <span>🧠</span> MARI REFLEKSI!
+        </h2>
+        <p class="text-xs text-slate-600 mt-1">
+          Jawablah pertanyaan refleksi (Assessment as Learning) di bawah ini untuk mengevaluasi pemahamanmu terhadap konsep garis regresi linear.
+        </p>
+      </div>
+
+      <div class="space-y-4">
+        <div class="space-y-1.5">
+          <label for="aal1" class="block text-xs font-bold text-slate-800">
+            1. Apa yang kalian pahami tentang hubungan antara titik rata-rata dan persamaan garis regresi?
+          </label>
+          <textarea id="aal1" rows="3" placeholder="Tuliskan pemahamanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="aal2" class="block text-xs font-bold text-slate-800">
+            2. Apa yang kalian pelajari dari kegiatan mengubah-ubah posisi garis regresi pada simulasi?
+          </label>
+          <textarea id="aal2" rows="3" placeholder="Tuliskan pengalaman eksplorasimu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="aal3" class="block text-xs font-bold text-slate-800">
+            3. Mengapa garis regresi dikatakan sebagai garis yang menghasilkan jumlah kuadrat residu paling kecil? Jelaskan berdasarkan hasil eksplorasi kalian.
+          </label>
+          <textarea id="aal3" rows="3" placeholder="Jelaskan alasanmu berdasarkan eksperimen residuum..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="aal4" class="block text-xs font-bold text-slate-800">
+            4. Bagian mana dari kegiatan pada web atau langkah perhitungan garis regresi yang paling membantu kalian memahami konsep garis regresi?
+          </label>
+          <textarea id="aal4" rows="3" placeholder="Tuliskan bagian yang paling membantu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="space-y-1.5">
+          <label for="aal5" class="block text-xs font-bold text-slate-800">
+            5. Apa yang masih belum kalian pahami atau bagian mana yang masih membuat kalian kesulitan dalam menentukan atau memahami garis regresi?
+          </label>
+          <textarea id="aal5" rows="3" placeholder="Tuliskan hal yang masih membingungkan di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+        </div>
+      </div>
+
+      <!-- PENGUMPULAN LKPD -->
+      <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center gap-3">
+        <button id="submitLkpdBtn" type="button" onclick="submitLKPD()" class="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white text-sm font-bold rounded-xl shadow-md transition-all">Submit LKPD</button>
+        <span id="submitStatus" role="status" aria-live="polite" class="text-xs font-semibold text-slate-600"></span>
+      </div>
+    </section>
   </div>
 
   <script>
+    // URL Web App dari Google Apps Script Anda:
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKK_bj1o02kPCti7rL035l7ngNC2Ikx40RzRhulEMzh5057-8cEeXZbyGDbvU2arai0g/exec  ";
+
+    function goToReflection() {
+      const name = document.getElementById('studentName');
+      const number = document.getElementById('studentNumber');
+      const studentClass = document.getElementById('studentClass');
+      const reflectionSection = document.getElementById('reflectionSection');
+
+      if (!name.value.trim() || !number.value.trim() || !studentClass.value.trim()) {
+        alert('Harap lengkapi Identitas Murid (Nama, Nomor Absen, dan Kelas) terlebih dahulu!');
+        const firstEmpty = [name, number, studentClass].find(input => !input.value.trim());
+        if (firstEmpty) firstEmpty.focus();
+        return;
+      }
+
+      reflectionSection.classList.remove('hidden');
+      reflectionSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    async function submitLKPD() {
+      const name = document.getElementById('studentName');
+      const number = document.getElementById('studentNumber');
+      const studentClass = document.getElementById('studentClass');
+      const status = document.getElementById('submitStatus');
+      const summary = document.getElementById('conceptSummary');
+      const button = document.getElementById('submitLkpdBtn');
+
+      if (!name.value.trim() || !number.value.trim() || !studentClass.value.trim()) {
+        status.className = 'text-xs font-semibold text-rose-600';
+        status.textContent = 'Lengkapi nama, nomor absen, dan kelas terlebih dahulu.';
+        return;
+      }
+      if (!Number.isInteger(Number(number.value)) || Number(number.value) < 1) {
+        status.className = 'text-xs font-semibold text-rose-600';
+        status.textContent = 'Nomor absen harus berupa bilangan bulat positif.';
+        number.focus();
+        return;
+      }
+
+      // Kunci form identitas
+      name.disabled = true;
+      number.disabled = true;
+      studentClass.disabled = true;
+      name.classList.add('bg-slate-100');
+      number.classList.add('bg-slate-100');
+      studentClass.classList.add('bg-slate-100');
+
+      // Indikator Loading
+      button.disabled = true;
+      button.textContent = '⏳ Mengirim ke Drive...';
+      status.className = 'text-xs font-semibold text-blue-600';
+      status.textContent = 'Sedang menyimpan file pengerjaan ke Google Drive...';
+
+      // Menyimpan data/inputan murid saat ini ke attribute HTML agar pengerjaan terekam secara permanen
+      document.querySelectorAll('input').forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+          if (input.checked) input.setAttribute('checked', 'checked');
+          else input.removeAttribute('checked');
+        } else {
+          input.setAttribute('value', input.value);
+        }
+      });
+
+      document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.textContent = textarea.value;
+      });
+
+      // Ambil dokumen HTML lengkap beserta jawaban murid yang sudah diisi
+      const fullHtmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+
+      const formData = new FormData();
+      formData.append('studentName', name.value.trim());
+      formData.append('studentNumber', number.value.trim());
+      formData.append('studentClass', studentClass.value.trim());
+      formData.append('htmlContent', fullHtmlContent);
+
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData
+        });
+
+        summary.classList.remove('hidden');
+        button.textContent = '✓ Sudah Disubmit & Tersimpan di Drive';
+        button.classList.remove('bg-blue-700', 'hover:bg-blue-800');
+        button.classList.add('bg-emerald-700', 'cursor-not-allowed');
+        status.className = 'text-xs font-semibold text-emerald-700';
+        status.textContent = 'LKPD berhasil disubmit dan tersimpan di Google Drive Pengajar!';
+        summary.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      } catch (error) {
+        console.error('Error Submit:', error);
+        button.disabled = false;
+        button.textContent = 'Submit LKPD';
+        status.className = 'text-xs font-semibold text-rose-600';
+        status.textContent = '❌ Gagal mengirim file ke Google Drive. Periksa koneksi internet dan coba lagi.';
+        name.disabled = false;
+        number.disabled = false;
+        studentClass.disabled = false;
+      }
+    }
+
     /* =========================================================================
      * FAST LIGHTWEIGHT SPREADSHEET ENGINE WITH INTERACTIVE FORMULA INPUT
      * ========================================================================= */
 
     const COLS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-    const EDIT_COLS = 7;   // A–G bisa diedit; H–J (residu) terisi otomatis
+    const EDIT_COLS = 7;   // A–G bisa diedit; H–J (residuum) terisi otomatis
     let rowCount = 8;
     
     // Core state matrices: raw input/formulas and evaluated display values
@@ -497,16 +679,13 @@
     // Track state for interactive formula clicking
     let lastInsertedRef = null;
 
-    // Snapshot (JSON) of the data points at the moment SSxx/SSxy were last
-    // successfully verified. The regression line and exploration slider only
-    // appear while the current data matches this snapshot.
     let verifiedPointsSnapshot = null;
     let sliderListenersAttached = false;
 
-    // State untuk fitur residu
-    let residualPoints = [];        // titik data saat grafik terakhir digambar
-    let residualLine = null;        // { a, b } garis regresi
-    let residualBuilt = false;      // objek residu sudah ada di GeoGebra?
+    // State untuk fitur residuum
+    let residualPoints = [];
+    let residualLine = null;
+    let residualBuilt = false;
     let residualControlsAttached = false;
 
     window.onload = function() {
@@ -524,7 +703,7 @@
         "showToolBar": false,
         "showAlgebraInput": false,
         "showMenuBar": false,
-        "perspective": "G",          // hanya Graphics; daftar objek residu tidak memenuhi Algebra View
+        "perspective": "G",
         "borderColor": "#ffffff",
         "appletOnLoad": ggbOnInit
       };
@@ -563,7 +742,7 @@
         for (let c = 1; c <= COLS.length; c++) {
           const td = document.createElement('td');
 
-          // Kolom residu (H–J): sel otomatis, tidak bisa diedit
+          // Kolom residuum (H–J): sel otomatis, tidak bisa diedit
           if (c > EDIT_COLS) {
             const isNA = (r === rowCount - 1) || (r === rowCount && c === EDIT_COLS + 1);
             td.id = `cell-${r}-${c}`;
@@ -583,7 +762,6 @@
           td.setAttribute('data-c', c);
           td.setAttribute('spellcheck', 'false');
 
-          // Intercept clicks on cells when in formula editing mode
           td.addEventListener('mousedown', (e) => onCellMouseDown(r, c, e));
           td.addEventListener('focus', () => onCellFocus(r, c));
           td.addEventListener('blur', () => onCellBlur(r, c));
@@ -599,9 +777,6 @@
       selectCell(1, 1);
     }
 
-    /* -------------------------------------------------------------------------
-     * INTERACTIVE CELL CLICKING WHEN TYPING FORMULAS
-     * ------------------------------------------------------------------------- */
     function isEditingFormula() {
       const formulaInput = document.getElementById('formula-input');
       const activeTd = document.getElementById(`cell-${selectedCell.r}-${selectedCell.c}`);
@@ -617,11 +792,9 @@
         const targetKey = `${COLS[c-1]}${r}`;
         const activeKey = `${COLS[selectedCell.c-1]}${selectedCell.r}`;
 
-        // Don't insert self-reference
         if (targetKey !== activeKey) {
-          e.preventDefault(); // Prevent changing cell focus
+          e.preventDefault();
           e.stopPropagation();
-
           insertCellRefIntoFormula(targetKey);
           return;
         }
@@ -629,7 +802,6 @@
       lastInsertedRef = null;
     }
 
-    // Klik sel otomatis (H–J) hanya berguna saat mengetik rumus: masukkan nama selnya
     function onAutoCellMouseDown(r, c, e) {
       if (isEditingFormula()) {
         e.preventDefault();
@@ -646,10 +818,8 @@
       let currentStr = formulaInput.value;
 
       if (lastInsertedRef && currentStr.endsWith(lastInsertedRef)) {
-        // Replace last inserted cell reference if clicked sequentially
         currentStr = currentStr.substring(0, currentStr.length - lastInsertedRef.length) + cellRef;
       } else {
-        // Append cell reference
         currentStr += cellRef;
       }
 
@@ -667,7 +837,6 @@
       r = Math.max(1, Math.min(rowCount, r));
       c = Math.max(1, Math.min(EDIT_COLS, c));
 
-      // Remove focus styles from previously selected cell
       const prevTd = document.getElementById(`cell-${selectedCell.r}-${selectedCell.c}`);
       if (prevTd) prevTd.classList.remove('selected');
 
@@ -706,7 +875,6 @@
       selectCell(r, c);
       const key = `${COLS[c-1]}${r}`;
       const td = document.getElementById(`cell-${r}-${c}`);
-      // Show raw formula string when focused for editing
       td.textContent = rawData[key] || '';
     }
 
@@ -808,7 +976,6 @@
 
     function reevaluateAll() {
       evalData = {};
-      // Multi-pass evaluation to resolve dependent cell formulas
       for (let pass = 0; pass < 4; pass++) {
         for (let r = 1; r <= rowCount; r++) {
           for (let c = 1; c <= COLS.length; c++) {
@@ -817,16 +984,10 @@
             evalData[key] = evaluateFormula(val);
           }
         }
-        // Kolom H–J dihitung dari data X, Y yang sudah dievaluasi pada pass ini
         computeAutoColumns();
       }
     }
 
-    /* -------------------------------------------------------------------------
-     * KOLOM residu OTOMATIS (H: Ŷ, I: e = Y − Ŷ, J: e²)
-     * Terisi hanya jika data saat ini sama dengan data yang sudah diverifikasi
-     * pada Langkah 2 (sama seperti syarat munculnya garis regresi).
-     * ------------------------------------------------------------------------- */
     function fmt2(v) {
       const t = v.toFixed(2);
       return t === '-0.00' ? '0.00' : t;
@@ -835,7 +996,6 @@
     function computeAutoColumns() {
       const dataRows = Math.max(0, rowCount - 2);
 
-      // Kosongkan dulu
       for (let r = 1; r <= rowCount; r++) {
         evalData[`H${r}`] = '';
         evalData[`I${r}`] = '';
@@ -875,7 +1035,6 @@
       let formula = expr.substring(1).trim().toUpperCase();
 
       try {
-        // Range functions: SUM, AVERAGE (mendukung $ pada rujukan sel)
         formula = formula.replace(/SUM\(\$?([A-J])\$?([0-9]+):\$?([A-J])\$?([0-9]+)\)/g, (match, c1, r1, c2, r2) => {
           const vals = getRangeValues(`${c1}${r1}`, `${c2}${r2}`);
           return `(${vals.reduce((a, b) => a + b, 0)})`;
@@ -886,19 +1045,15 @@
           return `(${vals.length > 0 ? (vals.reduce((a, b) => a + b, 0) / vals.length) : 0})`;
         });
 
-        // Cell References (Absolute & Relative): $B$8, B2, etc.
-        // Nilai dibungkus kurung agar bilangan negatif tetap benar, mis. (-3)^2 = 9
         formula = formula.replace(/\$?([A-J])\$?([0-9]+)/g, (match, col, row) => {
           const refKey = `${col}${row}`;
           const refVal = parseFloat(evalData[refKey]);
           return `(${isNaN(refVal) ? 0 : refVal})`;
         });
 
-        // Power operator ^ : operand sederhana -> Math.pow, sisanya -> **
         formula = formula.replace(/(\([^()]*\)|[0-9.]+)\^(\([^()]*\)|[0-9.]+)/g, 'Math.pow($1,$2)');
         formula = formula.replace(/\^/g, '**');
 
-        // Evaluate sanitized expression
         const result = Function(`"use strict"; return (${formula})`)();
         if (typeof result === 'number' && !isNaN(result)) {
           return Number.isInteger(result) ? String(result) : result.toFixed(2);
@@ -942,14 +1097,13 @@
     }
 
     /* =========================================================================
-     * DRAG / FILL HANDLE FEATURE — mouse + touch, spreadsheet-style
+     * DRAG / FILL HANDLE FEATURE
      * ========================================================================= */
 
     function setupDragFillEvents() {
       const fillHandle = document.getElementById('fill-handle');
       if (!fillHandle) return;
 
-      // Pointer Events make drag work with mouse, touch, and pen.
       fillHandle.addEventListener('pointerdown', (e) => {
         e.preventDefault();
         e.stopPropagation();
@@ -960,33 +1114,21 @@
         try { fillHandle.setPointerCapture(e.pointerId); } catch (_) {}
         document.body.classList.add('is-drag-filling');
 
-        highlightDragRange(
-          dragStartCell.r,
-          dragStartCell.r,
-          dragStartCell.c,
-          dragStartCell.c
-        );
+        highlightDragRange(dragStartCell.r, dragStartCell.r, dragStartCell.c, dragStartCell.c);
       });
 
       document.addEventListener('pointermove', (e) => {
         if (!isDragging) return;
 
         const target = document.elementFromPoint(e.clientX, e.clientY);
-        const cell = target && target.closest
-          ? target.closest('.sheet-cell')
-          : null;
+        const cell = target && target.closest ? target.closest('.sheet-cell') : null;
 
         if (cell) {
           const hoverR = parseInt(cell.dataset.r, 10);
           const hoverC = parseInt(cell.dataset.c, 10);
 
           if (Number.isFinite(hoverR) && Number.isFinite(hoverC)) {
-            highlightDragRange(
-              dragStartCell.r,
-              hoverR,
-              dragStartCell.c,
-              hoverC
-            );
+            highlightDragRange(dragStartCell.r, hoverR, dragStartCell.c, hoverC);
           }
         }
       });
@@ -995,9 +1137,7 @@
         if (!isDragging) return;
 
         const target = document.elementFromPoint(e.clientX, e.clientY);
-        const cell = target && target.closest
-          ? target.closest('.sheet-cell')
-          : null;
+        const cell = target && target.closest ? target.closest('.sheet-cell') : null;
 
         isDragging = false;
         document.body.classList.remove('is-drag-filling');
@@ -1007,12 +1147,7 @@
           const endC = parseInt(cell.dataset.c, 10);
 
           if (Number.isFinite(endR) && Number.isFinite(endC)) {
-            applyDragFill(
-              dragStartCell.r,
-              endR,
-              dragStartCell.c,
-              endC
-            );
+            applyDragFill(dragStartCell.r, endR, dragStartCell.c, endC);
           }
         }
 
@@ -1037,8 +1172,7 @@
     }
 
     function clearDragHighlights() {
-      document.querySelectorAll('.drag-selection')
-        .forEach(el => el.classList.remove('drag-selection'));
+      document.querySelectorAll('.drag-selection').forEach(el => el.classList.remove('drag-selection'));
     }
 
     function applyDragFill(startR, endR, startC, endC) {
@@ -1054,62 +1188,38 @@
 
       for (let r = minR; r <= maxR; r++) {
         for (let c = minC; c <= maxC; c++) {
-          // Never overwrite the original source cell.
           if (r === startR && c === startC) continue;
 
           const rowOffset = r - startR;
           const colOffset = c - startC;
           const targetKey = `${COLS[c - 1]}${r}`;
 
-          rawData[targetKey] = adjustFormulaForOffset(
-            sourceExpr,
-            rowOffset,
-            colOffset
-          );
+          rawData[targetKey] = adjustFormulaForOffset(sourceExpr, rowOffset, colOffset);
         }
       }
 
       reevaluateAll();
       updateAllCellDOMs();
       updateGeoGebraPlot();
-
-      // Keep the source cell active after filling.
       selectCell(startR, startC);
     }
 
     function adjustFormulaForOffset(expr, rowOffset, colOffset = 0) {
       if (!expr || !expr.startsWith('=')) return expr;
 
-      // Excel-like relative references:
-      // B1   -> C2 when dragged one column right and one row down
-      // $B1  -> $B2 (column locked)
-      // B$1  -> C$1 (row locked)
-      // $B$1 -> $B$1 (both locked)
-      return expr.replace(
-        /(\$?)([A-J])(\$?)([0-9]+)/g,
-        (match, absCol, col, absRow, rowStr) => {
-          const originalCol = COLS.indexOf(col) + 1;
-          const originalRow = parseInt(rowStr, 10);
+      return expr.replace(/(\$?)([A-J])(\$?)([0-9]+)/g, (match, absCol, col, absRow, rowStr) => {
+        const originalCol = COLS.indexOf(col) + 1;
+        const originalRow = parseInt(rowStr, 10);
 
-          const newCol = absCol === '$'
-            ? originalCol
-            : originalCol + colOffset;
+        const newCol = absCol === '$' ? originalCol : originalCol + colOffset;
+        const newRow = absRow === '$' ? originalRow : originalRow + rowOffset;
 
-          const newRow = absRow === '$'
-            ? originalRow
-            : originalRow + rowOffset;
-
-          // Keep references inside the spreadsheet bounds.
-          if (
-            newCol < 1 || newCol > COLS.length ||
-            newRow < 1 || newRow > rowCount
-          ) {
-            return match;
-          }
-
-          return `${absCol}${COLS[newCol - 1]}${absRow}${newRow}`;
+        if (newCol < 1 || newCol > COLS.length || newRow < 1 || newRow > rowCount) {
+          return match;
         }
-      );
+
+        return `${absCol}${COLS[newCol - 1]}${absRow}${newRow}`;
+      });
     }
 
     /* =========================================================================
@@ -1140,7 +1250,7 @@
 
     function getRawDataPoints() {
       const points = [];
-      const dataRows = Math.max(0, rowCount - 2); // Exclude Rata-rata and Total rows
+      const dataRows = Math.max(0, rowCount - 2);
 
       for (let r = 1; r <= dataRows; r++) {
         const xVal = parseFloat(evalData[`B${r}`]);
@@ -1161,8 +1271,6 @@
     function updateGeoGebraPlot() {
       if (!ggbApi) return;
 
-      // Preserve the exploration slider's current position (if visible) so an
-      // unrelated data edit doesn't reset it back to the default line.
       let preservedM = null, preservedC = null;
       const panelBefore = document.getElementById('explorationPanel');
       if (panelBefore && !panelBefore.classList.contains('hidden')) {
@@ -1179,17 +1287,12 @@
       residualBuilt = false;
 
       const points = getRawDataPoints();
-
-      // The regression line & exploration slider are only shown while the
-      // current data matches the data that was last successfully verified
-      // in Langkah 2 (SSxx & SSxy).
       const currentSnapshot = JSON.stringify(points);
       const isVerified = verifiedPointsSnapshot !== null && verifiedPointsSnapshot === currentSnapshot;
 
       if (!isVerified) {
         hideExplorationPanel();
         if (verifiedPointsSnapshot !== null) {
-          // Data was verified before, but has since changed - ask to re-verify.
           const msg = document.getElementById('msgStep2');
           if (msg) {
             msg.className = 'block text-xs font-semibold text-amber-600';
@@ -1220,12 +1323,10 @@
         ggbApi.evalCommand(`${pName} = (${pt.x}, ${pt.y})`);
         ggbApi.setColor(pName, 37, 99, 235);
         ggbApi.setPointSize(pName, 5);
-        // Titik data dikunci: sumber data adalah spreadsheet, bukan seretan mouse
         ggbApi.setFixed(pName, true, false);
         pointNames.push(pName);
       });
 
-      // Plot Regression Line & Exploration Line only after SSxx/SSxy verified
       if (pointNames.length >= 2 && isVerified) {
         ggbApi.evalCommand(`L_1 = {${pointNames.join(',')}}`);
         ggbApi.evalCommand(`GarisRegresi = FitLine(L_1)`);
@@ -1241,18 +1342,17 @@
         ggbApi.evalCommand(`cIntercept = ${cVal}`);
         ggbApi.evalCommand(`GarisEksplorasi: y = mSlope * x + cIntercept`);
         ggbApi.setColor('GarisEksplorasi', 37, 99, 235);
-        ggbApi.setLineStyle('GarisEksplorasi', 1); // dashed
+        ggbApi.setLineStyle('GarisEksplorasi', 1);
         ggbApi.setLineThickness('GarisEksplorasi', 3);
         ggbApi.setLabelVisible('GarisEksplorasi', false);
 
-        // residu (garis regresi & garis eksplorasi)
         const mathReg = calculateMathFromData();
         residualPoints = points;
         residualLine = mathReg ? { a: mathReg.a, b: mathReg.b } : null;
         try {
           buildResidualObjects(points, mathReg, view);
         } catch (err) {
-          console.error('Gagal membuat objek residu:', err);
+          console.error('Gagal membuat objek residuum:', err);
           residualBuilt = false;
         }
 
@@ -1261,13 +1361,7 @@
       }
     }
 
-    /* -------------------------------------------------------------------------
-     * residu DI GEOGEBRA: segmen (Y − Ŷ) & kotak kuadrat (e²)
-     *   r = terhadap garis regresi   (oranye, statis)
-     *   e = terhadap garis eksplorasi (ungu, dinamis mengikuti slider)
-     * ------------------------------------------------------------------------- */
     function gnum(v) {
-      // Hindari notasi ilmiah (mis. 1e-7) yang bisa dibaca GeoGebra sebagai konstanta e
       return Number(v).toFixed(8);
     }
 
@@ -1280,9 +1374,6 @@
       ggbApi.setVisible('aReg', false);
       ggbApi.setVisible('bReg', false);
 
-      // Faktor koreksi rasio sumbu agar sisi kotak tampak persegi pada layar.
-      // Tidak menggunakan Corner(), Square(), atau perintah GeoGebra yang
-      // berpotensi tidak didukung oleh applet.
       const xRange = Number(view.xMax - view.xMin);
       const yRange = Number(view.yMax - view.yMin);
       const appletW = 480;
@@ -1292,10 +1383,6 @@
       ggbApi.evalCommand(`kSq = ${gnum(kSq)}`);
       ggbApi.setVisible('kSq', false);
 
-      // Kotak kuadrat dibuat langsung dari ruas residu P-Q.
-      // Kotak dibuat dengan Polygon agar kompatibel dengan GeoGebra Classic/web.
-      // sehingga tidak bergantung pada perhitungan skala layar (kSq).
-
       const colors = { r: [234, 88, 12], e: [124, 58, 237] };
 
       points.forEach((pt, idx) => {
@@ -1303,23 +1390,17 @@
         const P = `P_{${i}}`;
 
         ['r', 'e'].forEach(t => {
-          const Q = `P${t}_{${i}}`;   // titik prediksi (x_i, ŷ_i)
-          const S = `S${t}_{${i}}`;   // segmen residu
-          const K = `K${t}_{${i}}`;   // kotak kuadrat residu
-          const T = `T${t}_{${i}}`;   // label nilai kuadrat residu (e²)
-          const yHat = t === 'r'
-            ? `aReg + bReg * x(${P})`
-            : `cIntercept + mSlope * x(${P})`;
+          const Q = `P${t}_{${i}}`;
+          const S = `S${t}_{${i}}`;
+          const K = `K${t}_{${i}}`;
+          const T = `T${t}_{${i}}`;
+          const yHat = t === 'r' ? `aReg + bReg * x(${P})` : `cIntercept + mSlope * x(${P})`;
           const [R, G, B] = colors[t];
 
           ggbApi.evalCommand(`${Q} = (x(${P}), ${yHat})`);
           ggbApi.evalCommand(`${S} = Segment(${P}, ${Q})`);
-          // P-Q adalah panjang residual |e|. Buat persegi secara manual
-          // dengan sisi yang dikoreksi terhadap rasio skala sumbu GeoGebra.
           const side = `abs(y(${P}) - y(${Q})) * kSq`;
           ggbApi.evalCommand(`${K} = Polygon({${P}, (x(${P}) + ${side}, y(${P})), (x(${P}) + ${side}, y(${Q})), ${Q}})`);
-
-          // Nilai numerik e² ditampilkan di dekat kotak dan ikut berubah saat slider digeser.
           ggbApi.evalCommand(`${T} = Text("e² = " + ((y(${P}) - y(${Q}))^2), (x(${Q}) + 0.15, (y(${P}) + y(${Q})) / 2))`);
 
           ggbApi.setColor(Q, R, G, B);
@@ -1328,7 +1409,7 @@
 
           ggbApi.setColor(S, R, G, B);
           ggbApi.setLineThickness(S, 3);
-          ggbApi.setLineStyle(S, 1); // putus-putus
+          ggbApi.setLineStyle(S, 1);
           ggbApi.setLabelVisible(S, false);
 
           ggbApi.setColor(K, R, G, B);
@@ -1352,7 +1433,7 @@
     function applyResidualVisibility() {
       if (!ggbApi || !residualBuilt) return;
 
-      const target = getResidualTarget();                        // 'reg' | 'exp'
+      const target = getResidualTarget();
       const showSeg = document.getElementById('chkResidSeg').checked;
       const showSq = document.getElementById('chkResidSq').checked;
 
@@ -1363,9 +1444,8 @@
             ggbApi.setVisible(`P${t}_{${i}}`, active && showSeg);
             ggbApi.setVisible(`S${t}_{${i}}`, active && showSeg);
             ggbApi.setVisible(`K${t}_{${i}}`, active && showSq);
-            // Nilai e² mengikuti kotak residu yang sedang dipilih.
             ggbApi.setVisible(`T${t}_{${i}}`, active && showSq);
-          } catch (err) { /* objek mungkin belum ada */ }
+          } catch (err) {}
         });
       }
     }
@@ -1374,8 +1454,7 @@
       if (residualControlsAttached) return;
       residualControlsAttached = true;
 
-      document.querySelectorAll('input[name="residTarget"]').forEach(el =>
-        el.addEventListener('change', applyResidualVisibility));
+      document.querySelectorAll('input[name="residTarget"]').forEach(el => el.addEventListener('change', applyResidualVisibility));
       document.getElementById('chkResidSeg').addEventListener('change', applyResidualVisibility);
       document.getElementById('chkResidSq').addEventListener('change', applyResidualVisibility);
     }
@@ -1392,7 +1471,6 @@
       }
     }
 
-    // Σe dan Σe² untuk garis eksplorasi (m, c) dibandingkan dengan garis regresi
     function updateResidualStats(m, c) {
       if (!residualLine || residualPoints.length === 0) return;
 
@@ -1426,9 +1504,6 @@
       }
     }
 
-    /* -------------------------------------------------------------------------
-     * SLIDER EKSPLORASI KEMIRINGAN & INTERSEP GARIS
-     * ------------------------------------------------------------------------- */
     function setupExplorationPanel(mVal, cVal, points) {
       const panel = document.getElementById('explorationPanel');
       if (!panel) return;
@@ -1477,8 +1552,7 @@
       document.getElementById('mSliderVal').textContent = m.toFixed(2);
       document.getElementById('cSliderVal').textContent = c.toFixed(2);
       const sign = c >= 0 ? '+' : '-';
-      document.getElementById('persamaanEksplorasi').textContent =
-        `Y = ${m.toFixed(2)}X ${sign} ${Math.abs(c).toFixed(2)}`;
+      document.getElementById('persamaanEksplorasi').textContent = `Y = ${m.toFixed(2)}X ${sign} ${Math.abs(c).toFixed(2)}`;
     }
 
     function onExplorationSliderInput() {
@@ -1490,14 +1564,8 @@
       try {
         ggbApi.setValue('mSlope', m);
         ggbApi.setValue('cIntercept', c);
-      } catch (e) {
-        // GeoGebra objects may not exist yet if the panel was just shown
-      }
+      } catch (e) {}
     }
-
-    /* =========================================================================
-     * VERIFICATION CHECKPOINTS
-     * ========================================================================= */
 
     function calculateMathFromData() {
       const points = getRawDataPoints();
@@ -1521,14 +1589,11 @@
       return { n, xBar, yBar, ssxx, ssxy, a, b };
     }
 
-    // Membulatkan angka ke n desimal (aman dari floating-point error)
     function roundTo(value, decimals) {
       const factor = Math.pow(10, decimals);
       return Math.round((value + Number.EPSILON) * factor) / factor;
     }
 
-    // Jawaban dianggap benar jika sama persis SETELAH dibulatkan ke 2 ATAU 3 angka desimal
-    // (mengakomodasi murid yang membulatkan hasil hitungannya sebelum mengetik jawaban)
     function isAnswerCorrect(userVal, trueVal) {
       return (
         roundTo(userVal, 2) === roundTo(trueVal, 2) ||
@@ -1585,10 +1650,8 @@
         msg.className = "block text-xs font-semibold text-emerald-600";
         msg.innerHTML = "✓ Benar! Nilai SSxx dan SSxy cocok.";
 
-        // Tandai data saat ini sudah terverifikasi, lalu tampilkan garis
-        // regresi & slider eksplorasi di GeoGebra.
         verifiedPointsSnapshot = JSON.stringify(getRawDataPoints());
-        reevaluateAll();        // isi kolom residu H–J
+        reevaluateAll();
         updateAllCellDOMs();
         updateGeoGebraPlot();
       } else {
@@ -1612,7 +1675,7 @@
 
       if (isNaN(userB) || isNaN(userA)) {
         msg.className = "block text-xs font-semibold text-rose-600";
-        msg.innerHTML = "⚠️ Harap masukkan angka untuk b dan a!";
+        msg.innerHTML = "⚠️️ Harap masukkan angka untuk b dan a!";
         return;
       }
 
@@ -1629,6 +1692,5 @@
       }
     }
   </script>
-
 </body>
 </html>
