@@ -236,11 +236,11 @@
               <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-300 rounded-lg px-2 py-1">
                 <span class="text-[11px] font-semibold text-slate-600">Preset:</span>
                 <select id="presetSelect" onchange="loadPresetData(this.value)" class="text-xs bg-transparent text-blue-800 font-bold focus:outline-none cursor-pointer">
-                  <option value="1" selected>Data Pengamatan LKPD (n=20)</option>
+                  <option value="empty" selected>Spreadsheet Kosong (Isi Data Sendiri)</option>
+                  <option value="1">Data Pengamatan LKPD (n=20)</option>
                   <option value="2">Contoh 1: Jam Belajar vs Nilai Ujian (n=6)</option>
                   <option value="3">Contoh 2: Biaya Iklan vs Omzet Penjualan (n=5)</option>
                   <option value="4">Contoh 3: Suhu Udara vs Es Terjual (n=6)</option>
-                  <option value="empty">Kosongkan Spreadsheet (Data Bebas)</option>
                 </select>
               </div>
 
@@ -317,7 +317,7 @@
             <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">
               <span>📝</span> 2. Verifikasi Pengolahan Data
             </h2>
-            <span class="text-xs text-slate-500 font-medium">Bebas koma/titik, pembulatan atas/bawah &amp; berapapun angka desimal</span>
+            <span class="text-xs text-slate-500 font-medium">Bisa koma/titik, wajib setidaknya 2 angka di belakang koma</span>
           </div>
 
           <!-- Langkah 1 -->
@@ -329,10 +329,10 @@
             <p class="text-xs text-slate-600">Masukkan nilai rata-rata variabel X dan Y yang telah Anda hitung di spreadsheet (bisa koma/titik, pembulatan ke atas maupun ke bawah, berapapun angka desimal):</p>
             <div class="flex flex-wrap items-center gap-3 pt-1">
               <label class="text-xs font-semibold">x̄:</label>
-              <input type="text" id="userXbar" placeholder="contoh: 6,17 atau 6,16" class="w-32 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userXbar" placeholder="contoh: 2,63 atau 2,6250" class="w-32 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <label class="text-xs font-semibold">ȳ:</label>
-              <input type="text" id="userYbar" placeholder="contoh: 3,83 atau 3,84" class="w-32 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userYbar" placeholder="contoh: 6,42 atau 6,4250" class="w-32 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <button onclick="cekLangkah1()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                 Cek Langkah 1
@@ -350,10 +350,10 @@
             <p class="text-xs text-slate-600">Masukkan nilai total <em>SS<sub>xx</sub> = &Sigma;(X − x̄)²</em> dan <em>SS<sub>xy</sub> = &Sigma;(X − x̄)(Y − ȳ)</em> dari baris Total di spreadsheet (bisa koma/titik, pembulatan ke atas/bawah, atau nilai eksak kalkulator):</p>
             <div class="flex flex-wrap items-center gap-3 pt-1">
               <label class="text-xs font-semibold">SSxx:</label>
-              <input type="text" id="userSSxx" placeholder="contoh: 92,84 atau 92,83" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userSSxx" placeholder="contoh: 28,44 atau 28,4375" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <label class="text-xs font-semibold">SSxy:</label>
-              <input type="text" id="userSSxy" placeholder="contoh: 39,16 atau 39,17" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userSSxy" placeholder="contoh: -17,31 atau -17,3125" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <button onclick="cekLangkah2()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                 Cek Langkah 2
@@ -371,10 +371,10 @@
             <p class="text-xs text-slate-600">Hitung nilai gradien <em>b = SS<sub>xy</sub> / SS<sub>xx</sub></em> dan intersep <em>a = ȳ − b(x̄)</em> (bebas pembulatan ke atas/bawah &amp; jumlah desimal):</p>
             <div class="flex flex-wrap items-center gap-3 pt-1">
               <label class="text-xs font-semibold">Gradien (b):</label>
-              <input type="text" id="userB" placeholder="contoh: 0,42 atau 0,43" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userB" placeholder="contoh: -0,61 atau -0,6088" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <label class="text-xs font-semibold">Intersep (a):</label>
-              <input type="text" id="userA" placeholder="contoh: 1,23 atau 1,22" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userA" placeholder="contoh: 8,02 atau 8,0231" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <button onclick="cekLangkah3()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                 Verifikasi Jawaban
@@ -1060,10 +1060,10 @@
     let residualControlsAttached = false;
 
     window.onload = function() {
-      // Coba pulihkan dari localStorage jika ada, jika tidak muat Preset 1
+      // Coba pulihkan dari localStorage jika ada, jika tidak default kosong
       const restored = loadFromLocalStorage();
       if (!restored) {
-        loadPresetData("1");
+        loadPresetData("empty");
       }
 
       setupFormulaInputListener();
@@ -1380,10 +1380,10 @@
       }
     }
 
-    function fmt2(v) {
-      if (v === null || v === undefined || isNaN(v) || !isFinite(v)) return '0.00';
-      const t = Number(v).toFixed(2);
-      return t === '-0.00' ? '0.00' : t;
+    function fmt4(v) {
+      if (v === null || v === undefined || isNaN(v) || !isFinite(v)) return '0.0000';
+      const t = Number(v).toFixed(4);
+      return t === '-0.0000' ? '0.0000' : t;
     }
 
     function computeAutoColumns() {
@@ -1412,13 +1412,13 @@
         sumE += e;
         sumE2 += e * e;
 
-        evalData[`H${r}`] = fmt2(yHat);
-        evalData[`I${r}`] = fmt2(e);
-        evalData[`J${r}`] = fmt2(e * e);
+        evalData[`H${r}`] = fmt4(yHat);
+        evalData[`I${r}`] = fmt4(e);
+        evalData[`J${r}`] = fmt4(e * e);
       }
 
-      evalData[`I${rowCount}`] = fmt2(Math.abs(sumE) < 1e-9 ? 0 : sumE);
-      evalData[`J${rowCount}`] = fmt2(sumE2);
+      evalData[`I${rowCount}`] = fmt4(Math.abs(sumE) < 1e-9 ? 0 : sumE);
+      evalData[`J${rowCount}`] = fmt4(sumE2);
     }
 
     /* Mendukung parsing angka baik dengan koma (,) maupun titik (.) */
@@ -1470,7 +1470,8 @@
         const result = Function(`"use strict"; return (${formula})`)();
         if (typeof result === 'number' && !isNaN(result)) {
           if (!isFinite(result)) return '#DIV/0!';
-          return Number.isInteger(result) ? String(result) : result.toFixed(2);
+          const t = result.toFixed(4);
+          return t === '-0.0000' ? '0.0000' : t;
         }
         return result;
       } catch (err) {
@@ -1820,7 +1821,7 @@
         ggbApi.setColor('M_rata', 245, 158, 11);
         ggbApi.setPointSize('M_rata', 7);
         ggbApi.setPointStyle('M_rata', 1); // Bentuk berlian / diamond
-        ggbApi.setCaption('M_rata', `M(${fmt2(math.xBar)}, ${fmt2(math.yBar)})`);
+        ggbApi.setCaption('M_rata', `M(${fmt4(math.xBar)}, ${fmt4(math.yBar)})`);
         ggbApi.setLabelStyle('M_rata', 2);
         ggbApi.setLabelVisible('M_rata', showMean);
         ggbApi.setVisible('M_rata', showMean);
@@ -1991,10 +1992,10 @@
       });
       if (Math.abs(rE) < 1e-9) rE = 0;
 
-      document.getElementById('sumEExp').textContent = fmt2(sE);
-      document.getElementById('sumE2Exp').textContent = fmt2(sE2);
-      document.getElementById('sumEReg').textContent = fmt2(rE);
-      document.getElementById('sumE2Reg').textContent = fmt2(rE2);
+      document.getElementById('sumEExp').textContent = fmt4(sE);
+      document.getElementById('sumE2Exp').textContent = fmt4(sE2);
+      document.getElementById('sumEReg').textContent = fmt4(rE);
+      document.getElementById('sumE2Reg').textContent = fmt4(rE2);
 
       const verdict = document.getElementById('residVerdict');
       const diff = Math.max(0, sE2 - rE2);
@@ -2002,13 +2003,13 @@
 
       if (sameLine) {
         verdict.className = 'text-xs font-semibold text-emerald-700 leading-relaxed bg-emerald-50 p-2 rounded border border-emerald-200';
-        verdict.innerHTML = '🎯 <strong>Hebat!</strong> Garis eksplorasi berimpit dengan garis regresi. Nilai &Sigma;e² = ' + fmt2(rE2) + ' adalah nilai <strong>minimum</strong> yang tidak bisa lebih kecil lagi!';
+        verdict.innerHTML = '🎯 <strong>Hebat!</strong> Garis eksplorasi berimpit dengan garis regresi. Nilai &Sigma;e² = ' + fmt4(rE2) + ' adalah nilai <strong>minimum</strong> yang tidak bisa lebih kecil lagi!';
       } else if (diff <= Math.max(0.05 * rE2, 0.05)) {
         verdict.className = 'text-xs font-semibold text-emerald-700 leading-relaxed';
         verdict.textContent = '🎯 Σe² garis Anda hampir sama dengan garis regresi. Bisakah lebih kecil lagi?';
       } else {
         verdict.className = 'text-xs font-semibold text-orange-800 leading-relaxed';
-        verdict.textContent = `Σe² garis eksplorasi lebih besar +${fmt2(diff)} dibandingkan garis regresi terbaik. Geser slider agar selisihnya mengecil.`;
+        verdict.textContent = `Σe² garis eksplorasi lebih besar +${fmt4(diff)} dibandingkan garis regresi terbaik. Geser slider agar selisihnya mengecil.`;
       }
     }
 
@@ -2221,6 +2222,9 @@
       const rawStr = String(rawInput).trim();
       if (rawStr === '') return false;
 
+      // Syarat mutlak: jawaban verifikasi harus menunjukkan setidaknya 2 angka di belakang koma
+      if (getDecimalPlaces(rawStr) < 2) return false;
+
       const userVal = parseNum(rawStr);
       if (isNaN(userVal) || !isFinite(userVal)) return false;
 
@@ -2266,6 +2270,14 @@
         msg.innerHTML = "⚠️ Harap masukkan angka untuk x̄ dan ȳ (bisa menggunakan koma atau titik)!";
         badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
         badge.textContent = "✗ Belum lengkap";
+        return;
+      }
+
+      if (getDecimalPlaces(rawX) < 2 || getDecimalPlaces(rawY) < 2) {
+        msg.className = "block text-xs font-semibold text-amber-600";
+        msg.innerHTML = "⚠️ Jawaban harus menunjukkan setidaknya 2 angka di belakang koma (contoh: 2,63 atau 6,42)!";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700";
+        badge.textContent = "✗ Format desimal";
         return;
       }
 
@@ -2320,6 +2332,14 @@
         msg.innerHTML = "⚠️ Harap masukkan angka untuk SSxx dan SSxy (bisa menggunakan koma atau titik)!";
         badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
         badge.textContent = "✗ Belum lengkap";
+        return;
+      }
+
+      if (getDecimalPlaces(rawSSxx) < 2 || getDecimalPlaces(rawSSxy) < 2) {
+        msg.className = "block text-xs font-semibold text-amber-600";
+        msg.innerHTML = "⚠️ Jawaban harus menunjukkan setidaknya 2 angka di belakang koma (contoh: 28,44 atau -17,31)!";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700";
+        badge.textContent = "✗ Format desimal";
         return;
       }
 
@@ -2391,6 +2411,14 @@
         msg.innerHTML = "⚠️ Harap masukkan angka untuk b dan a (bisa menggunakan koma atau titik)!";
         badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
         badge.textContent = "✗ Belum lengkap";
+        return;
+      }
+
+      if (getDecimalPlaces(rawB) < 2 || getDecimalPlaces(rawA) < 2) {
+        msg.className = "block text-xs font-semibold text-amber-600";
+        msg.innerHTML = "⚠️ Jawaban harus menunjukkan setidaknya 2 angka di belakang koma (contoh: -0,61 atau 8,02)!";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-700";
+        badge.textContent = "✗ Format desimal";
         return;
       }
 
@@ -2487,7 +2515,7 @@
      * AUTO-SAVE (LOCALSTORAGE)
      * ========================================================================= */
 
-    const STORAGE_KEY = 'lkpd_regresi_digital_v3';
+    const STORAGE_KEY = 'lkpd_regresi_digital_v4';
 
     function setupAutoSaveListeners() {
       ['studentName', 'studentNumber', 'studentClass', 'refleksiResid1', 'refleksiResid2', 'refleksiResid3', 'refleksiSlider', 'aal1', 'aal2', 'aal3', 'aal4', 'aal5'].forEach(id => {
