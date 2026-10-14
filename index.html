@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LKPD Digital: Regresi Linear Interaktif (Satset &amp; Ringan)</title>
+  <title>LKPD Digital: Eksplorasi Regresi Linear & Residu</title>
 
   <!-- Tailwind CSS for modern responsive design -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -79,16 +79,17 @@
 
     #fill-handle {
       position: absolute;
-      width: 8px;
-      height: 8px;
+      width: 9px;
+      height: 9px;
       background-color: #2563eb;
-      border: 1px solid white;
-      right: -4px;
-      bottom: -4px;
+      border: 1.5px solid white;
+      right: -5px;
+      bottom: -5px;
       cursor: crosshair;
       pointer-events: auto;
       z-index: 25;
       touch-action: none;
+      border-radius: 1px;
     }
 
     /* Selection rectangle for drag fill */
@@ -102,7 +103,7 @@
       cursor: crosshair !important;
     }
 
-    /* Kolom residuum (H–J): terisi otomatis, tidak bisa diedit */
+    /* Kolom residu (H–J): terisi otomatis, tidak bisa diedit */
     .sheet-table th.auto-col {
       background-color: #ffedd5;
       color: #9a3412;
@@ -132,6 +133,29 @@
     .sheet-table td.auto-cell.auto-na:empty::before {
       content: '';
     }
+
+    /* Print styles for exporting neat PDF */
+    @media print {
+      body {
+        background: white !important;
+        padding: 0 !important;
+      }
+      .no-print, button, #fill-handle, #cell-overlay, #formula-bar-container {
+        display: none !important;
+      }
+      #sheet-container {
+        max-height: none !important;
+        overflow: visible !important;
+        border: 1px solid #94a3b8 !important;
+      }
+      #reflectionSection {
+        display: block !important;
+      }
+      textarea {
+        border: 1px solid #cbd5e1 !important;
+        resize: none !important;
+      }
+    }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-900 p-3 md:p-6 min-h-screen">
@@ -139,32 +163,57 @@
   <div class="max-w-[1450px] mx-auto space-y-5">
 
     <!-- Header Section -->
-    <header class="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-800 text-white p-5 md:p-6 rounded-2xl shadow-md">
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-800 text-white p-5 md:p-6 rounded-2xl shadow-md">
       <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 class="text-xl md:text-2xl font-bold tracking-tight mb-1">LKPD DIGITAL: EKSPLORASI REGRESI LINEAR</h1>
-          <p class="text-blue-100 text-xs md:text-sm opacity-95">
-            Spreadsheet interaktif: Ketik angka, klik sel saat memasukkan rumus (diawali <code>=</code>), tarik <i>drag handle</i>, dan lihat garis regresi GeoGebra!
+          <div class="flex items-center gap-2 mb-1">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-500/30 text-blue-200 border border-blue-400/30 uppercase tracking-wide">
+              Kurikulum Merdeka • Kelas XI Matematika
+            </span>
+            <span id="saveBadge" class="text-[11px] text-blue-200/80 flex items-center gap-1 font-medium">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Tersimpan otomatis
+            </span>
+          </div>
+          <h1 class="text-xl md:text-2xl font-black tracking-tight mb-1">
+            LKPD DIGITAL: EKSPLORASI REGRESI LINEAR &amp; RESIDU
+          </h1>
+          <p class="text-blue-100 text-xs md:text-sm opacity-95 max-w-3xl leading-relaxed">
+            Eksplorasi garis regresi terbaik (<em>line of best fit</em>) dengan spreadsheet interaktif dan simulasi GeoGebra. Temukan mengapa jumlah kuadrat <strong>residu</strong> (&Sigma;e&sup2;) selalu mencapai nilai minimum pada garis regresi!
           </p>
+        </div>
+
+        <!-- Quick Action Bar -->
+        <div class="flex flex-wrap items-center gap-2 no-print">
+          <button onclick="window.print()" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-lg border border-white/20 transition-all flex items-center gap-1.5 shadow-sm" title="Cetak atau simpan LKPD sebagai file PDF">
+            <span>🖨️</span> Cetak / Simpan PDF
+          </button>
+          <button onclick="downloadHtmlBackup()" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-lg border border-white/20 transition-all flex items-center gap-1.5 shadow-sm" title="Unduh file salinan pengerjaan LKPD Anda">
+            <span>💾</span> Unduh HTML
+          </button>
         </div>
       </div>
     </header>
 
     <!-- IDENTITAS MURID -->
     <section class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3" aria-labelledby="identityHeading">
-      <h2 id="identityHeading" class="text-base md:text-lg font-bold text-blue-900">Identitas Murid</h2>
+      <div class="flex items-center justify-between border-b border-slate-100 pb-2">
+        <h2 id="identityHeading" class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">
+          <span>👤</span> Identitas Murid
+        </h2>
+        <span class="text-[11px] text-slate-500 font-medium">Lengkapi identitas sebelum mengumpulkan</span>
+      </div>
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div class="space-y-1">
-          <label for="studentName" class="block text-xs font-semibold text-slate-700">Nama lengkap</label>
-          <input id="studentName" type="text" autocomplete="name" required placeholder="Masukkan nama lengkap" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <label for="studentName" class="block text-xs font-semibold text-slate-700">Nama lengkap <span class="text-rose-500">*</span></label>
+          <input id="studentName" type="text" autocomplete="name" required placeholder="Masukkan nama lengkap" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
         </div>
         <div class="space-y-1">
-          <label for="studentNumber" class="block text-xs font-semibold text-slate-700">Nomor absen</label>
-          <input id="studentNumber" type="number" min="1" step="1" required placeholder="Nomor absen" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <label for="studentNumber" class="block text-xs font-semibold text-slate-700">Nomor absen <span class="text-rose-500">*</span></label>
+          <input id="studentNumber" type="number" min="1" step="1" required placeholder="Nomor absen (contoh: 14)" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
         </div>
         <div class="space-y-1">
-          <label for="studentClass" class="block text-xs font-semibold text-slate-700">Kelas</label>
-          <input id="studentClass" type="text" required placeholder="Contoh: XI F8" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          <label for="studentClass" class="block text-xs font-semibold text-slate-700">Kelas <span class="text-rose-500">*</span></label>
+          <input id="studentClass" type="text" required placeholder="Contoh: XI MIPA 1 / XI F8" class="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all">
         </div>
       </div>
     </section>
@@ -172,7 +221,7 @@
     <!-- Main Grid Layout -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-      <!-- LEFT COLUMN: ULTRA-FAST SPREADSHEET & CHECKPOINTS (7 Cols on LG) -->
+      <!-- LEFT COLUMN: SPREADSHEET & CHECKPOINTS (7 Cols on LG) -->
       <div class="lg:col-span-7 space-y-5">
 
         <!-- SPREADSHEET CARD -->
@@ -181,41 +230,56 @@
             <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">
               <span>📊</span> 1. Lembar Kerja Spreadsheet
             </h2>
-            <div class="flex items-center gap-2">
-              <button onclick="addRow()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300">
-                + Tambah Baris
-              </button>
-              <button onclick="removeRow()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300">
-                - Hapus Baris
-              </button>
-              <button onclick="resetSheet()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition-colors border border-rose-200">
-                Reset
-              </button>
+
+            <!-- Dataset Presets & Table Tools -->
+            <div class="flex flex-wrap items-center gap-2 no-print">
+              <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-300 rounded-lg px-2 py-1">
+                <span class="text-[11px] font-semibold text-slate-600">Preset:</span>
+                <select id="presetSelect" onchange="loadPresetData(this.value)" class="text-xs bg-transparent text-blue-800 font-bold focus:outline-none cursor-pointer">
+                  <option value="1" selected>Data Pengamatan LKPD (n=20)</option>
+                  <option value="2">Contoh 1: Jam Belajar vs Nilai Ujian (n=6)</option>
+                  <option value="3">Contoh 2: Biaya Iklan vs Omzet Penjualan (n=5)</option>
+                  <option value="4">Contoh 3: Suhu Udara vs Es Terjual (n=6)</option>
+                  <option value="empty">Kosongkan Spreadsheet (Data Bebas)</option>
+                </select>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <button onclick="addRow()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300" title="Tambah baris data baru (data lama tetap aman)">
+                  + Baris
+                </button>
+                <button onclick="removeRow()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300" title="Hapus baris data terakhir">
+                  - Baris
+                </button>
+                <button onclick="resetSheet()" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition-colors border border-rose-200" title="Kosongkan seluruh data tabel">
+                  Reset
+                </button>
+              </div>
             </div>
           </div>
 
           <!-- Formula Bar -->
-          <div class="flex items-center gap-2 bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs">
-            <span id="active-cell-id" class="font-bold text-blue-700 min-w-[36px] text-center border-r border-slate-300 pr-2">B7</span>
-            <span class="text-slate-400 font-semibold italic">fx</span>
-            <input type="text" id="formula-input" placeholder="Ketik angka atau rumus diawali = (contoh: =B1-$B$7, =D1^2, =SUM(F1:F6))" class="w-full bg-white border border-slate-200 rounded px-2 py-1 text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500">
+          <div id="formula-bar-container" class="flex items-center gap-2 bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs">
+            <span id="active-cell-id" class="font-bold text-blue-700 min-w-[40px] text-center border-r border-slate-300 pr-2">B1</span>
+            <span class="text-slate-400 font-semibold italic select-none">fx</span>
+            <input type="text" id="formula-input" placeholder="Ketik angka atau rumus diawali = (contoh: =B1-$B$7, =D1^2, =D1*E1, =SUM(F1:F6))" class="w-full bg-white border border-slate-200 rounded px-2.5 py-1 text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono text-xs">
           </div>
 
           <!-- Spreadsheet Viewport -->
-          <div id="sheet-container" class="relative overflow-x-auto border border-slate-300 rounded-xl bg-slate-50 max-h-[420px]">
+          <div id="sheet-container" class="relative overflow-x-auto border border-slate-300 rounded-xl bg-slate-50 max-h-[440px]">
             <table class="sheet-table" id="sheet-table">
               <thead>
                 <tr>
                   <th style="width: 40px;"></th>
-                  <th style="width: 120px;">A<br><span class="text-[10px] font-normal text-slate-500">No / Ket</span></th>
+                  <th style="width: 110px;">A<br><span class="text-[10px] font-normal text-slate-500">No / Ket</span></th>
                   <th style="width: 90px;">B<br><span class="text-[10px] font-normal text-slate-500">X</span></th>
                   <th style="width: 90px;">C<br><span class="text-[10px] font-normal text-slate-500">Y</span></th>
                   <th style="width: 100px;">D<br><span class="text-[10px] font-normal text-slate-500">X − x̄</span></th>
-                  <th style="width: 100px;">E<br><span class="text-[10px] font-normal text-slate-500">Y − ȳ</span></th>
+                  <th style="width: 100px;">E<br><span class="text-[10px] font-normal text-slate-500">Y − ȳ</span></th>
                   <th style="width: 110px;">F<br><span class="text-[10px] font-normal text-slate-500">(X − x̄)²</span></th>
-                  <th style="width: 130px;">G<br><span class="text-[10px] font-normal text-slate-500">(X − x̄)(Y − ȳ)</span></th>
+                  <th style="width: 130px;">G<br><span class="text-[10px] font-normal text-slate-500">(X − x̄)(Y − ȳ)</span></th>
                   <th class="auto-col" style="width: 110px;">H<br><span class="text-[10px] font-normal text-orange-700">Prediksi (Ŷ)</span></th>
-                  <th class="auto-col" style="width: 130px;">I<br><span class="text-[10px] font-normal text-orange-700">Residuum (e = Y − Ŷ)</span></th>
+                  <th class="auto-col" style="width: 130px;">I<br><span class="text-[10px] font-normal text-orange-700">Residu (e = Y − Ŷ)</span></th>
                   <th class="auto-col" style="width: 120px;">J<br><span class="text-[10px] font-normal text-orange-700">Kuadrat (e²)</span></th>
                 </tr>
               </thead>
@@ -224,38 +288,51 @@
 
             <!-- Active Cell Overlay Border + Drag/Fill Handle -->
             <div id="cell-overlay">
-              <div id="fill-handle"></div>
+              <div id="fill-handle" title="Tarik handle untuk salin rumus otomatis (Drag Fill)"></div>
             </div>
           </div>
 
           <!-- Quick Tips -->
-          <div class="bg-blue-50/80 border border-blue-200 rounded-xl p-3 text-xs text-blue-900 space-y-1">
-            <div class="font-bold flex items-center gap-1">💡 Petunjuk Rumus &amp; Drag Fill:</div>
-            <ul class="list-disc list-inside space-y-0.5 text-blue-800">
-              <li>Saat mengetik rumus diawali <code>=</code>, **klik sel di tabel** untuk memasukkan namanya secara otomatis (misal klik <code>B1</code>, ketik <code>-</code>, lalu klik <code>B7</code>).</li>
-              <li>Gunakan <code>$</code> untuk mengunci sel absolut saat drag rumus (contoh: <code>=B1-$B$7</code>).</li>
-              <li>Tarik kotak kecil biru (fill handle) di pojok kanan bawah sel untuk menyalin rumus ke bawah.</li>
-              <li>Kolom <strong>H–J</strong> (oranye) terisi otomatis setelah Langkah 2 benar: <code>Ŷ = a + bX</code>, <code>e = Y − Ŷ</code>, dan <code>e²</code>. Pada baris Total, kolom I bernilai ≈ 0 dan kolom J adalah Σe² (SSE).</li>
+          <div class="bg-blue-50/80 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-900 space-y-1.5">
+            <div class="font-bold flex items-center justify-between">
+              <span class="flex items-center gap-1.5">💡 Petunjuk Rumus &amp; Fitur Interaktif:</span>
+              <button onclick="autoFillDeviationsDemo()" class="no-print text-[11px] font-bold text-blue-600 hover:text-blue-800 underline">
+                Bantu Lengkapi Rumus Kolom D–G Otomatis
+              </button>
+            </div>
+            <ul class="list-disc list-inside space-y-1 text-blue-800 leading-relaxed">
+              <li>Saat mengetik rumus diawali <code>=</code>, <strong>klik sel di tabel</strong> untuk memasukkan alamat sel secara otomatis (contoh: klik <code>B1</code>, ketik <code>-</code>, lalu klik <code>B7</code>).</li>
+              <li>Gunakan <code>$</code> untuk mengunci sel absolut saat drag rumus ke bawah (contoh: <code>=B1-$B$7</code>).</li>
+              <li>Tarik kotak kecil biru di pojok kanan bawah sel (<em>fill handle</em>) untuk menyalin rumus ke baris di bawahnya.</li>
+              <li><strong>Fleksibilitas Desimal:</strong> Mendukung tanda koma (<code>,</code>) maupun titik (<code>.</code>), pembulatan ke atas (<em>round-up/ceil</em>) maupun ke bawah (<em>floor/trunc</em>), serta bebas berapa pun angka di belakang koma.</li>
+              <li><strong>Toleransi Pembulatan:</strong> Jawaban yang disalin langsung dari baris Rata-rata dan Total di tabel dijamin selalu benar!</li>
+              <li>Kolom <strong>H–J</strong> (oranye) terisi otomatis setelah Langkah 2 benar: <code>Ŷ = a + bX</code>, <code>e = Y − Ŷ</code>, dan <code>e²</code>. Baris Total kolom I bernilai &approx; 0 dan kolom J adalah &Sigma;e² (SSE).</li>
             </ul>
           </div>
         </div>
 
         <!-- CHECKPOINTS CARD -->
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-          <h2 class="text-base md:text-lg font-bold text-blue-900 border-b border-slate-100 pb-3 flex items-center gap-2">
-            <span>📝</span> 2. Verifikasi Pengolahan Data
-          </h2>
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">
+              <span>📝</span> 2. Verifikasi Pengolahan Data
+            </h2>
+            <span class="text-xs text-slate-500 font-medium">Bebas koma/titik, pembulatan atas/bawah &amp; berapapun angka desimal</span>
+          </div>
 
           <!-- Langkah 1 -->
           <div class="bg-slate-50 border-l-4 border-blue-600 p-3.5 rounded-r-xl border border-slate-200 space-y-2">
-            <div class="font-bold text-blue-950 text-xs md:text-sm">Langkah 1 – Nilai Rata-rata (x̄ dan ȳ)</div>
-            <p class="text-xs text-slate-600">Masukkan nilai rata-rata dari variabel X dan Y yang telah Anda hitung di spreadsheet:</p>
+            <div class="flex items-center justify-between">
+              <div class="font-bold text-blue-950 text-xs md:text-sm">Langkah 1 – Nilai Rata-rata (x̄ dan ȳ)</div>
+              <span id="badgeStep1" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Belum diverifikasi</span>
+            </div>
+            <p class="text-xs text-slate-600">Masukkan nilai rata-rata variabel X dan Y yang telah Anda hitung di spreadsheet (bisa koma/titik, pembulatan ke atas maupun ke bawah, berapapun angka desimal):</p>
             <div class="flex flex-wrap items-center gap-3 pt-1">
               <label class="text-xs font-semibold">x̄:</label>
-              <input type="number" id="userXbar" step="any" placeholder="..." class="w-24 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userXbar" placeholder="contoh: 6,17 atau 6,16" class="w-32 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
-              <label class="text-xs font-semibold">ȳ:</label>
-              <input type="number" id="userYbar" step="any" placeholder="..." class="w-24 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <label class="text-xs font-semibold">ȳ:</label>
+              <input type="text" id="userYbar" placeholder="contoh: 3,83 atau 3,84" class="w-32 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <button onclick="cekLangkah1()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                 Cek Langkah 1
@@ -266,14 +343,17 @@
 
           <!-- Langkah 2 -->
           <div class="bg-slate-50 border-l-4 border-blue-600 p-3.5 rounded-r-xl border border-slate-200 space-y-2">
-            <div class="font-bold text-blue-950 text-xs md:text-sm">Langkah 2 – Total SSxx dan SSxy</div>
-            <p class="text-xs text-slate-600">Masukkan nilai total <em>SS<sub>xx</sub> = Σ(X - x̄)²</em> dan <em>SS<sub>xy</sub> = Σ(X - x̄)(Y - ȳ)</em> dari spreadsheet:</p>
+            <div class="flex items-center justify-between">
+              <div class="font-bold text-blue-950 text-xs md:text-sm">Langkah 2 – Total SSxx dan SSxy</div>
+              <span id="badgeStep2" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Belum diverifikasi</span>
+            </div>
+            <p class="text-xs text-slate-600">Masukkan nilai total <em>SS<sub>xx</sub> = &Sigma;(X − x̄)²</em> dan <em>SS<sub>xy</sub> = &Sigma;(X − x̄)(Y − ȳ)</em> dari baris Total di spreadsheet (bisa koma/titik, pembulatan ke atas/bawah, atau nilai eksak kalkulator):</p>
             <div class="flex flex-wrap items-center gap-3 pt-1">
               <label class="text-xs font-semibold">SSxx:</label>
-              <input type="number" id="userSSxx" step="any" placeholder="..." class="w-24 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userSSxx" placeholder="contoh: 92,84 atau 92,83" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <label class="text-xs font-semibold">SSxy:</label>
-              <input type="number" id="userSSxy" step="any" placeholder="..." class="w-24 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userSSxy" placeholder="contoh: 39,16 atau 39,17" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <button onclick="cekLangkah2()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                 Cek Langkah 2
@@ -284,14 +364,17 @@
 
           <!-- Langkah 3 -->
           <div class="bg-slate-50 border-l-4 border-blue-600 p-3.5 rounded-r-xl border border-slate-200 space-y-2">
-            <div class="font-bold text-blue-950 text-xs md:text-sm">Langkah 3 – Koefisien Regresi (a dan b)</div>
-            <p class="text-xs text-slate-600">Hitung nilai gradien <em>b = SS<sub>xy</sub> / SS<sub>xx</sub></em> dan intersep <em>a = ȳ - b(x̄)</em>:</p>
+            <div class="flex items-center justify-between">
+              <div class="font-bold text-blue-950 text-xs md:text-sm">Langkah 3 – Koefisien Regresi (a dan b)</div>
+              <span id="badgeStep3" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Belum diverifikasi</span>
+            </div>
+            <p class="text-xs text-slate-600">Hitung nilai gradien <em>b = SS<sub>xy</sub> / SS<sub>xx</sub></em> dan intersep <em>a = ȳ − b(x̄)</em> (bebas pembulatan ke atas/bawah &amp; jumlah desimal):</p>
             <div class="flex flex-wrap items-center gap-3 pt-1">
               <label class="text-xs font-semibold">Gradien (b):</label>
-              <input type="number" id="userB" step="any" placeholder="..." class="w-24 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userB" placeholder="contoh: 0,42 atau 0,43" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <label class="text-xs font-semibold">Intersep (a):</label>
-              <input type="number" id="userA" step="any" placeholder="..." class="w-24 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
+              <input type="text" id="userA" placeholder="contoh: 1,23 atau 1,22" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
               
               <button onclick="cekLangkah3()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-colors shadow-sm">
                 Verifikasi Jawaban
@@ -300,18 +383,43 @@
             <span id="msgStep3" class="block text-xs font-semibold"></span>
           </div>
 
-          <!-- Result Box -->
-          <div id="resultBox" class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-3.5 rounded-xl text-center font-bold text-xs md:text-sm">
-            Ketik data X dan Y di spreadsheet, lalu lengkapi langkah pengolahan data di atas!
+          <!-- Result & Statistical Analysis Box -->
+          <div id="resultBox" class="bg-emerald-50 border border-emerald-200 text-emerald-900 p-4 rounded-xl text-center font-bold text-xs md:text-sm space-y-2">
+            <div>Ketik data X dan Y di spreadsheet, lalu lengkapi langkah verifikasi pengolahan data di atas!</div>
+          </div>
+
+          <!-- Statistical Summary Metrics (Pearson r & R2) -->
+          <div id="statsSummaryCard" class="hidden bg-slate-50 border border-slate-200 rounded-xl p-3.5 text-xs space-y-2.5">
+            <div class="font-bold text-slate-800 flex items-center justify-between border-b border-slate-200 pb-2">
+              <span class="flex items-center gap-1.5">📈 Ringkasan Statistik Regresi:</span>
+              <span id="rBadge" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800"></span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-center">
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                <div class="text-[11px] text-slate-500 font-semibold">Koefisien Korelasi (r)</div>
+                <div id="valPearsonR" class="text-sm font-extrabold text-blue-700 mt-0.5">-</div>
+                <div id="valPearsonDesc" class="text-[10px] text-slate-500">Arah &amp; kekuatan</div>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                <div class="text-[11px] text-slate-500 font-semibold">Koefisien Determinasi (R²)</div>
+                <div id="valR2" class="text-sm font-extrabold text-emerald-700 mt-0.5">-</div>
+                <div id="valR2Desc" class="text-[10px] text-slate-500">Kontribusi X terhadap Y</div>
+              </div>
+              <div class="bg-white p-2.5 rounded-lg border border-slate-200">
+                <div class="text-[11px] text-slate-500 font-semibold">Jumlah Kuadrat Residu (SSE)</div>
+                <div id="valSSE" class="text-sm font-extrabold text-orange-700 mt-0.5">-</div>
+                <div class="text-[10px] text-slate-500">&Sigma;e² minimum</div>
+              </div>
+            </div>
           </div>
 
         </div>
 
-        <!-- RESIDUAL CARD -->
+        <!-- RESIDU CARD -->
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">
-              <span>🔬</span> 4. Eksperimen Residuum
+              <span>🔬</span> 4. Eksperimen Residu
             </h2>
             <span id="residStatus" class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 border border-slate-200">
               🔒 Terbuka setelah Langkah 2 benar
@@ -319,63 +427,64 @@
           </div>
 
           <p class="text-xs text-slate-600 leading-relaxed">
-            <strong>Residuum</strong> adalah selisih antara nilai Y hasil pengamatan dan nilai Ŷ hasil prediksi garis,
-            yaitu <em>e<sub>i</sub> = y<sub>i</sub> − ŷ<sub>i</sub></em>. Di GeoGebra, residuum tampak sebagai
-            segmen putus-putus dari setiap titik data menuju garis. Kolom H–J pada spreadsheet menghitungnya otomatis.
+            <strong>Residu</strong> adalah selisih antara nilai Y hasil pengamatan dan nilai Ŷ hasil prediksi garis,
+            yaitu <em>e<sub>i</sub> = y<sub>i</sub> − ŷ<sub>i</sub></em>. Di GeoGebra, residu tampak sebagai
+            segmen putus-putus vertikal dari setiap titik data menuju garis. Kolom H–J pada spreadsheet menghitungnya secara otomatis.
           </p>
 
           <div class="bg-slate-50 border-l-4 border-orange-500 p-3.5 rounded-r-xl border border-slate-200 space-y-2">
-            <div class="font-bold text-blue-950 text-xs md:text-sm">Panduan Eksperimen</div>
-            <ol class="list-decimal list-inside space-y-1 text-xs text-slate-700 leading-relaxed">
-              <li>Lihat baris <em>Total</em> pada kolom I dan J di spreadsheet. Catat nilai Σe dan Σe² (SSE).</li>
-              <li>Di panel GeoGebra, centang <strong>Kotak kuadrat residuum</strong> untuk melihat e² sebagai luas persegi.</li>
-              <li>Pilih <strong>Garis eksplorasi</strong>, lalu geser slider m dan c. Amati Σe² garis Anda dan bandingkan dengan Σe² garis regresi.</li>
+            <div class="font-bold text-blue-950 text-xs md:text-sm">Panduan Eksperimen Residu</div>
+            <ol class="list-decimal list-inside space-y-1.5 text-xs text-slate-700 leading-relaxed">
+              <li>Lihat baris <em>Total</em> pada kolom I dan J di spreadsheet. Catat nilai &Sigma;e dan &Sigma;e² (SSE).</li>
+              <li>Di panel visualisasi GeoGebra sebelah kanan, aktifkan <strong>Kotak kuadrat residu (e²)</strong> untuk melihat kuadrat residu sebagai luas persegi geometri.</li>
+              <li>Pilih <strong>Garis eksplorasi</strong>, lalu geser slider kemiringan (m) dan intersep (c). Perhatikan perbandingan nilai &Sigma;e² garis eksplorasi dengan &Sigma;e² garis regresi.</li>
+              <li>Klik tombol <strong>⚖️ Uji Garis Datar (m = 0, c = ȳ)</strong> untuk mengamati fenomena unik saat garis sejajar sumbu X.</li>
             </ol>
           </div>
 
           <div class="space-y-4">
             <div class="space-y-1.5">
               <label for="refleksiResid1" class="block text-xs font-semibold text-slate-700">
-                1. Apa yang terjadi pada panjang garis residuum ketika posisi garis mendekati kumpulan titik data?
+                1. Apa yang terjadi pada panjang segmen garis residu ketika posisi garis semakin mendekati kumpulan titik data?
               </label>
-              <textarea id="refleksiResid1" rows="3" placeholder="Tuliskan pengamatanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              <textarea id="refleksiResid1" rows="3" placeholder="Tuliskan pengamatanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"></textarea>
             </div>
 
             <div class="space-y-1.5">
               <label for="refleksiResid2" class="block text-xs font-semibold text-slate-700">
-                2. Coba geser slider garis eksplorasi. Bisakah kamu menemukan nilai Σe² yang lebih kecil dari milik garis regresi? Mengapa?
+                2. Coba geser slider garis eksplorasi ke berbagai posisi. Bisakah kamu menemukan nilai &Sigma;e² yang lebih kecil dari milik garis regresi terbaik? Mengapa demikian?
               </label>
-              <textarea id="refleksiResid2" rows="3" placeholder="Tuliskan jawabanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              <textarea id="refleksiResid2" rows="3" placeholder="Tuliskan jawabanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"></textarea>
             </div>
 
             <div class="space-y-1.5">
               <label for="refleksiResid3" class="block text-xs font-semibold text-slate-700">
-                3. Mengapa kita perlu mengkuadratkan nilai residuum (e²) alih-alih hanya menjumlahkan nilai residuum biasa (e)?
+                3. Mengapa kita perlu mengkuadratkan nilai residu (e²) alih-alih hanya menjumlahkan nilai residu biasa (&Sigma;e)?
               </label>
               <p class="text-[11px] text-slate-500">
-                Petunjuk: letakkan garis mendatar (m = 0) dengan c di sekitar ȳ, lalu bandingkan Σe dan Σe².
+                💡 <em>Petunjuk:</em> Gunakan tombol <strong>⚖️ Uji Garis Datar (m = 0, c = ȳ)</strong> di panel sebelah kanan, lalu bandingkan nilai &Sigma;e dan &Sigma;e²!
               </p>
-              <textarea id="refleksiResid3" rows="3" placeholder="Tuliskan jawabanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              <textarea id="refleksiResid3" rows="3" placeholder="Tuliskan jawabanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"></textarea>
             </div>
           </div>
 
           <div class="flex items-center justify-between pt-2">
-                <button type="button" onclick="goToReflection()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1.5">
-          <span>Lanjut ke Refleksi</span>
-          <span>➔</span>
-        </button>
-      </div>
+            <button type="button" onclick="goToReflection()" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-lg shadow-sm transition-colors flex items-center gap-1.5">
+              <span>Lanjut ke Refleksi (Assessment as Learning)</span>
+              <span>➔</span>
+            </button>
+          </div>
 
           <div id="conceptSummary" class="hidden bg-blue-50/80 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-900 space-y-2">
-            <div class="font-bold flex items-center gap-1">📌 Rangkuman Konsep</div>
+            <div class="font-bold flex items-center gap-1">📌 Rangkuman Konsep Residu:</div>
             <div>
-              <span class="font-semibold">Rumus residuum:</span>
+              <span class="font-semibold">Rumus residu:</span>
               <span class="block text-center text-sm font-bold py-1"><em>e<sub>i</sub> = y<sub>i</sub> − ŷ<sub>i</sub></em></span>
             </div>
             <div>
-              <span class="font-semibold">Prinsip best fit:</span>
-              garis regresi disebut garis terbaik (<em>line of best fit</em>) karena menghasilkan jumlah kuadrat residuum paling kecil:
-              <span class="block text-center text-sm font-bold py-1">Σe² → minimum</span>
+              <span class="font-semibold">Prinsip Kuadrat Terkecil (Ordinary Least Squares):</span>
+              Garis regresi disebut garis terbaik (<em>line of best fit</em>) karena menghasilkan jumlah kuadrat residu paling minimum:
+              <span class="block text-center text-sm font-bold py-1">&Sigma;e² &rarr; minimum</span>
             </div>
           </div>
         </div>
@@ -385,99 +494,124 @@
       <!-- RIGHT COLUMN: GEOGEBRA (5 Cols on LG) -->
       <div class="lg:col-span-5 lg:sticky lg:top-5 lg:max-h-[calc(100vh-2.5rem)] lg:overflow-y-auto space-y-4">
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-          <h2 class="text-base md:text-lg font-bold text-blue-900 border-b border-slate-100 pb-3 flex items-center gap-2">
-            <span>📈</span> 3. Visualisasi Grafik (GeoGebra)
-          </h2>
-          <p class="text-xs text-slate-500">
-            Setiap kali Anda memasukkan data X &amp; Y, titik diagram pencar akan ditampilkan di GeoGebra. <strong>Garis regresi linear</strong> dan <strong>slider eksplorasi</strong> baru akan muncul setelah Anda berhasil memverifikasi SSxx dan SSxy pada Langkah 2.
+          <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+            <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">
+              <span>📈</span> 3. Visualisasi Grafik (GeoGebra)
+            </h2>
+            <div class="flex items-center gap-2">
+              <label class="flex items-center gap-1 text-[11px] font-semibold text-amber-800 cursor-pointer bg-amber-50 px-2 py-0.5 rounded border border-amber-200" title="Tampilkan titik sentroid rata-rata data M(x̄, ȳ)">
+                <input type="checkbox" id="chkShowMean" checked onchange="toggleMeanVisibility()" class="accent-amber-600">
+                Titik Rata-rata M(x̄, ȳ)
+              </label>
+            </div>
+          </div>
+          
+          <p class="text-xs text-slate-500 leading-relaxed">
+            Titik data diagram pencar (biru) dan titik rata-rata <strong>M(x̄, ȳ)</strong> (kuning) otomatis ditampilkan. <strong>Garis regresi linear</strong> (merah) dan panel eksplorasi residu aktif setelah Anda memverifikasi Langkah 2.
           </p>
 
           <div class="w-full bg-slate-100 rounded-xl border border-slate-200 flex items-center justify-center min-h-[440px] overflow-hidden">
-            <div id="ggb-element" class="w-full" style="width: 480px; height: 440px;"></div>
+            <div id="ggb-element" class="w-full max-w-full" style="width: 480px; height: 440px;"></div>
           </div>
+
           <div id="explorationPanel" class="hidden bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-4">
-            <h3 class="text-sm font-bold text-blue-900 flex items-center gap-2">
-              <span>🎚️️</span> Eksplorasi Kemiringan &amp; Letak Garis
-            </h3>
+            <div class="flex items-center justify-between border-b border-slate-200 pb-2">
+              <h3 class="text-xs md:text-sm font-bold text-blue-900 flex items-center gap-2">
+                <span>🎚️</span> Eksplorasi Kemiringan &amp; Letak Garis
+              </h3>
+            </div>
+
             <p class="text-xs text-slate-500">
-              Geser slider di bawah ini untuk mengubah kemiringan dan letak garis biru putus-putus (garis eksplorasi Anda). Bandingkan dengan garis regresi merah (garis terbaik hasil perhitungan).
+              Ubah kemiringan (m) dan intersep (c) garis biru putus-putus. Bandingkan jumlah kuadrat residunya (&Sigma;e&sup2;) dengan garis regresi merah (garis terbaik).
             </p>
+
+            <!-- Quick Action Preset Buttons for Reflection -->
+            <div class="grid grid-cols-2 gap-2 pt-1">
+              <button onclick="setExplorationToRegression()" class="px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-[11px] font-bold rounded-lg border border-blue-200 transition-colors flex items-center justify-center gap-1">
+                <span>🎯</span> Set ke Garis Regresi
+              </button>
+              <button onclick="setExplorationToHorizontal()" class="px-2.5 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-800 text-[11px] font-bold rounded-lg border border-amber-200 transition-colors flex items-center justify-center gap-1" title="Set kemiringan m=0 dan c=ȳ untuk menguji &Sigma;e vs &Sigma;e²">
+                <span>⚖️</span> Uji Garis Datar (m=0)
+              </button>
+            </div>
 
             <div>
               <div class="flex justify-between text-xs font-semibold mb-1">
                 <span>Kemiringan / Slope (m):</span>
-                <span id="mSliderVal" class="text-blue-600 font-bold">0.00</span>
+                <span id="mSliderVal" class="text-blue-600 font-bold font-mono">0.00</span>
               </div>
-              <input type="range" id="mSlider" min="-5" max="5" step="0.01" value="0" class="w-full accent-blue-600">
+              <input type="range" id="mSlider" min="-5" max="5" step="0.01" value="0" class="w-full accent-blue-600 cursor-pointer">
             </div>
 
             <div>
               <div class="flex justify-between text-xs font-semibold mb-1">
-                <span>Intersep (c):</span>
-                <span id="cSliderVal" class="text-blue-600 font-bold">0.00</span>
+                <span>Intersep / Titik Potong Y (c):</span>
+                <span id="cSliderVal" class="text-blue-600 font-bold font-mono">0.00</span>
               </div>
-              <input type="range" id="cSlider" min="-50" max="50" step="0.5" value="0" class="w-full accent-blue-600">
+              <input type="range" id="cSlider" min="-50" max="50" step="0.01" value="0" class="w-full accent-blue-600 cursor-pointer">
             </div>
 
             <div class="p-3 bg-blue-50 rounded-lg border border-blue-100 text-xs text-blue-900">
               <strong>Persamaan Garis Eksplorasi Anda:</strong><br>
-              <span id="persamaanEksplorasi" class="text-sm font-bold block mt-1">Y = 0.00X + 0.00</span>
+              <span id="persamaanEksplorasi" class="text-sm font-bold block mt-1 font-mono">Y = 0.00X + 0.00</span>
             </div>
 
-            <!-- Panel Residuum -->
+            <!-- Panel Residu -->
             <div id="residualPanel" class="p-3 bg-orange-50/70 rounded-xl border border-orange-200 space-y-3">
               <h4 class="text-xs font-bold text-orange-800 flex items-center gap-1.5">
-                <span>📏</span> Residuum: selisih data terhadap garis
+                <span>📏</span> Residu: selisih data terhadap garis
               </h4>
 
               <div class="space-y-1.5 text-xs text-slate-700">
-                <div class="font-semibold">Ukur residuum terhadap:</div>
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="residTarget" value="reg" checked class="accent-orange-600">
-                  <span class="inline-block w-3 h-3 rounded-full" style="background:#ea580c"></span>
-                  Garis regresi (merah)
-                </label>
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="residTarget" value="exp" class="accent-violet-600">
-                  <span class="inline-block w-3 h-3 rounded-full" style="background:#7c3aed"></span>
-                  Garis eksplorasi (biru putus-putus)
-                </label>
+                <div class="font-semibold text-slate-800">Ukur residu terhadap:</div>
+                <div class="flex items-center gap-4">
+                  <label class="flex items-center gap-1.5 cursor-pointer font-medium">
+                    <input type="radio" name="residTarget" value="reg" checked class="accent-orange-600">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full" style="background:#ea580c"></span>
+                    Garis regresi (merah)
+                  </label>
+                  <label class="flex items-center gap-1.5 cursor-pointer font-medium">
+                    <input type="radio" name="residTarget" value="exp" class="accent-violet-600">
+                    <span class="inline-block w-2.5 h-2.5 rounded-full" style="background:#7c3aed"></span>
+                    Garis eksplorasi (biru)
+                  </label>
+                </div>
               </div>
 
               <div class="flex flex-wrap gap-x-5 gap-y-1.5 text-xs text-slate-700">
-                <label class="flex items-center gap-1.5 cursor-pointer">
+                <label class="flex items-center gap-1.5 cursor-pointer font-medium">
                   <input type="checkbox" id="chkResidSeg" checked class="accent-orange-600">
-                  Segmen residuum
+                  Segmen garis residu (e)
                 </label>
-                <label class="flex items-center gap-1.5 cursor-pointer">
+                <label class="flex items-center gap-1.5 cursor-pointer font-medium">
                   <input type="checkbox" id="chkResidSq" checked class="accent-orange-600">
-                  Kotak kuadrat residuum (e²)
+                  Kotak kuadrat residu (e²)
                 </label>
               </div>
 
               <div class="overflow-hidden rounded-lg border border-orange-200 bg-white">
                 <table class="w-full text-xs">
                   <thead>
-                    <tr class="bg-orange-100/70 text-orange-900">
-                      <th class="text-left font-semibold px-2 py-1.5">Garis</th>
-                      <th class="text-right font-semibold px-2 py-1.5">Σe</th>
-                      <th class="text-right font-semibold px-2 py-1.5">Σe²</th>
+                    <tr class="bg-orange-100/70 text-orange-900 font-bold">
+                      <th class="text-left px-2 py-1.5">Model Garis</th>
+                      <th class="text-right px-2 py-1.5" title="Jumlah selisih residu biasa">&Sigma;e</th>
+                      <th class="text-right px-2 py-1.5" title="Jumlah kuadrat residu (SSE)">&Sigma;e²</th>
                     </tr>
                   </thead>
                   <tbody class="divide-y divide-orange-100">
                     <tr>
-                      <td class="px-2 py-1.5">
-                        <span class="inline-block w-2.5 h-2.5 rounded-full mr-1" style="background:#7c3aed"></span>Eksplorasi
+                      <td class="px-2 py-1.5 font-medium">
+                        <span class="inline-block w-2 h-2 rounded-full mr-1.5" style="background:#7c3aed"></span>Eksplorasi
                       </td>
-                      <td id="sumEExp" class="text-right px-2 py-1.5 tabular-nums">0.00</td>
-                      <td id="sumE2Exp" class="text-right px-2 py-1.5 tabular-nums font-bold text-violet-700">0.00</td>
+                      <td id="sumEExp" class="text-right px-2 py-1.5 tabular-nums font-mono">0.00</td>
+                      <td id="sumE2Exp" class="text-right px-2 py-1.5 tabular-nums font-bold text-violet-700 font-mono">0.00</td>
                     </tr>
                     <tr>
-                      <td class="px-2 py-1.5">
-                        <span class="inline-block w-2.5 h-2.5 rounded-full mr-1" style="background:#ea580c"></span>Regresi (SSE)
+                      <td class="px-2 py-1.5 font-medium">
+                        <span class="inline-block w-2 h-2 rounded-full mr-1.5" style="background:#ea580c"></span>Regresi (Terbaik)
                       </td>
-                      <td id="sumEReg" class="text-right px-2 py-1.5 tabular-nums">0.00</td>
-                      <td id="sumE2Reg" class="text-right px-2 py-1.5 tabular-nums font-bold text-orange-700">0.00</td>
+                      <td id="sumEReg" class="text-right px-2 py-1.5 tabular-nums font-mono">0.00</td>
+                      <td id="sumE2Reg" class="text-right px-2 py-1.5 tabular-nums font-bold text-orange-700 font-mono">0.00</td>
                     </tr>
                   </tbody>
                 </table>
@@ -487,10 +621,10 @@
             </div>
 
             <div>
-              <label class="block text-xs font-semibold text-slate-700 mb-1">
-                💭 Apa yang terjadi ketika kemiringan garis dan letak garis berubah?
+              <label for="refleksiSlider" class="block text-xs font-semibold text-slate-700 mb-1">
+                💬 Apa yang terjadi pada nilai &Sigma;e² ketika garis eksplorasi digeser menjauhi kumpulan titik data?
               </label>
-              <textarea id="refleksiSlider" rows="3" placeholder="Tuliskan pengamatanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none"></textarea>
+              <textarea id="refleksiSlider" rows="2" placeholder="Tuliskan kesimpulan pengamatanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all"></textarea>
             </div>
           </div>
         </div>
@@ -505,58 +639,272 @@
           <span>🧠</span> MARI REFLEKSI!
         </h2>
         <p class="text-xs text-slate-600 mt-1">
-          Jawablah pertanyaan refleksi (Assessment as Learning) di bawah ini untuk mengevaluasi pemahamanmu terhadap konsep garis regresi linear.
+          Jawablah pertanyaan refleksi (<em>Assessment as Learning</em>) di bawah ini untuk mengevaluasi pemahaman konsep garis regresi linear dan residu.
         </p>
       </div>
 
       <div class="space-y-4">
         <div class="space-y-1.5">
           <label for="aal1" class="block text-xs font-bold text-slate-800">
-            1. Apa yang kalian pahami tentang hubungan antara titik rata-rata dan persamaan garis regresi?
+            1. Apa yang kalian pahami tentang hubungan antara titik rata-rata (x̄, ȳ) dan garis regresi? Apakah garis regresi selalu melewati titik rata-rata tersebut?
           </label>
           <textarea id="aal1" rows="3" placeholder="Tuliskan pemahamanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
 
         <div class="space-y-1.5">
           <label for="aal2" class="block text-xs font-bold text-slate-800">
-            2. Apa yang kalian pelajari dari kegiatan mengubah-ubah posisi garis regresi pada simulasi?
+            2. Apa yang kalian pelajari dari kegiatan mengubah-ubah posisi kemiringan (m) dan letak (c) garis pada simulasi slider?
           </label>
           <textarea id="aal2" rows="3" placeholder="Tuliskan pengalaman eksplorasimu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
 
         <div class="space-y-1.5">
           <label for="aal3" class="block text-xs font-bold text-slate-800">
-            3. Mengapa garis regresi dikatakan sebagai garis yang menghasilkan jumlah kuadrat residu paling kecil? Jelaskan berdasarkan hasil eksplorasi kalian.
+            3. Mengapa garis regresi dikatakan sebagai garis yang menghasilkan jumlah kuadrat residu paling kecil (&Sigma;e² &rarr; minimum)? Jelaskan berdasarkan hasil eksperimen residu kalian.
           </label>
-          <textarea id="aal3" rows="3" placeholder="Jelaskan alasanmu berdasarkan eksperimen residuum..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+          <textarea id="aal3" rows="3" placeholder="Jelaskan alasanmu berdasarkan eksperimen residu..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
 
         <div class="space-y-1.5">
           <label for="aal4" class="block text-xs font-bold text-slate-800">
-            4. Bagian mana dari kegiatan pada web atau langkah perhitungan garis regresi yang paling membantu kalian memahami konsep garis regresi?
+            4. Bagian mana dari kegiatan pada spreadsheet atau simulasi GeoGebra yang paling membantu kalian memahami konsep regresi linear?
           </label>
           <textarea id="aal4" rows="3" placeholder="Tuliskan bagian yang paling membantu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
 
         <div class="space-y-1.5">
           <label for="aal5" class="block text-xs font-bold text-slate-800">
-            5. Apa yang masih belum kalian pahami atau bagian mana yang masih membuat kalian kesulitan dalam menentukan atau memahami garis regresi?
+            5. Apa yang masih belum kalian pahami atau bagian mana yang masih membuat kalian kesulitan dalam menentukan garis regresi linear?
           </label>
           <textarea id="aal5" rows="3" placeholder="Tuliskan hal yang masih membingungkan di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
       </div>
 
       <!-- PENGUMPULAN LKPD -->
-      <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center gap-3">
-        <button id="submitLkpdBtn" type="button" onclick="submitLKPD()" class="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white text-sm font-bold rounded-xl shadow-md transition-all">Submit LKPD</button>
+      <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="flex flex-wrap items-center gap-3">
+          <button id="submitLkpdBtn" type="button" onclick="submitLKPD()" class="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white text-sm font-bold rounded-xl shadow-md transition-all flex items-center gap-2">
+            <span>🚀</span> Submit LKPD (Google Drive)
+          </button>
+          <button type="button" onclick="downloadHtmlBackup()" class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-300 transition-all flex items-center gap-1.5">
+            <span>💾</span> Unduh Cadangan Jawaban (.html)
+          </button>
+        </div>
         <span id="submitStatus" role="status" aria-live="polite" class="text-xs font-semibold text-slate-600"></span>
       </div>
     </section>
   </div>
 
   <script>
-    // URL Web App dari Google Apps Script Anda:
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKK_bj1o02kPCti7rL035l7ngNC2Ikx40RzRhulEMzh5057-8cEeXZbyGDbvU2arai0g/exec  ";
+    // URL Web App dari Google Apps Script (trimmed URL):
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKK_bj1o02kPCti7rL035l7ngNC2Ikx40RzRhulEMzh5057-8cEeXZbyGDbvU2arai0g/exec";
+
+    /* =========================================================================
+     * PRESET DATASETS (Kurikulum Merdeka Kontekstual)
+     * ========================================================================= */
+    const PRESETS = {
+      "1": {
+        name: "Data Pengamatan LKPD (n=20)",
+        points: [
+                  {
+                            "x": 2,
+                            "y": 7.5
+                  },
+                  {
+                            "x": 2,
+                            "y": 7
+                  },
+                  {
+                            "x": 4,
+                            "y": 5.5
+                  },
+                  {
+                            "x": 2.5,
+                            "y": 7
+                  },
+                  {
+                            "x": 2.5,
+                            "y": 4
+                  },
+                  {
+                            "x": 1,
+                            "y": 5
+                  },
+                  {
+                            "x": 1,
+                            "y": 8
+                  },
+                  {
+                            "x": 4.5,
+                            "y": 5
+                  },
+                  {
+                            "x": 1.5,
+                            "y": 7.5
+                  },
+                  {
+                            "x": 0.5,
+                            "y": 8.5
+                  },
+                  {
+                            "x": 2.5,
+                            "y": 6.5
+                  },
+                  {
+                            "x": 1.5,
+                            "y": 8
+                  },
+                  {
+                            "x": 3,
+                            "y": 6
+                  },
+                  {
+                            "x": 5,
+                            "y": 4.5
+                  },
+                  {
+                            "x": 3,
+                            "y": 6.5
+                  },
+                  {
+                            "x": 4,
+                            "y": 7
+                  },
+                  {
+                            "x": 2,
+                            "y": 6.5
+                  },
+                  {
+                            "x": 3.5,
+                            "y": 6
+                  },
+                  {
+                            "x": 3,
+                            "y": 7
+                  },
+                  {
+                            "x": 3.5,
+                            "y": 5.5
+                  }
+        ]
+      },
+      "2": {
+        name: "Lama Belajar vs Nilai Ujian (n=6)",
+        points: [
+          { x: 2, y: 50 },
+          { x: 4, y: 60 },
+          { x: 5, y: 70 },
+          { x: 7, y: 75 },
+          { x: 8, y: 85 },
+          { x: 10, y: 95 }
+        ]
+      },
+      "3": {
+        name: "Biaya Iklan vs Omzet Penjualan (n=5)",
+        points: [
+          { x: 5, y: 22 },
+          { x: 8, y: 28 },
+          { x: 10, y: 35 },
+          { x: 12, y: 40 },
+          { x: 15, y: 48 }
+        ]
+      },
+      "4": {
+        name: "Suhu Udara vs Es Terjual (n=6)",
+        points: [
+          { x: 26, y: 50 },
+          { x: 28, y: 65 },
+          { x: 30, y: 80 },
+          { x: 32, y: 95 },
+          { x: 34, y: 110 },
+          { x: 36, y: 130 }
+        ]
+      }
+    };
+
+    function loadPresetData(key) {
+      if (key === 'empty') {
+        initSpreadsheetData(6);
+        clearVerificationInputs();
+        updateAllCellDOMs();
+        updateGeoGebraPlot();
+        saveToLocalStorage();
+        return;
+      }
+
+      const preset = PRESETS[key];
+      if (!preset) return;
+
+      const pts = preset.points;
+      const count = pts.length;
+      initSpreadsheetData(count);
+
+      pts.forEach((p, idx) => {
+        const r = idx + 1;
+        rawData[`B${r}`] = String(p.x);
+        rawData[`C${r}`] = String(p.y);
+      });
+
+      clearVerificationInputs();
+      reevaluateAll();
+      updateAllCellDOMs();
+      updateGeoGebraPlot();
+      saveToLocalStorage();
+    }
+
+    function clearVerificationInputs() {
+      verifiedPointsSnapshot = null;
+      ['userXbar', 'userYbar', 'userSSxx', 'userSSxy', 'userB', 'userA'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = '';
+      });
+      ['msgStep1', 'msgStep2', 'msgStep3'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = ''; el.className = 'block text-xs font-semibold'; }
+      });
+      ['badgeStep1', 'badgeStep2', 'badgeStep3'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.className = 'text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600';
+          el.textContent = 'Belum diverifikasi';
+        }
+      });
+      const rb = document.getElementById('resultBox');
+      if (rb) {
+        rb.innerHTML = 'Ketik data X dan Y di spreadsheet, lalu lengkapi langkah verifikasi pengolahan data di atas!';
+        rb.className = 'bg-emerald-50 border border-emerald-200 text-emerald-900 p-4 rounded-xl text-center font-bold text-xs md:text-sm space-y-2';
+      }
+      const stats = document.getElementById('statsSummaryCard');
+      if (stats) stats.classList.add('hidden');
+      hideExplorationPanel();
+    }
+
+    /* Bantuan isi rumus otomatis untuk tujuan belajar / demonstrasi */
+    function autoFillDeviationsDemo() {
+      const dataRows = rowCount - 2;
+      const meanRow = rowCount - 1;
+      const totalRow = rowCount;
+
+      // Rumus rata-rata
+      rawData[`B${meanRow}`] = `=AVERAGE(B1:B${dataRows})`;
+      rawData[`C${meanRow}`] = `=AVERAGE(C1:C${dataRows})`;
+
+      // Rumus deviasi tiap baris
+      for (let r = 1; r <= dataRows; r++) {
+        rawData[`D${r}`] = `=B${r}-$B$${meanRow}`;
+        rawData[`E${r}`] = `=C${r}-$C$${meanRow}`;
+        rawData[`F${r}`] = `=D${r}^2`;
+        rawData[`G${r}`] = `=D${r}*E${r}`;
+      }
+
+      // Rumus total
+      rawData[`F${totalRow}`] = `=SUM(F1:F${dataRows})`;
+      rawData[`G${totalRow}`] = `=SUM(G1:G${dataRows})`;
+
+      reevaluateAll();
+      updateAllCellDOMs();
+      saveToLocalStorage();
+    }
 
     function goToReflection() {
       const name = document.getElementById('studentName');
@@ -609,7 +957,7 @@
       status.className = 'text-xs font-semibold text-blue-600';
       status.textContent = 'Sedang menyimpan file pengerjaan ke Google Drive...';
 
-      // Menyimpan data/inputan murid saat ini ke attribute HTML agar pengerjaan terekam secara permanen
+      // Sinkronkan input nilai ke attribute HTML
       document.querySelectorAll('input').forEach(input => {
         if (input.type === 'checkbox' || input.type === 'radio') {
           if (input.checked) input.setAttribute('checked', 'checked');
@@ -623,7 +971,6 @@
         textarea.textContent = textarea.value;
       });
 
-      // Ambil dokumen HTML lengkap beserta jawaban murid yang sudah diisi
       const fullHtmlContent = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
 
       const formData = new FormData();
@@ -652,50 +999,79 @@
         button.disabled = false;
         button.textContent = 'Submit LKPD';
         status.className = 'text-xs font-semibold text-rose-600';
-        status.textContent = '❌ Gagal mengirim file ke Google Drive. Periksa koneksi internet dan coba lagi.';
+        status.innerHTML = '❌ Gagal mengirim otomatis ke Google Drive. <a href="javascript:downloadHtmlBackup()" class="underline font-bold text-rose-700">Klik di sini untuk mengunduh cadangan file HTML</a> dan kirim langsung ke guru.';
         name.disabled = false;
         number.disabled = false;
         studentClass.disabled = false;
       }
     }
 
+    function downloadHtmlBackup() {
+      document.querySelectorAll('input').forEach(input => {
+        if (input.type === 'checkbox' || input.type === 'radio') {
+          if (input.checked) input.setAttribute('checked', 'checked');
+          else input.removeAttribute('checked');
+        } else {
+          input.setAttribute('value', input.value);
+        }
+      });
+
+      document.querySelectorAll('textarea').forEach(textarea => {
+        textarea.textContent = textarea.value;
+      });
+
+      const name = (document.getElementById('studentName').value.trim() || 'Murid').replace(/\s+/g, '_');
+      const cls = (document.getElementById('studentClass').value.trim() || 'Kelas').replace(/\s+/g, '_');
+      const filename = `LKPD_Regresi_${name}_${cls}.html`;
+
+      const fullHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(link.href);
+    }
+
     /* =========================================================================
-     * FAST LIGHTWEIGHT SPREADSHEET ENGINE WITH INTERACTIVE FORMULA INPUT
+     * SPREADSHEET ENGINE
      * ========================================================================= */
 
     const COLS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-    const EDIT_COLS = 7;   // A–G bisa diedit; H–J (residuum) terisi otomatis
-    let rowCount = 8;
+    const EDIT_COLS = 7;   // A–G bisa diedit; H–J (residu) terisi otomatis
+    let rowCount = 8;      // 6 data rows + 1 Mean + 1 Total = 8
     
-    // Core state matrices: raw input/formulas and evaluated display values
     let rawData = {};
     let evalData = {};
 
-    let selectedCell = { r: 1, c: 1 }; // 1-indexed (r=1..N, c=1..7)
+    let selectedCell = { r: 1, c: 1 };
     let isDragging = false;
     let dragStartCell = null;
     let ggbApi = null;
 
-    // Track state for interactive formula clicking
     let lastInsertedRef = null;
-
     let verifiedPointsSnapshot = null;
     let sliderListenersAttached = false;
 
-    // State untuk fitur residuum
+    // State untuk fitur residu
     let residualPoints = [];
     let residualLine = null;
     let residualBuilt = false;
     let residualControlsAttached = false;
 
     window.onload = function() {
-      initSpreadsheetData();
-      renderSpreadsheetTable();
+      // Coba pulihkan dari localStorage jika ada, jika tidak muat Preset 1
+      const restored = loadFromLocalStorage();
+      if (!restored) {
+        loadPresetData("1");
+      }
+
       setupFormulaInputListener();
       setupDragFillEvents();
       setupResidualControls();
+      setupAutoSaveListeners();
 
-      // Initialize GeoGebra
+      // Inisialisasi GeoGebra
       var params = {
         "appName": "classic",
         "width": 480,
@@ -711,7 +1087,8 @@
       applet.inject('ggb-element');
     };
 
-    function initSpreadsheetData() {
+    function initSpreadsheetData(dataRowCount = 6) {
+      rowCount = dataRowCount + 2;
       rawData = {};
       evalData = {};
 
@@ -724,6 +1101,7 @@
           else rawData[key] = '';
         }
       }
+      renderSpreadsheetTable();
       reevaluateAll();
     }
 
@@ -734,7 +1112,7 @@
       for (let r = 1; r <= rowCount; r++) {
         const tr = document.createElement('tr');
         
-        // Row Label
+        // Row Label (1, 2, 3, ...)
         const tdRowHeader = document.createElement('td');
         tdRowHeader.textContent = r;
         tr.appendChild(tdRowHeader);
@@ -742,14 +1120,14 @@
         for (let c = 1; c <= COLS.length; c++) {
           const td = document.createElement('td');
 
-          // Kolom residuum (H–J): sel otomatis, tidak bisa diedit
+          // Kolom residu (H–J): sel otomatis terhitung
           if (c > EDIT_COLS) {
             const isNA = (r === rowCount - 1) || (r === rowCount && c === EDIT_COLS + 1);
             td.id = `cell-${r}-${c}`;
             td.className = 'auto-cell' + (r === rowCount ? ' total-cell' : '') + (isNA ? ' auto-na' : '');
             td.setAttribute('data-r', r);
             td.setAttribute('data-c', c);
-            td.title = 'Terisi otomatis';
+            td.title = 'Kolom residu otomatis';
             td.addEventListener('mousedown', (e) => onAutoCellMouseDown(r, c, e));
             tr.appendChild(td);
             continue;
@@ -831,6 +1209,7 @@
       reevaluateAll();
       updateAllCellDOMs();
       updateGeoGebraPlot();
+      saveToLocalStorage();
     }
 
     function selectCell(r, c) {
@@ -885,6 +1264,7 @@
       reevaluateAll();
       updateAllCellDOMs();
       updateGeoGebraPlot();
+      saveToLocalStorage();
     }
 
     function onCellInput(r, c, e) {
@@ -910,6 +1290,12 @@
         onCellBlur(r, c);
         selectCell(r, c + 1);
         focusSelectedCell();
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        const key = `${COLS[c-1]}${r}`;
+        const td = document.getElementById(`cell-${r}-${c}`);
+        if (td) td.textContent = evalData[key] !== undefined ? evalData[key] : '';
+        document.getElementById('formula-input').value = rawData[key] || '';
       } else if (e.key === 'ArrowDown' && !e.shiftKey) {
         if (!e.target.isContentEditable || getCaretPosition(e.target) === e.target.textContent.length) {
           onCellBlur(r, c);
@@ -957,6 +1343,7 @@
         reevaluateAll();
         updateAllCellDOMs();
         updateGeoGebraPlot();
+        saveToLocalStorage();
       });
 
       input.addEventListener('keydown', (e) => {
@@ -964,6 +1351,11 @@
           e.preventDefault();
           selectCell(selectedCell.r + 1, selectedCell.c);
           focusSelectedCell();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          const key = `${COLS[selectedCell.c-1]}${selectedCell.r}`;
+          input.value = rawData[key] || '';
+          updateAllCellDOMs();
         } else {
           lastInsertedRef = null;
         }
@@ -989,7 +1381,8 @@
     }
 
     function fmt2(v) {
-      const t = v.toFixed(2);
+      if (v === null || v === undefined || isNaN(v) || !isFinite(v)) return '0.00';
+      const t = Number(v).toFixed(2);
       return t === '-0.00' ? '0.00' : t;
     }
 
@@ -1010,8 +1403,8 @@
 
       let sumE = 0, sumE2 = 0;
       for (let r = 1; r <= dataRows; r++) {
-        const x = parseFloat(evalData[`B${r}`]);
-        const y = parseFloat(evalData[`C${r}`]);
+        const x = parseNum(evalData[`B${r}`]);
+        const y = parseNum(evalData[`C${r}`]);
         if (isNaN(x) || isNaN(y)) continue;
 
         const yHat = math.a + math.b * x;
@@ -1028,34 +1421,55 @@
       evalData[`J${rowCount}`] = fmt2(sumE2);
     }
 
+    /* Mendukung parsing angka baik dengan koma (,) maupun titik (.) */
+    function parseNum(val) {
+      if (typeof val === 'number') return val;
+      if (!val || typeof val !== 'string') return NaN;
+      const clean = val.trim().replace(/\s+/g, '').replace(',', '.');
+      return parseFloat(clean);
+    }
+
     function evaluateFormula(expr) {
       if (!expr || typeof expr !== 'string') return expr;
-      if (!expr.startsWith('=')) return expr;
+      if (!expr.startsWith('=')) {
+        return expr;
+      }
 
-      let formula = expr.substring(1).trim().toUpperCase();
+      let formula = expr.substring(1).trim();
+      // Konversi format angka desimal koma (misal: 2,5 -> 2.5) di luar separator fungsi
+      formula = formula.replace(/(\d+),(\d+)/g, '$1.$2');
 
       try {
-        formula = formula.replace(/SUM\(\$?([A-J])\$?([0-9]+):\$?([A-J])\$?([0-9]+)\)/g, (match, c1, r1, c2, r2) => {
+        // Dukungan SUM, JUMLAH, TOTAL
+        formula = formula.replace(/(?:SUM|JUMLAH|TOTAL)\(\$?([A-J])\$?([0-9]+):\$?([A-J])\$?([0-9]+)\)/gi, (match, c1, r1, c2, r2) => {
           const vals = getRangeValues(`${c1}${r1}`, `${c2}${r2}`);
           return `(${vals.reduce((a, b) => a + b, 0)})`;
         });
 
-        formula = formula.replace(/AVERAGE\(\$?([A-J])\$?([0-9]+):\$?([A-J])\$?([0-9]+)\)/g, (match, c1, r1, c2, r2) => {
+        // Dukungan AVERAGE, RATA_RATA, RATA2, RATARATA
+        formula = formula.replace(/(?:AVERAGE|RATA_RATA|RATARATA|RATA2)\(\$?([A-J])\$?([0-9]+):\$?([A-J])\$?([0-9]+)\)/gi, (match, c1, r1, c2, r2) => {
           const vals = getRangeValues(`${c1}${r1}`, `${c2}${r2}`);
           return `(${vals.length > 0 ? (vals.reduce((a, b) => a + b, 0) / vals.length) : 0})`;
         });
 
-        formula = formula.replace(/\$?([A-J])\$?([0-9]+)/g, (match, col, row) => {
-          const refKey = `${col}${row}`;
-          const refVal = parseFloat(evalData[refKey]);
+        // Dukungan referensi sel (A1, $B$7, dll)
+        formula = formula.replace(/\$?([A-J])\$?([0-9]+)/gi, (match, col, row) => {
+          const refKey = `${col.toUpperCase()}${row}`;
+          const refVal = parseNum(evalData[refKey]);
           return `(${isNaN(refVal) ? 0 : refVal})`;
         });
 
-        formula = formula.replace(/(\([^()]*\)|[0-9.]+)\^(\([^()]*\)|[0-9.]+)/g, 'Math.pow($1,$2)');
+        // Penanganan aman operator perpangkatan ^ (mencegah Unary operator error di JS)
+        while (formula.includes('^')) {
+          const prev = formula;
+          formula = formula.replace(/([0-9.]+|\([^()]+\))\s*\^\s*([0-9.]+|\([^()]+\))/g, 'Math.pow($1,$2)');
+          if (formula === prev) break;
+        }
         formula = formula.replace(/\^/g, '**');
 
         const result = Function(`"use strict"; return (${formula})`)();
         if (typeof result === 'number' && !isNaN(result)) {
+          if (!isFinite(result)) return '#DIV/0!';
           return Number.isInteger(result) ? String(result) : result.toFixed(2);
         }
         return result;
@@ -1065,9 +1479,9 @@
     }
 
     function getRangeValues(startKey, endKey) {
-      const sCol = startKey.charAt(0);
+      const sCol = startKey.charAt(0).toUpperCase();
       const sRow = parseInt(startKey.substring(1));
-      const eCol = endKey.charAt(0);
+      const eCol = endKey.charAt(0).toUpperCase();
       const eRow = parseInt(endKey.substring(1));
 
       const sC = COLS.indexOf(sCol) + 1;
@@ -1077,7 +1491,7 @@
       for (let r = Math.min(sRow, eRow); r <= Math.max(sRow, eRow); r++) {
         for (let c = Math.min(sC, eC); c <= Math.max(sC, eC); c++) {
           const key = `${COLS[c-1]}${r}`;
-          const v = parseFloat(evalData[key]);
+          const v = parseNum(evalData[key]);
           if (!isNaN(v)) values.push(v);
         }
       }
@@ -1202,13 +1616,14 @@
       updateAllCellDOMs();
       updateGeoGebraPlot();
       selectCell(startR, startC);
+      saveToLocalStorage();
     }
 
     function adjustFormulaForOffset(expr, rowOffset, colOffset = 0) {
       if (!expr || !expr.startsWith('=')) return expr;
 
-      return expr.replace(/(\$?)([A-J])(\$?)([0-9]+)/g, (match, absCol, col, absRow, rowStr) => {
-        const originalCol = COLS.indexOf(col) + 1;
+      return expr.replace(/(\$?)([A-J])(\$?)([0-9]+)/gi, (match, absCol, col, absRow, rowStr) => {
+        const originalCol = COLS.indexOf(col.toUpperCase()) + 1;
         const originalRow = parseInt(rowStr, 10);
 
         const newCol = absCol === '$' ? originalCol : originalCol + colOffset;
@@ -1223,38 +1638,107 @@
     }
 
     /* =========================================================================
-     * GEOGEBRA EMBED & DYNAMIC REGRESSION LINE
+     * ADD / REMOVE ROW: DATA LAMA TIDAK TERHAPUS
      * ========================================================================= */
 
     function addRow() {
+      const oldDataRows = rowCount - 2;
+      const newDataRows = oldDataRows + 1;
+      const oldMeanRow = rowCount - 1;
+      const oldTotalRow = rowCount;
+
       rowCount++;
+      const newMeanRow = rowCount - 1;
+      const newTotalRow = rowCount;
+
+      // Geser data Total ke baris baru paling bawah
+      for (let c = 1; c <= COLS.length; c++) {
+        const col = COLS[c - 1];
+        rawData[`${col}${newTotalRow}`] = rawData[`${col}${oldTotalRow}`] || '';
+      }
+      // Geser data Rata-rata ke baris baru
+      for (let c = 1; c <= COLS.length; c++) {
+        const col = COLS[c - 1];
+        rawData[`${col}${newMeanRow}`] = rawData[`${col}${oldMeanRow}`] || '';
+      }
+      // Inisialisasi baris data baru yang disisipkan
+      for (let c = 1; c <= COLS.length; c++) {
+        const col = COLS[c - 1];
+        rawData[`${col}${newDataRows}`] = (c === 1) ? String(newDataRows) : '';
+      }
+
+      rawData[`A${newMeanRow}`] = 'Rata-rata';
+      rawData[`A${newTotalRow}`] = 'Total';
+
       renderSpreadsheetTable();
-      initSpreadsheetData();
+      reevaluateAll();
+      updateAllCellDOMs();
+      updateGeoGebraPlot();
+      saveToLocalStorage();
     }
 
     function removeRow() {
-      if (rowCount > 4) {
-        rowCount--;
-        renderSpreadsheetTable();
-        initSpreadsheetData();
+      const dataRows = rowCount - 2;
+      if (dataRows <= 2) {
+        alert("Minimal harus ada 2 baris data pengamatan!");
+        return;
       }
+
+      const removeIndex = dataRows;
+      const oldMeanRow = rowCount - 1;
+      const oldTotalRow = rowCount;
+
+      // Pindahkan data Rata-rata ke baris removeIndex
+      for (let c = 1; c <= COLS.length; c++) {
+        const col = COLS[c - 1];
+        rawData[`${col}${removeIndex}`] = rawData[`${col}${oldMeanRow}`] || '';
+      }
+      // Pindahkan data Total ke oldMeanRow
+      for (let c = 1; c <= COLS.length; c++) {
+        const col = COLS[c - 1];
+        rawData[`${col}${oldMeanRow}`] = rawData[`${col}${oldTotalRow}`] || '';
+      }
+      // Hapus data baris Total lama
+      for (let c = 1; c <= COLS.length; c++) {
+        const col = COLS[c - 1];
+        delete rawData[`${col}${oldTotalRow}`];
+        delete evalData[`${col}${oldTotalRow}`];
+      }
+
+      rowCount--;
+      const newMeanRow = rowCount - 1;
+      const newTotalRow = rowCount;
+      rawData[`A${newMeanRow}`] = 'Rata-rata';
+      rawData[`A${newTotalRow}`] = 'Total';
+
+      renderSpreadsheetTable();
+      reevaluateAll();
+      updateAllCellDOMs();
+      updateGeoGebraPlot();
+      saveToLocalStorage();
     }
 
     function resetSheet() {
-      if (confirm("Reset seluruh isi spreadsheet?")) {
-        initSpreadsheetData();
+      if (confirm("Reset seluruh isi spreadsheet dan kembali ke tabel kosong?")) {
+        initSpreadsheetData(6);
+        clearVerificationInputs();
         updateAllCellDOMs();
         updateGeoGebraPlot();
+        saveToLocalStorage();
       }
     }
+
+    /* =========================================================================
+     * GEOGEBRA EMBED & DYNAMIC REGRESSION LINE + RESIDU
+     * ========================================================================= */
 
     function getRawDataPoints() {
       const points = [];
       const dataRows = Math.max(0, rowCount - 2);
 
       for (let r = 1; r <= dataRows; r++) {
-        const xVal = parseFloat(evalData[`B${r}`]);
-        const yVal = parseFloat(evalData[`C${r}`]);
+        const xVal = parseNum(evalData[`B${r}`]);
+        const yVal = parseNum(evalData[`C${r}`]);
 
         if (!isNaN(xVal) && !isNaN(yVal)) {
           points.push({ x: xVal, y: yVal });
@@ -1296,7 +1780,7 @@
           const msg = document.getElementById('msgStep2');
           if (msg) {
             msg.className = 'block text-xs font-semibold text-amber-600';
-            msg.innerHTML = '⚠️ Data berubah. Verifikasi ulang SSxx dan SSxy untuk menampilkan garis regresi & slider eksplorasi.';
+            msg.innerHTML = '⚠️ Data berubah. Verifikasi ulang SSxx dan SSxy pada Langkah 2 untuk menampilkan garis regresi & panel eksperimen residu.';
           }
         }
       }
@@ -1317,6 +1801,7 @@
       const view = { xMin: minX - paddingX, xMax: maxX + paddingX, yMin: minY - paddingY, yMax: maxY + paddingY };
       ggbApi.setCoordSystem(view.xMin, view.xMax, view.yMin, view.yMax);
 
+      // 1. Gambar Titik-titik Data Diagram Pencar (Biru)
       const pointNames = [];
       points.forEach((pt, idx) => {
         const pName = `P_{${idx + 1}}`;
@@ -1327,6 +1812,22 @@
         pointNames.push(pName);
       });
 
+      // 2. Gambar Titik Rata-rata M(x̄, ȳ) (Kuning Keemasan)
+      const math = calculateMathFromData();
+      if (math && isFinite(math.xBar) && isFinite(math.yBar)) {
+        const showMean = document.getElementById('chkShowMean') ? document.getElementById('chkShowMean').checked : true;
+        ggbApi.evalCommand(`M_rata = (${gnum(math.xBar)}, ${gnum(math.yBar)})`);
+        ggbApi.setColor('M_rata', 245, 158, 11);
+        ggbApi.setPointSize('M_rata', 7);
+        ggbApi.setPointStyle('M_rata', 1); // Bentuk berlian / diamond
+        ggbApi.setCaption('M_rata', `M(${fmt2(math.xBar)}, ${fmt2(math.yBar)})`);
+        ggbApi.setLabelStyle('M_rata', 2);
+        ggbApi.setLabelVisible('M_rata', showMean);
+        ggbApi.setVisible('M_rata', showMean);
+        ggbApi.setFixed('M_rata', true, false);
+      }
+
+      // 3. Jika Langkah 2 sudah terverifikasi: Gambar Garis Regresi & Residu
       if (pointNames.length >= 2 && isVerified) {
         ggbApi.evalCommand(`L_1 = {${pointNames.join(',')}}`);
         ggbApi.evalCommand(`GarisRegresi = FitLine(L_1)`);
@@ -1334,7 +1835,6 @@
         ggbApi.setLineThickness('GarisRegresi', 3);
         ggbApi.setLabelVisible('GarisRegresi', true);
 
-        const math = calculateMathFromData();
         const mVal = preservedM !== null ? preservedM : (math ? math.b : 1);
         const cVal = preservedC !== null ? preservedC : (math ? math.a : 0);
 
@@ -1346,19 +1846,27 @@
         ggbApi.setLineThickness('GarisEksplorasi', 3);
         ggbApi.setLabelVisible('GarisEksplorasi', false);
 
-        const mathReg = calculateMathFromData();
         residualPoints = points;
-        residualLine = mathReg ? { a: mathReg.a, b: mathReg.b } : null;
+        residualLine = math ? { a: math.a, b: math.b } : null;
         try {
-          buildResidualObjects(points, mathReg, view);
+          buildResidualObjects(points, math, view);
         } catch (err) {
-          console.error('Gagal membuat objek residuum:', err);
+          console.error('Gagal membuat objek residu:', err);
           residualBuilt = false;
         }
 
         setupExplorationPanel(mVal, cVal, points);
         applyResidualVisibility();
       }
+    }
+
+    function toggleMeanVisibility() {
+      if (!ggbApi) return;
+      const show = document.getElementById('chkShowMean').checked;
+      try {
+        ggbApi.setVisible('M_rata', show);
+        ggbApi.setLabelVisible('M_rata', show);
+      } catch (_) {}
     }
 
     function gnum(v) {
@@ -1401,7 +1909,7 @@
           ggbApi.evalCommand(`${S} = Segment(${P}, ${Q})`);
           const side = `abs(y(${P}) - y(${Q})) * kSq`;
           ggbApi.evalCommand(`${K} = Polygon({${P}, (x(${P}) + ${side}, y(${P})), (x(${P}) + ${side}, y(${Q})), ${Q}})`);
-          ggbApi.evalCommand(`${T} = Text("e² = " + ((y(${P}) - y(${Q}))^2), (x(${Q}) + 0.15, (y(${P}) + y(${Q})) / 2))`);
+          ggbApi.evalCommand(`${T} = Text("e² = " + ((y(${P}) - y(${Q}))^2), (x(${Q}) + ${xRange * 0.02}, (y(${P}) + y(${Q})) / 2))`);
 
           ggbApi.setColor(Q, R, G, B);
           ggbApi.setPointSize(Q, 4);
@@ -1464,7 +1972,7 @@
       if (!badge) return;
       if (open) {
         badge.className = 'text-[11px] font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
-        badge.textContent = '✅ Terbuka: gunakan panel GeoGebra';
+        badge.textContent = '✅ Terbuka: gunakan panel GeoGebra di samping';
       } else {
         badge.className = 'text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 border border-slate-200';
         badge.textContent = '🔒 Terbuka setelah Langkah 2 benar';
@@ -1490,17 +1998,17 @@
 
       const verdict = document.getElementById('residVerdict');
       const diff = Math.max(0, sE2 - rE2);
-      const sameLine = Math.abs(m - residualLine.b) < 1e-6 && Math.abs(c - residualLine.a) < 1e-6;
+      const sameLine = Math.abs(m - residualLine.b) < 0.03 && Math.abs(c - residualLine.a) < 0.08;
 
       if (sameLine) {
-        verdict.className = 'text-xs font-semibold text-slate-700 leading-relaxed';
-        verdict.textContent = 'Garis eksplorasi sekarang sama dengan garis regresi. Geser slider lalu perhatikan perubahan Σe².';
+        verdict.className = 'text-xs font-semibold text-emerald-700 leading-relaxed bg-emerald-50 p-2 rounded border border-emerald-200';
+        verdict.innerHTML = '🎯 <strong>Hebat!</strong> Garis eksplorasi berimpit dengan garis regresi. Nilai &Sigma;e² = ' + fmt2(rE2) + ' adalah nilai <strong>minimum</strong> yang tidak bisa lebih kecil lagi!';
       } else if (diff <= Math.max(0.05 * rE2, 0.05)) {
         verdict.className = 'text-xs font-semibold text-emerald-700 leading-relaxed';
         verdict.textContent = '🎯 Σe² garis Anda hampir sama dengan garis regresi. Bisakah lebih kecil lagi?';
       } else {
         verdict.className = 'text-xs font-semibold text-orange-800 leading-relaxed';
-        verdict.textContent = `Σe² garis Anda lebih besar ${fmt2(diff)} dari garis regresi. Geser slider agar selisihnya mengecil.`;
+        verdict.textContent = `Σe² garis eksplorasi lebih besar +${fmt2(diff)} dibandingkan garis regresi terbaik. Geser slider agar selisihnya mengecil.`;
       }
     }
 
@@ -1523,13 +2031,13 @@
 
       mSlider.min = (-mSpan).toFixed(2);
       mSlider.max = mSpan.toFixed(2);
-      mSlider.step = Math.max(mSpan / 200, 0.01).toFixed(3);
-      mSlider.value = mVal;
+      mSlider.step = '0.01';
+      mSlider.value = mVal.toFixed(2);
 
       cSlider.min = (cCenter - cSpan).toFixed(2);
       cSlider.max = (cCenter + cSpan).toFixed(2);
-      cSlider.step = Math.max(cSpan / 200, 0.1).toFixed(3);
-      cSlider.value = cVal;
+      cSlider.step = '0.01';
+      cSlider.value = cVal.toFixed(2);
 
       updateExplorationLabels(mVal, cVal);
       updateResidualStats(mVal, cVal);
@@ -1567,6 +2075,31 @@
       } catch (e) {}
     }
 
+    /* Tombol Cepat: Pasang slider ke Garis Regresi Terbaik */
+    function setExplorationToRegression() {
+      if (!residualLine) return;
+      const mSlider = document.getElementById('mSlider');
+      const cSlider = document.getElementById('cSlider');
+      mSlider.value = residualLine.b.toFixed(2);
+      cSlider.value = residualLine.a.toFixed(2);
+      onExplorationSliderInput();
+    }
+
+    /* Tombol Cepat: Uji Garis Datar m = 0 dan c = yBar */
+    function setExplorationToHorizontal() {
+      const math = calculateMathFromData();
+      if (!math) return;
+      const mSlider = document.getElementById('mSlider');
+      const cSlider = document.getElementById('cSlider');
+      mSlider.value = '0.00';
+      cSlider.value = math.yBar.toFixed(2);
+      onExplorationSliderInput();
+    }
+
+    /* =========================================================================
+     * STATISTICAL CALCULATIONS & ADIL / TOLERANT VERIFICATION ENGINE
+     * ========================================================================= */
+
     function calculateMathFromData() {
       const points = getRawDataPoints();
       const n = points.length;
@@ -1577,16 +2110,31 @@
       const xBar = sumX / n;
       const yBar = sumY / n;
 
-      let ssxx = 0, ssxy = 0;
+      let ssxx = 0, ssxy = 0, ssyy = 0;
       points.forEach(p => {
-        ssxx += Math.pow(p.x - xBar, 2);
-        ssxy += (p.x - xBar) * (p.y - yBar);
+        const dx = p.x - xBar;
+        const dy = p.y - yBar;
+        ssxx += dx * dx;
+        ssxy += dx * dy;
+        ssyy += dy * dy;
       });
 
-      const b = ssxy / ssxx;
+      const b = ssxx !== 0 ? (ssxy / ssxx) : 0;
       const a = yBar - (b * xBar);
 
-      return { n, xBar, yBar, ssxx, ssxy, a, b };
+      // Koefisien Korelasi Pearson (r)
+      const rDenom = Math.sqrt(ssxx * ssyy);
+      const r = rDenom !== 0 ? (ssxy / rDenom) : 0;
+      const r2 = r * r;
+
+      // SSE (Sum of Squared Errors)
+      let sse = 0;
+      points.forEach(p => {
+        const err = p.y - (a + b * p.x);
+        sse += err * err;
+      });
+
+      return { n, xBar, yBar, ssxx, ssxy, ssyy, a, b, r, r2, sse };
     }
 
     function roundTo(value, decimals) {
@@ -1594,101 +2142,428 @@
       return Math.round((value + Number.EPSILON) * factor) / factor;
     }
 
-    function isAnswerCorrect(userVal, trueVal) {
-      return (
-        roundTo(userVal, 2) === roundTo(trueVal, 2) ||
-        roundTo(userVal, 3) === roundTo(trueVal, 3)
-      );
+    /* Menghitung banyaknya angka di belakang koma yang diketikkan murid */
+    function getDecimalPlaces(str) {
+      if (!str || typeof str !== 'string') return 0;
+      const clean = str.trim().replace(/\s+/g, '').replace(',', '.');
+      const dotIndex = clean.indexOf('.');
+      return dotIndex === -1 ? 0 : clean.length - dotIndex - 1;
+    }
+
+    /*
+     * Verifikasi Adil & Menyeluruh:
+     * - Menerima pembulatan standar (half-up / round)
+     * - Menerima pembulatan ke atas (ceil / round-up)
+     * - Menerima pembulatan ke bawah (floor / round-down / truncation)
+     * - Bebas berapapun angka di belakang koma yang dimasukkan murid
+     * - Toleran terhadap pergeseran akumulasi pembulatan per-baris spreadsheet
+     */
+    /*
+     * Verifikasi Adil & Menyeluruh:
+     * - Menerima pembulatan standar (half-up / round)
+     * - Menerima pembulatan ke atas (ceil / round-up)
+     * - Menerima pembulatan ke bawah (floor / round-down / truncation)
+     * - Bebas berapapun angka di belakang koma (0, 1, 2, 3, dst.)
+     * - Toleran terhadap pergeseran akumulasi pembulatan per-baris spreadsheet
+     */
+    function checkSingleTarget(userStr, userVal, targetVal) {
+      if (!isFinite(targetVal) || !isFinite(userVal)) return false;
+
+      // 1. Kecocokan eksak nilai float
+      if (Math.abs(userVal - targetVal) < 1e-9) return true;
+
+      const k = getDecimalPlaces(userStr);
+
+      // 2. Evaluasi presisi k desimal sesuai format digit yang diketik murid:
+      // Menguji pembulatan standar (round), pembulatan ke atas (ceil), pembulatan ke bawah (floor), dan pemotongan (trunc)
+      const factor = Math.pow(10, k);
+      const roundVal = Math.round((targetVal + Number.EPSILON) * factor) / factor;
+      const floorVal = Math.floor((targetVal + Number.EPSILON) * factor) / factor;
+      const ceilVal = Math.ceil((targetVal - Number.EPSILON) * factor) / factor;
+      const truncVal = Math.trunc(targetVal * factor) / factor;
+
+      if (Math.abs(userVal - roundVal) < 1e-9) return true;
+      if (Math.abs(userVal - floorVal) < 1e-9) return true;
+      if (Math.abs(userVal - ceilVal) < 1e-9) return true;
+      if (Math.abs(userVal - truncVal) < 1e-9) return true;
+
+      // 3. Cek pembulatan standar matematika untuk semua tingkat desimal 0 s.d. 6
+      for (let d = 0; d <= 6; d++) {
+        const f = Math.pow(10, d);
+        if (Math.abs(userVal - Math.round((targetVal + Number.EPSILON) * f) / f) < 1e-9) {
+          return true;
+        }
+      }
+
+      // 4. Toleransi perambatan per-baris spreadsheet (misal deviasi ±0.03 pada 2+ desimal)
+      if (k >= 2 && Math.abs(userVal - targetVal) <= 0.05) {
+        return true;
+      }
+
+      // 5. Toleransi relatif wajar (2%) untuk nilai besar (>= 5)
+      if (Math.abs(targetVal) >= 5) {
+        if (Math.abs((userVal - targetVal) / targetVal) <= 0.02) {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
+    /* 
+     * Memvalidasi jawaban murid:
+     * - Menerima tanda koma (,) maupun titik (.)
+     * - Membenarkan pembulatan ke atas maupun ke bawah berapapun angka di belakang koma
+     * - Menjamin jawaban yang ditulis PERSIS SESUAI DI TABEL atau EKSAK selalu benar!
+     */
+    function isAnswerCorrect(rawInput, trueVal, alternateTargets = []) {
+      if (rawInput === undefined || rawInput === null) return false;
+      const rawStr = String(rawInput).trim();
+      if (rawStr === '') return false;
+
+      const userVal = parseNum(rawStr);
+      if (isNaN(userVal) || !isFinite(userVal)) return false;
+
+      const targets = [trueVal];
+      if (Array.isArray(alternateTargets)) {
+        targets.push(...alternateTargets.filter(t => isFinite(t)));
+      } else if (alternateTargets !== null && alternateTargets !== undefined && isFinite(alternateTargets)) {
+        targets.push(alternateTargets);
+      }
+
+      return targets.some(t => checkSingleTarget(rawStr, userVal, t));
+    }
+
+    function getAlternateSpreadsheetSum(colLetter) {
+      const dataRows = Math.max(0, rowCount - 2);
+      let sum = 0;
+      let count = 0;
+      for (let r = 1; r <= dataRows; r++) {
+        const v = parseNum(evalData[`${colLetter}${r}`]);
+        if (!isNaN(v)) {
+          sum += v;
+          count++;
+        }
+      }
+      return count === dataRows ? sum : null;
     }
 
     function cekLangkah1() {
       const math = calculateMathFromData();
       const msg = document.getElementById("msgStep1");
+      const badge = document.getElementById("badgeStep1");
 
       if (!math) {
         alert("Ketik minimal 2 pasang data pada kolom X dan Y!");
         return;
       }
 
-      const userXbar = parseFloat(document.getElementById("userXbar").value);
-      const userYbar = parseFloat(document.getElementById("userYbar").value);
+      const rawX = document.getElementById("userXbar").value;
+      const rawY = document.getElementById("userYbar").value;
 
-      if (isNaN(userXbar) || isNaN(userYbar)) {
+      if (!rawX.trim() || !rawY.trim() || isNaN(parseNum(rawX)) || isNaN(parseNum(rawY))) {
         msg.className = "block text-xs font-semibold text-rose-600";
-        msg.innerHTML = "⚠️ Harap masukkan angka untuk x̄ dan ȳ!";
+        msg.innerHTML = "⚠️ Harap masukkan angka untuk x̄ dan ȳ (bisa menggunakan koma atau titik)!";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
+        badge.textContent = "✗ Belum lengkap";
         return;
       }
 
-      if (isAnswerCorrect(userXbar, math.xBar) && isAnswerCorrect(userYbar, math.yBar)) {
+      // Ambil nilai yang saat ini tertulis langsung di baris Rata-rata tabel spreadsheet
+      const meanRow = rowCount - 1;
+      const tableXbar = parseNum(evalData[`B${meanRow}`]);
+      const tableYbar = parseNum(evalData[`C${meanRow}`]);
+
+      const altX = isFinite(tableXbar) ? [tableXbar] : [];
+      const altY = isFinite(tableYbar) ? [tableYbar] : [];
+
+      const xOk = isAnswerCorrect(rawX, math.xBar, altX);
+      const yOk = isAnswerCorrect(rawY, math.yBar, altY);
+
+      if (xOk && yOk) {
         msg.className = "block text-xs font-semibold text-emerald-600";
-        msg.innerHTML = "✓ Benar! Perhitungan rata-rata x̄ dan ȳ sesuai.";
+        msg.innerHTML = "✓ Benar! Perhitungan rata-rata x̄ dan ȳ sesuai.";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700";
+        badge.textContent = "✓ Selesai";
       } else {
-        msg.className = "block text-xs font-semibold text-rose-600";
-        msg.innerHTML = "✗ Belum tepat. Periksa kembali nilai rata-rata pada spreadsheet Anda.";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
+        badge.textContent = "✗ Belum sesuai";
+        if (xOk && !yOk) {
+          msg.className = "block text-xs font-semibold text-amber-600";
+          msg.innerHTML = "⚠️ Nilai x̄ sudah tepat, tetapi ȳ belum sesuai. Periksa kembali penjumlahan kolom Y.";
+        } else if (!xOk && yOk) {
+          msg.className = "block text-xs font-semibold text-amber-600";
+          msg.innerHTML = "⚠️ Nilai ȳ sudah tepat, tetapi x̄ belum sesuai. Periksa kembali penjumlahan kolom X.";
+        } else {
+          msg.className = "block text-xs font-semibold text-rose-600";
+          msg.innerHTML = "✗ Belum tepat. Rumus: x̄ = &Sigma;X / n dan ȳ = &Sigma;Y / n.";
+        }
       }
+      saveToLocalStorage();
     }
 
     function cekLangkah2() {
       const math = calculateMathFromData();
       const msg = document.getElementById("msgStep2");
+      const badge = document.getElementById("badgeStep2");
 
       if (!math) {
         alert("Ketik minimal 2 pasang data pada kolom X dan Y!");
         return;
       }
 
-      const userSSxx = parseFloat(document.getElementById("userSSxx").value);
-      const userSSxy = parseFloat(document.getElementById("userSSxy").value);
+      const rawSSxx = document.getElementById("userSSxx").value;
+      const rawSSxy = document.getElementById("userSSxy").value;
 
-      if (isNaN(userSSxx) || isNaN(userSSxy)) {
+      if (!rawSSxx.trim() || !rawSSxy.trim() || isNaN(parseNum(rawSSxx)) || isNaN(parseNum(rawSSxy))) {
         msg.className = "block text-xs font-semibold text-rose-600";
-        msg.innerHTML = "⚠️ Harap masukkan angka untuk SSxx dan SSxy!";
+        msg.innerHTML = "⚠️ Harap masukkan angka untuk SSxx dan SSxy (bisa menggunakan koma atau titik)!";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
+        badge.textContent = "✗ Belum lengkap";
         return;
       }
 
-      if (isAnswerCorrect(userSSxx, math.ssxx) && isAnswerCorrect(userSSxy, math.ssxy)) {
+      // Ambil nilai yang tertulis LANGSUNG di sel Total tabel (F[rowCount], G[rowCount])
+      const totalRow = rowCount;
+      const tableSSxx = parseNum(evalData[`F${totalRow}`]);
+      const tableSSxy = parseNum(evalData[`G${totalRow}`]);
+
+      // Ambil juga jumlah alternatif dari penjumlahan sel per sel
+      const altSumSSxx = getAlternateSpreadsheetSum('F');
+      const altSumSSxy = getAlternateSpreadsheetSum('G');
+
+      const targetsSSxx = [];
+      if (isFinite(tableSSxx)) targetsSSxx.push(tableSSxx);
+      if (isFinite(altSumSSxx)) targetsSSxx.push(altSumSSxx);
+
+      const targetsSSxy = [];
+      if (isFinite(tableSSxy)) targetsSSxy.push(tableSSxy);
+      if (isFinite(altSumSSxy)) targetsSSxy.push(altSumSSxy);
+
+      const xxOk = isAnswerCorrect(rawSSxx, math.ssxx, targetsSSxx);
+      const xyOk = isAnswerCorrect(rawSSxy, math.ssxy, targetsSSxy);
+
+      if (xxOk && xyOk) {
         msg.className = "block text-xs font-semibold text-emerald-600";
-        msg.innerHTML = "✓ Benar! Nilai SSxx dan SSxy cocok.";
+        msg.innerHTML = "✓ Benar! Nilai SSxx dan SSxy cocok. Garis regresi & panel eksperimen residu sekarang aktif!";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700";
+        badge.textContent = "✓ Selesai";
 
         verifiedPointsSnapshot = JSON.stringify(getRawDataPoints());
         reevaluateAll();
         updateAllCellDOMs();
         updateGeoGebraPlot();
       } else {
-        msg.className = "block text-xs font-semibold text-rose-600";
-        msg.innerHTML = "✗ Belum tepat. Periksa baris total jumlah deviasi Anda.";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
+        badge.textContent = "✗ Belum sesuai";
+        if (xxOk && !xyOk) {
+          msg.className = "block text-xs font-semibold text-amber-600";
+          msg.innerHTML = "⚠️ SSxx sudah cocok, tetapi SSxy belum tepat. Periksa kolom G: (X − x̄)(Y − ȳ).";
+        } else if (!xxOk && xyOk) {
+          msg.className = "block text-xs font-semibold text-amber-600";
+          msg.innerHTML = "⚠️ SSxy sudah cocok, tetapi SSxx belum tepat. Periksa kolom F: (X − x̄)².";
+        } else {
+          msg.className = "block text-xs font-semibold text-rose-600";
+          msg.innerHTML = "✗ Belum tepat. Periksa kembali hasil kuadrat dan perkalian deviasi pada kolom F dan G.";
+        }
       }
+      saveToLocalStorage();
     }
 
     function cekLangkah3() {
       const math = calculateMathFromData();
       const msg = document.getElementById("msgStep3");
+      const badge = document.getElementById("badgeStep3");
       const resultBox = document.getElementById("resultBox");
+      const statsCard = document.getElementById("statsSummaryCard");
 
       if (!math) {
         alert("Ketik minimal 2 pasang data pada kolom X dan Y!");
         return;
       }
 
-      const userB = parseFloat(document.getElementById("userB").value);
-      const userA = parseFloat(document.getElementById("userA").value);
+      const rawB = document.getElementById("userB").value;
+      const rawA = document.getElementById("userA").value;
+      const userB = parseNum(rawB);
 
-      if (isNaN(userB) || isNaN(userA)) {
+      if (!rawB.trim() || !rawA.trim() || isNaN(userB) || isNaN(parseNum(rawA))) {
         msg.className = "block text-xs font-semibold text-rose-600";
-        msg.innerHTML = "⚠️️ Harap masukkan angka untuk b dan a!";
+        msg.innerHTML = "⚠️ Harap masukkan angka untuk b dan a (bisa menggunakan koma atau titik)!";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
+        badge.textContent = "✗ Belum lengkap";
         return;
       }
 
-      if (isAnswerCorrect(userB, math.b) && isAnswerCorrect(userA, math.a)) {
+      // Ambil nilai tabel atau input Langkah 2 siswa
+      const userSSxx = parseNum(document.getElementById("userSSxx")?.value);
+      const userSSxy = parseNum(document.getElementById("userSSxy")?.value);
+      const totalRow = rowCount;
+      const tableSSxx = parseNum(evalData[`F${totalRow}`]);
+      const tableSSxy = parseNum(evalData[`G${totalRow}`]);
+
+      const targetsB = [];
+      if (isFinite(tableSSxy) && isFinite(tableSSxx) && tableSSxx !== 0) {
+        targetsB.push(tableSSxy / tableSSxx);
+      }
+      if (isFinite(userSSxy) && isFinite(userSSxx) && userSSxx !== 0) {
+        targetsB.push(userSSxy / userSSxx);
+      }
+
+      // Ambil nilai rata-rata dari tabel / input Langkah 1
+      const meanRow = rowCount - 1;
+      const tableXbar = parseNum(evalData[`B${meanRow}`]);
+      const tableYbar = parseNum(evalData[`C${meanRow}`]);
+      const userXbar = parseNum(document.getElementById("userXbar")?.value);
+      const userYbar = parseNum(document.getElementById("userYbar")?.value);
+
+      const effectiveXbar = isFinite(userXbar) ? userXbar : (isFinite(tableXbar) ? tableXbar : math.xBar);
+      const effectiveYbar = isFinite(userYbar) ? userYbar : (isFinite(tableYbar) ? tableYbar : math.yBar);
+
+      // Alternatif nilai a berdasarkan variasi pembulatan murid
+      const targetsA = [
+        math.yBar - (userB * math.xBar),
+        effectiveYbar - (userB * effectiveXbar),
+        effectiveYbar - (math.b * effectiveXbar),
+        math.yBar - (roundTo(math.b, 2) * math.xBar),
+        math.yBar - (roundTo(math.b, 1) * math.xBar)
+      ];
+
+      const bOk = isAnswerCorrect(rawB, math.b, targetsB);
+      const aOk = isAnswerCorrect(rawA, math.a, targetsA);
+
+      if (bOk && aOk) {
         msg.className = "block text-xs font-semibold text-emerald-600";
         msg.innerHTML = "✓ Sempurna! Nilai koefisien regresi a dan b Anda sudah tepat.";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700";
+        badge.textContent = "✓ Selesai";
 
-        const sign = math.b >= 0 ? "+" : "-";
+        const sign = math.b >= 0 ? "+" : "−";
         const absB = Math.abs(math.b).toFixed(2);
-        resultBox.innerHTML = `Persamaan Regresi Anda:<br><span class="text-xl font-extrabold text-emerald-900">Ŷ = ${math.a.toFixed(2)} ${sign} ${absB}X</span>`;
+        resultBox.className = "bg-emerald-50 border-2 border-emerald-500 text-emerald-950 p-4 rounded-xl text-center space-y-2 shadow-sm";
+        resultBox.innerHTML = `
+          <div class="text-xs font-bold text-emerald-800 uppercase tracking-wide">Persamaan Garis Regresi Terbaik (Line of Best Fit):</div>
+          <div class="text-xl md:text-2xl font-black text-emerald-900 font-mono py-1">Ŷ = ${math.a.toFixed(2)} ${sign} ${absB}X</div>
+          <div class="text-xs text-emerald-700 font-normal">
+            Artinya, setiap kenaikan 1 unit nilai X diprediksi akan mengubah nilai Y sebesar ${math.b.toFixed(2)} unit.
+          </div>
+        `;
+
+        // Tampilkan Ringkasan Statistik Tambahan (Pearson r & R2)
+        statsCard.classList.remove('hidden');
+        document.getElementById('valPearsonR').textContent = math.r.toFixed(3);
+        document.getElementById('valR2').textContent = (math.r2 * 100).toFixed(1) + '%';
+        document.getElementById('valSSE').textContent = math.sse.toFixed(2);
+
+        // Kategori korelasi
+        let rDesc = 'Lemah';
+        const absR = Math.abs(math.r);
+        if (absR >= 0.9) rDesc = math.r > 0 ? 'Positif Sangat Kuat' : 'Negatif Sangat Kuat';
+        else if (absR >= 0.7) rDesc = math.r > 0 ? 'Positif Kuat' : 'Negatif Kuat';
+        else if (absR >= 0.4) rDesc = math.r > 0 ? 'Positif Sedang' : 'Negatif Sedang';
+        else rDesc = 'Korelasi Sangat Lemah';
+
+        document.getElementById('valPearsonDesc').textContent = rDesc;
+        const rBadge = document.getElementById('rBadge');
+        rBadge.textContent = rDesc;
+
       } else {
-        msg.className = "block text-xs font-semibold text-rose-600";
-        msg.innerHTML = "✗ Nilai a atau b belum tepat. Gunakan: b = SSxy / SSxx, dan a = ȳ - b(x̄).";
+        badge.className = "text-[11px] font-bold px-2 py-0.5 rounded-full bg-rose-100 text-rose-700";
+        badge.textContent = "✗ Belum sesuai";
+        if (bOk && !aOk) {
+          msg.className = "block text-xs font-semibold text-amber-600";
+          msg.innerHTML = "⚠️ Nilai gradien b sudah benar, periksa rumus intersep a = ȳ − b(x̄).";
+        } else if (!bOk && aOk) {
+          msg.className = "block text-xs font-semibold text-amber-600";
+          msg.innerHTML = "⚠️ Nilai intersep a sudah benar, periksa rumus gradien b = SSxy / SSxx.";
+        } else {
+          msg.className = "block text-xs font-semibold text-rose-600";
+          msg.innerHTML = "✗ Nilai a atau b belum tepat. Rumus: b = SSxy / SSxx, dan a = ȳ − b(x̄).";
+        }
+      }
+      saveToLocalStorage();
+    }
+
+    /* =========================================================================
+     * AUTO-SAVE (LOCALSTORAGE)
+     * ========================================================================= */
+
+    const STORAGE_KEY = 'lkpd_regresi_digital_v3';
+
+    function setupAutoSaveListeners() {
+      ['studentName', 'studentNumber', 'studentClass', 'refleksiResid1', 'refleksiResid2', 'refleksiResid3', 'refleksiSlider', 'aal1', 'aal2', 'aal3', 'aal4', 'aal5'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', saveToLocalStorage);
+      });
+    }
+
+    function saveToLocalStorage() {
+      try {
+        const state = {
+          rowCount,
+          rawData,
+          studentName: document.getElementById('studentName')?.value || '',
+          studentNumber: document.getElementById('studentNumber')?.value || '',
+          studentClass: document.getElementById('studentClass')?.value || '',
+          userXbar: document.getElementById('userXbar')?.value || '',
+          userYbar: document.getElementById('userYbar')?.value || '',
+          userSSxx: document.getElementById('userSSxx')?.value || '',
+          userSSxy: document.getElementById('userSSxy')?.value || '',
+          userB: document.getElementById('userB')?.value || '',
+          userA: document.getElementById('userA')?.value || '',
+          refleksiResid1: document.getElementById('refleksiResid1')?.value || '',
+          refleksiResid2: document.getElementById('refleksiResid2')?.value || '',
+          refleksiResid3: document.getElementById('refleksiResid3')?.value || '',
+          refleksiSlider: document.getElementById('refleksiSlider')?.value || '',
+          aal1: document.getElementById('aal1')?.value || '',
+          aal2: document.getElementById('aal2')?.value || '',
+          aal3: document.getElementById('aal3')?.value || '',
+          aal4: document.getElementById('aal4')?.value || '',
+          aal5: document.getElementById('aal5')?.value || '',
+          verifiedPointsSnapshot
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+
+        const badge = document.getElementById('saveBadge');
+        if (badge) {
+          const now = new Date();
+          const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-emerald-400 inline-block"></span> Tersimpan (${timeStr})`;
+        }
+      } catch (_) {}
+    }
+
+    function loadFromLocalStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+        const state = JSON.parse(raw);
+        if (!state || !state.rawData) return false;
+
+        rowCount = state.rowCount || 8;
+        rawData = state.rawData || {};
+        verifiedPointsSnapshot = state.verifiedPointsSnapshot || null;
+
+        ['studentName', 'studentNumber', 'studentClass', 'userXbar', 'userYbar', 'userSSxx', 'userSSxy', 'userB', 'userA', 'refleksiResid1', 'refleksiResid2', 'refleksiResid3', 'refleksiSlider', 'aal1', 'aal2', 'aal3', 'aal4', 'aal5'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el && state[id] !== undefined) el.value = state[id];
+        });
+
+        renderSpreadsheetTable();
+        reevaluateAll();
+        updateAllCellDOMs();
+
+        if (verifiedPointsSnapshot !== null) {
+          const math = calculateMathFromData();
+          if (math) {
+            const rb = document.getElementById('resultBox');
+            const sign = math.b >= 0 ? "+" : "−";
+            const absB = Math.abs(math.b).toFixed(2);
+            rb.innerHTML = `Persamaan Garis Regresi Terbaik:<br><span class="text-xl font-extrabold text-emerald-900 font-mono">Ŷ = ${math.a.toFixed(2)} ${sign} ${absB}X</span>`;
+          }
+        }
+        return true;
+      } catch (_) {
+        return false;
       }
     }
   </script>
