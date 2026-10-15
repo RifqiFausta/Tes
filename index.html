@@ -279,38 +279,33 @@
             </div>
           </div>
 
-          <!-- Panduan Lengkap Rumus Spreadsheet & Tips Interaktif -->
+          <!-- Panduan Rumus Spreadsheet & Tips Belajar -->
           <div class="bg-gradient-to-br from-blue-50/90 via-slate-50 to-indigo-50/70 border border-blue-200 rounded-2xl p-4 text-xs text-blue-950 space-y-3.5">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/80 pb-2.5">
               <span class="font-extrabold text-sm text-blue-950 flex items-center gap-2">
-                <span>📖</span> Panduan Semua Fungsi Spreadsheet Regresi:
+                <span>📖</span> Panduan Rumus Spreadsheet Regresi:
               </span>
               <span class="text-[11px] text-blue-700 font-semibold bg-blue-100/70 px-2.5 py-0.5 rounded-full">
-                Klik tombol "Gunakan" pada rumus untuk memasukkan ke sel aktif
+                Ketik rumus di Formula Bar (fx) diawali tanda sama dengan (=)
               </span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
               <!-- Card 1: Rata-rata -->
               <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-blue-400 transition-colors">
-                <div class="flex items-center justify-between font-bold text-blue-900">
-                  <span class="flex items-center gap-1.5 text-xs"><span class="text-blue-600 font-black">x̄</span> 1. Nilai Rata-rata (Mean)</span>
-                  <button type="button" onclick="insertQuickFormula('AVERAGE')" class="text-[11px] font-bold text-blue-600 hover:text-white hover:bg-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200 transition-colors">Gunakan</button>
+                <div class="font-bold text-blue-900 flex items-center gap-1.5 text-xs">
+                  <span class="text-blue-600 font-black">x̄</span> 1. Nilai Rata-rata (Mean)
                 </div>
                 <div class="font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-xs font-bold">=AVERAGE(B1:B6)</div>
                 <p class="text-[11px] text-slate-600 leading-snug">
-                  Letakkan di sel <strong>B (Rata-rata)</strong> untuk x̄, dan di sel <strong>C (Rata-rata)</strong> untuk ȳ. Mendukung juga <code>=JUMLAH/n</code>, <code>=TOTAL/n</code>, atau <code>=RATA_RATA(B1:B6)</code>.
+                  Letakkan di baris <strong>Rata-rata</strong>: sel B untuk x̄, dan sel C untuk ȳ. Mendukung juga <code>=JUMLAH/n</code>, <code>=TOTAL/n</code>, atau <code>=RATA_RATA(B1:B6)</code>.
                 </p>
               </div>
 
               <!-- Card 2: Deviasi -->
               <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-amber-400 transition-colors">
-                <div class="flex items-center justify-between font-bold text-blue-900">
-                  <span class="flex items-center gap-1.5 text-xs"><span class="text-amber-600 font-black">↔️</span> 2. Deviasi (X − x̄) &amp; (Y − ȳ)</span>
-                  <div class="flex gap-1">
-                    <button type="button" onclick="insertQuickFormula('DEV_X')" class="text-[11px] font-bold text-amber-700 hover:text-white hover:bg-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 transition-colors">Kolom D</button>
-                    <button type="button" onclick="insertQuickFormula('DEV_Y')" class="text-[11px] font-bold text-amber-700 hover:text-white hover:bg-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 transition-colors">Kolom E</button>
-                  </div>
+                <div class="font-bold text-blue-900 flex items-center gap-1.5 text-xs">
+                  <span class="text-amber-600 font-black">↔️</span> 2. Deviasi (X − x̄) &amp; (Y − ȳ)
                 </div>
                 <div class="font-mono text-amber-800 bg-amber-50 border border-amber-200 px-2 py-1 rounded text-xs font-bold">=B1-$B$7 dan =C1-$C$7</div>
                 <p class="text-[11px] text-slate-600 leading-snug">
@@ -320,9 +315,8 @@
 
               <!-- Card 3: Kuadrat Deviasi -->
               <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-purple-400 transition-colors">
-                <div class="flex items-center justify-between font-bold text-blue-900">
-                  <span class="flex items-center gap-1.5 text-xs"><span class="text-purple-600 font-black">²</span> 3. Kuadrat Deviasi (X − x̄)²</span>
-                  <button type="button" onclick="insertQuickFormula('SQR')" class="text-[11px] font-bold text-purple-700 hover:text-white hover:bg-purple-600 bg-purple-50 px-2.5 py-0.5 rounded-md border border-purple-200 transition-colors">Gunakan</button>
+                <div class="font-bold text-blue-900 flex items-center gap-1.5 text-xs">
+                  <span class="text-purple-600 font-black">²</span> 3. Kuadrat Deviasi (X − x̄)²
                 </div>
                 <div class="font-mono text-purple-800 bg-purple-50 border border-purple-200 px-2 py-1 rounded text-xs font-bold">=D1^2 atau =D1*D1</div>
                 <p class="text-[11px] text-slate-600 leading-snug">
@@ -332,9 +326,8 @@
 
               <!-- Card 4: Perkalian Deviasi -->
               <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-indigo-400 transition-colors">
-                <div class="flex items-center justify-between font-bold text-blue-900">
-                  <span class="flex items-center gap-1.5 text-xs"><span class="text-indigo-600 font-black">✕</span> 4. Perkalian (X − x̄)(Y − ȳ)</span>
-                  <button type="button" onclick="insertQuickFormula('PROD')" class="text-[11px] font-bold text-indigo-700 hover:text-white hover:bg-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-md border border-indigo-200 transition-colors">Gunakan</button>
+                <div class="font-bold text-blue-900 flex items-center gap-1.5 text-xs">
+                  <span class="text-indigo-600 font-black">✕</span> 4. Perkalian (X − x̄)(Y − ȳ)
                 </div>
                 <div class="font-mono text-indigo-800 bg-indigo-50 border border-indigo-200 px-2 py-1 rounded text-xs font-bold">=D1*E1</div>
                 <p class="text-[11px] text-slate-600 leading-snug">
@@ -344,9 +337,8 @@
 
               <!-- Card 5: Jumlah Total SSxx & SSxy -->
               <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-emerald-400 transition-colors">
-                <div class="flex items-center justify-between font-bold text-blue-900">
-                  <span class="flex items-center gap-1.5 text-xs"><span class="text-emerald-600 font-black">Σ</span> 5. Jumlah Total (SSxx &amp; SSxy)</span>
-                  <button type="button" onclick="insertQuickFormula('SUM')" class="text-[11px] font-bold text-emerald-700 hover:text-white hover:bg-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200 transition-colors">Gunakan</button>
+                <div class="font-bold text-blue-900 flex items-center gap-1.5 text-xs">
+                  <span class="text-emerald-600 font-black">Σ</span> 5. Jumlah Total (SSxx &amp; SSxy)
                 </div>
                 <div class="font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-xs font-bold">=SUM(F1:F6) dan =SUM(G1:G6)</div>
                 <p class="text-[11px] text-slate-600 leading-snug">
@@ -367,15 +359,15 @@
               </div>
             </div>
 
-            <!-- Petunjuk & Fitur Interaktif Tambahan -->
+            <!-- Petunjuk Penggunaan -->
             <div class="bg-white/80 rounded-xl p-3 text-[11px] text-slate-700 space-y-1.5 border border-blue-200/60 shadow-xs">
               <div class="font-bold text-blue-950 flex items-center gap-1.5">
                 <span>💡</span> Tips Praktis Menghitung di Lembar Kerja:
               </div>
               <ul class="list-disc list-inside space-y-1 text-slate-600 leading-relaxed">
                 <li><strong>Klik Sel Langsung:</strong> Saat mengetik rumus diawali <code>=</code>, Anda cukup <strong>mengklik sel di tabel</strong> untuk memasukkan kodenya secara otomatis (misal: klik <code>B1</code>, ketik <code>-</code>, lalu klik <code>B7</code>).</li>
-                <li><strong>Salin Cepat:</strong> Setelah membuat rumus di baris 1, klik tombol <strong>⬇️ Salin ke Bawah</strong> atau tarik kotak biru kecil (<em>fill handle</em>) di sudut kanan bawah sel.</li>
-                <li><strong>Bantuan Otomatis Penuh:</strong> Jika murid kesulitan, klik tombol <strong>✨ Lengkapi Semua Rumus</strong> di atas tabel untuk mengisi seluruh kolom D sampai G, baris Rata-rata, dan baris Total dalam satu kali klik.</li>
+                <li><strong>Salin Rumus (Drag Fill):</strong> Setelah membuat rumus di baris 1, tarik kotak kecil biru (<em>fill handle</em>) di sudut kanan bawah sel ke bawah untuk menyalin rumus ke baris di bawahnya secara otomatis.</li>
+                <li><strong>Kunci Sel ($):</strong> Gunakan tanda dollar <code>$</code> (contoh: <code>$B$7</code>) agar baris rata-rata tidak bergeser saat rumus disalin ke bawah.</li>
                 <li><strong>Desimal Fleksibel:</strong> Sistem menerima pemisah desimal koma (<code>,</code>) maupun titik (<code>.</code>), serta pembulatan ke atas maupun ke bawah.</li>
                 <li>Kolom <strong>H–J</strong> (oranye) terisi otomatis setelah Langkah 2 benar: <code>Ŷ = a + bX</code>, <code>e = Y − Ŷ</code>, dan <code>e²</code>.</li>
               </ul>
@@ -771,157 +763,18 @@
     // URL Web App dari Google Apps Script (trimmed URL):
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwKK_bj1o02kPCti7rL035l7ngNC2Ikx40RzRhulEMzh5057-8cEeXZbyGDbvU2arai0g/exec";
 
-    /* =========================================================================
-     * PRESET DATASETS (Kurikulum Merdeka Kontekstual)
-     * ========================================================================= */
-    const PRESETS = {
-      "1": {
-        name: "Data Pengamatan LKPD (n=20)",
-        points: [
-                  {
-                            "x": 2,
-                            "y": 7.5
-                  },
-                  {
-                            "x": 2,
-                            "y": 7
-                  },
-                  {
-                            "x": 4,
-                            "y": 5.5
-                  },
-                  {
-                            "x": 2.5,
-                            "y": 7
-                  },
-                  {
-                            "x": 2.5,
-                            "y": 4
-                  },
-                  {
-                            "x": 1,
-                            "y": 5
-                  },
-                  {
-                            "x": 1,
-                            "y": 8
-                  },
-                  {
-                            "x": 4.5,
-                            "y": 5
-                  },
-                  {
-                            "x": 1.5,
-                            "y": 7.5
-                  },
-                  {
-                            "x": 0.5,
-                            "y": 8.5
-                  },
-                  {
-                            "x": 2.5,
-                            "y": 6.5
-                  },
-                  {
-                            "x": 1.5,
-                            "y": 8
-                  },
-                  {
-                            "x": 3,
-                            "y": 6
-                  },
-                  {
-                            "x": 5,
-                            "y": 4.5
-                  },
-                  {
-                            "x": 3,
-                            "y": 6.5
-                  },
-                  {
-                            "x": 4,
-                            "y": 7
-                  },
-                  {
-                            "x": 2,
-                            "y": 6.5
-                  },
-                  {
-                            "x": 3.5,
-                            "y": 6
-                  },
-                  {
-                            "x": 3,
-                            "y": 7
-                  },
-                  {
-                            "x": 3.5,
-                            "y": 5.5
-                  }
-        ]
-      },
-      "2": {
-        name: "Lama Belajar vs Nilai Ujian (n=6)",
-        points: [
-          { x: 2, y: 50 },
-          { x: 4, y: 60 },
-          { x: 5, y: 70 },
-          { x: 7, y: 75 },
-          { x: 8, y: 85 },
-          { x: 10, y: 95 }
-        ]
-      },
-      "3": {
-        name: "Biaya Iklan vs Omzet Penjualan (n=5)",
-        points: [
-          { x: 5, y: 22 },
-          { x: 8, y: 28 },
-          { x: 10, y: 35 },
-          { x: 12, y: 40 },
-          { x: 15, y: 48 }
-        ]
-      },
-      "4": {
-        name: "Suhu Udara vs Es Terjual (n=6)",
-        points: [
-          { x: 26, y: 50 },
-          { x: 28, y: 65 },
-          { x: 30, y: 80 },
-          { x: 32, y: 95 },
-          { x: 34, y: 110 },
-          { x: 36, y: 130 }
-        ]
-      }
-    };
-
-    function loadPresetData(key) {
-      if (key === 'empty') {
-        initSpreadsheetData(6);
-        clearVerificationInputs();
-        updateAllCellDOMs();
-        updateGeoGebraPlot();
-        saveToLocalStorage();
-        return;
-      }
-
-      const preset = PRESETS[key];
-      if (!preset) return;
-
-      const pts = preset.points;
-      const count = pts.length;
+    /* Inisialisasi lembar kerja kosong */
+    function initEmptySpreadsheet(count = 6) {
       initSpreadsheetData(count);
-
-      pts.forEach((p, idx) => {
-        const r = idx + 1;
-        rawData[`B${r}`] = String(p.x);
-        rawData[`C${r}`] = String(p.y);
-      });
-
       clearVerificationInputs();
-      reevaluateAll();
       updateAllCellDOMs();
       updateGeoGebraPlot();
       saveToLocalStorage();
+    }
+
+    // Kompatibilitas jika dipanggil dengan parameter
+    function loadPresetData(key) {
+      initEmptySpreadsheet(6);
     }
 
     function clearVerificationInputs() {
@@ -951,185 +804,7 @@
       hideExplorationPanel();
     }
 
-    /* =========================================================================
-     * TOMBOL & BANTUAN RUMUS CEPAT UNTUK MURID
-     * ========================================================================= */
-
-    function insertQuickFormula(type) {
-      const dataRows = rowCount - 2;
-      const meanRow = rowCount - 1;
-      const totalRow = rowCount;
-
-      let r = selectedCell.r;
-      let c = selectedCell.c;
-      let colLetter = COLS[c - 1];
-
-      let formula = '';
-
-      switch (type) {
-        case 'AVERAGE':
-          if (colLetter === 'A') {
-            c = 2;
-            colLetter = 'B';
-            selectCell(r, c);
-          }
-          formula = `=AVERAGE(${colLetter}1:${colLetter}${dataRows})`;
-          break;
-
-        case 'SUM':
-          if (colLetter === 'A') {
-            c = 6;
-            colLetter = 'F';
-            selectCell(r, c);
-          }
-          formula = `=SUM(${colLetter}1:${colLetter}${dataRows})`;
-          break;
-
-        case 'DEV_X':
-          const rowX = (r > dataRows) ? 1 : r;
-          formula = `=B${rowX}-$B$${meanRow}`;
-          if (colLetter !== 'D') {
-            selectCell(rowX, 4);
-            r = rowX;
-            c = 4;
-            colLetter = 'D';
-          }
-          break;
-
-        case 'DEV_Y':
-          const rowY = (r > dataRows) ? 1 : r;
-          formula = `=C${rowY}-$C$${meanRow}`;
-          if (colLetter !== 'E') {
-            selectCell(rowY, 5);
-            r = rowY;
-            c = 5;
-            colLetter = 'E';
-          }
-          break;
-
-        case 'SQR':
-          const rowSqr = (r > dataRows) ? 1 : r;
-          formula = `=D${rowSqr}^2`;
-          if (colLetter !== 'F') {
-            selectCell(rowSqr, 6);
-            r = rowSqr;
-            c = 6;
-            colLetter = 'F';
-          }
-          break;
-
-        case 'PROD':
-          const rowProd = (r > dataRows) ? 1 : r;
-          formula = `=D${rowProd}*E${rowProd}`;
-          if (colLetter !== 'G') {
-            selectCell(rowProd, 7);
-            r = rowProd;
-            c = 7;
-            colLetter = 'G';
-          }
-          break;
-
-        case 'COUNT':
-          const countCol = (colLetter === 'A') ? 'B' : colLetter;
-          formula = `=COUNT(${countCol}1:${countCol}${dataRows})`;
-          break;
-
-        case 'POWER':
-          const rowPow = (r > dataRows) ? 1 : r;
-          formula = `=POWER(D${rowPow}; 2)`;
-          break;
-
-        case 'SQRT':
-          const rowSqrt = (r > dataRows) ? 1 : r;
-          formula = `=SQRT(F${rowSqrt})`;
-          break;
-
-        default:
-          return;
-      }
-
-      const key = `${COLS[selectedCell.c - 1]}${selectedCell.r}`;
-      rawData[key] = formula;
-
-      const formulaInput = document.getElementById('formula-input');
-      if (formulaInput) formulaInput.value = formula;
-
-      const activeTd = document.getElementById(`cell-${selectedCell.r}-${selectedCell.c}`);
-      if (activeTd) activeTd.textContent = formula;
-
-      reevaluateAll();
-      updateAllCellDOMs();
-      updateGeoGebraPlot();
-      saveToLocalStorage();
-    }
-
-    function onSelectFxDropdown(type) {
-      if (!type) return;
-      insertQuickFormula(type);
-    }
-
-    function fillCurrentFormulaDown() {
-      const dataRows = rowCount - 2;
-      const startR = selectedCell.r;
-      const c = selectedCell.c;
-      const colLetter = COLS[c - 1];
-      const sourceKey = `${colLetter}${startR}`;
-      const sourceExpr = rawData[sourceKey] || '';
-
-      if (!sourceExpr || !sourceExpr.startsWith('=')) {
-        alert(`Harap pilih sel yang berisi rumus (diawali =) terlebih dahulu, misalnya sel di baris 1 kolom ${colLetter}.`);
-        return;
-      }
-
-      for (let r = 1; r <= dataRows; r++) {
-        const offset = r - startR;
-        const targetKey = `${colLetter}${r}`;
-        rawData[targetKey] = adjustFormulaForOffset(sourceExpr, offset, 0);
-      }
-
-      reevaluateAll();
-      updateAllCellDOMs();
-      updateGeoGebraPlot();
-      saveToLocalStorage();
-
-      const formulaInput = document.getElementById('formula-input');
-      if (formulaInput) {
-        const origBg = formulaInput.style.backgroundColor;
-        formulaInput.style.backgroundColor = '#dcfce7';
-        setTimeout(() => { formulaInput.style.backgroundColor = origBg; }, 600);
-      }
-    }
-
-    /* Bantuan isi seluruh rumus otomatis untuk tujuan belajar / demonstrasi */
-    function autoFillDeviationsDemo() {
-      const dataRows = rowCount - 2;
-      const meanRow = rowCount - 1;
-      const totalRow = rowCount;
-
-      // Rumus rata-rata di baris Mean
-      rawData[`B${meanRow}`] = `=AVERAGE(B1:B${dataRows})`;
-      rawData[`C${meanRow}`] = `=AVERAGE(C1:C${dataRows})`;
-
-      // Rumus deviasi, kuadrat, dan perkalian tiap baris data
-      for (let r = 1; r <= dataRows; r++) {
-        rawData[`D${r}`] = `=B${r}-$B$${meanRow}`;
-        rawData[`E${r}`] = `=C${r}-$C$${meanRow}`;
-        rawData[`F${r}`] = `=D${r}^2`;
-        rawData[`G${r}`] = `=D${r}*E${r}`;
-      }
-
-      // Rumus total penjumlahan di baris Total
-      rawData[`B${totalRow}`] = `=SUM(B1:B${dataRows})`;
-      rawData[`C${totalRow}`] = `=SUM(C1:C${dataRows})`;
-      rawData[`D${totalRow}`] = `=SUM(D1:D${dataRows})`;
-      rawData[`E${totalRow}`] = `=SUM(E1:E${dataRows})`;
-      rawData[`F${totalRow}`] = `=SUM(F1:F${dataRows})`;
-      rawData[`G${totalRow}`] = `=SUM(G1:G${dataRows})`;
-
-      reevaluateAll();
-      updateAllCellDOMs();
-      saveToLocalStorage();
-    }
+    
 
     function goToReflection() {
       const name = document.getElementById('studentName');
@@ -2765,21 +2440,21 @@
         badge.textContent = "✓ Selesai";
 
         const sign = math.b >= 0 ? "+" : "−";
-        const absB = Math.abs(math.b).toFixed(2);
+        const absB = Math.abs(math.b).toFixed(4);
         resultBox.className = "bg-emerald-50 border-2 border-emerald-500 text-emerald-950 p-4 rounded-xl text-center space-y-2 shadow-sm";
         resultBox.innerHTML = `
           <div class="text-xs font-bold text-emerald-800 uppercase tracking-wide">Persamaan Garis Regresi Terbaik (Line of Best Fit):</div>
-          <div class="text-xl md:text-2xl font-black text-emerald-900 font-mono py-1">Ŷ = ${math.a.toFixed(2)} ${sign} ${absB}X</div>
+          <div class="text-xl md:text-2xl font-black text-emerald-900 font-mono py-1">Ŷ = ${math.a.toFixed(4)} ${sign} ${absB}X</div>
           <div class="text-xs text-emerald-700 font-normal">
-            Artinya, setiap kenaikan 1 unit nilai X diprediksi akan mengubah nilai Y sebesar ${math.b.toFixed(2)} unit.
+            Artinya, setiap kenaikan 1 unit nilai X diprediksi akan mengubah nilai Y sebesar ${math.b.toFixed(4)} unit.
           </div>
         `;
 
         // Tampilkan Ringkasan Statistik Tambahan (Pearson r & R2)
         statsCard.classList.remove('hidden');
-        document.getElementById('valPearsonR').textContent = math.r.toFixed(3);
-        document.getElementById('valR2').textContent = (math.r2 * 100).toFixed(1) + '%';
-        document.getElementById('valSSE').textContent = math.sse.toFixed(2);
+        document.getElementById('valPearsonR').textContent = math.r.toFixed(4);
+        document.getElementById('valR2').textContent = (math.r2 * 100).toFixed(2) + '%';
+        document.getElementById('valSSE').textContent = math.sse.toFixed(4);
 
         // Kategori korelasi
         let rDesc = 'Lemah';
@@ -2884,8 +2559,8 @@
           if (math) {
             const rb = document.getElementById('resultBox');
             const sign = math.b >= 0 ? "+" : "−";
-            const absB = Math.abs(math.b).toFixed(2);
-            rb.innerHTML = `Persamaan Garis Regresi Terbaik:<br><span class="text-xl font-extrabold text-emerald-900 font-mono">Ŷ = ${math.a.toFixed(2)} ${sign} ${absB}X</span>`;
+            const absB = Math.abs(math.b).toFixed(4);
+            rb.innerHTML = `Persamaan Garis Regresi Terbaik:<br><span class="text-xl font-extrabold text-emerald-900 font-mono">Ŷ = ${math.a.toFixed(4)} ${sign} ${absB}X</span>`;
           }
         }
         return true;
