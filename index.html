@@ -602,22 +602,22 @@
             <div>
               <div class="flex justify-between text-xs font-semibold mb-1">
                 <span>Kemiringan / Slope (m):</span>
-                <span id="mSliderVal" class="text-blue-600 font-bold font-mono">0.00</span>
+                <span id="mSliderVal" class="text-blue-600 font-bold font-mono">0.0000</span>
               </div>
-              <input type="range" id="mSlider" min="-5" max="5" step="0.01" value="0" class="w-full accent-blue-600 cursor-pointer">
+              <input type="range" id="mSlider" min="-5" max="5" step="0.0001" value="0" class="w-full accent-blue-600 cursor-pointer">
             </div>
 
             <div>
               <div class="flex justify-between text-xs font-semibold mb-1">
                 <span>Intersep / Titik Potong Y (c):</span>
-                <span id="cSliderVal" class="text-blue-600 font-bold font-mono">0.00</span>
+                <span id="cSliderVal" class="text-blue-600 font-bold font-mono">0.0000</span>
               </div>
-              <input type="range" id="cSlider" min="-50" max="50" step="0.01" value="0" class="w-full accent-blue-600 cursor-pointer">
+              <input type="range" id="cSlider" min="-50" max="50" step="0.0001" value="0" class="w-full accent-blue-600 cursor-pointer">
             </div>
 
             <div class="p-3 bg-blue-50 rounded-lg border border-blue-100 text-xs text-blue-900">
               <strong>Persamaan Garis Eksplorasi Anda:</strong><br>
-              <span id="persamaanEksplorasi" class="text-sm font-bold block mt-1 font-mono">Y = 0.00X + 0.00</span>
+              <span id="persamaanEksplorasi" class="text-sm font-bold block mt-1 font-mono">Y = 0.0000X + 0.0000</span>
             </div>
 
             <!-- Panel Residu -->
@@ -2004,15 +2004,15 @@
       const cCenter = Math.min(...yVals);
       const cSpan = Math.max(yRange * 1.5, 5);
 
-      mSlider.min = (-mSpan).toFixed(2);
-      mSlider.max = mSpan.toFixed(2);
-      mSlider.step = '0.01';
-      mSlider.value = mVal.toFixed(2);
+      mSlider.min = (-mSpan).toFixed(4);
+      mSlider.max = mSpan.toFixed(4);
+      mSlider.step = '0.0001';
+      mSlider.value = mVal.toFixed(4);
 
-      cSlider.min = (cCenter - cSpan).toFixed(2);
-      cSlider.max = (cCenter + cSpan).toFixed(2);
-      cSlider.step = '0.01';
-      cSlider.value = cVal.toFixed(2);
+      cSlider.min = (cCenter - cSpan).toFixed(4);
+      cSlider.max = (cCenter + cSpan).toFixed(4);
+      cSlider.step = '0.0001';
+      cSlider.value = cVal.toFixed(4);
 
       updateExplorationLabels(mVal, cVal);
       updateResidualStats(mVal, cVal);
@@ -2032,10 +2032,10 @@
     }
 
     function updateExplorationLabels(m, c) {
-      document.getElementById('mSliderVal').textContent = m.toFixed(2);
-      document.getElementById('cSliderVal').textContent = c.toFixed(2);
-      const sign = c >= 0 ? '+' : '-';
-      document.getElementById('persamaanEksplorasi').textContent = `Y = ${m.toFixed(2)}X ${sign} ${Math.abs(c).toFixed(2)}`;
+      document.getElementById('mSliderVal').textContent = m.toFixed(4);
+      document.getElementById('cSliderVal').textContent = c.toFixed(4);
+      const sign = c >= 0 ? '+' : '−';
+      document.getElementById('persamaanEksplorasi').textContent = `Y = ${m.toFixed(4)}X ${sign} ${Math.abs(c).toFixed(4)}`;
     }
 
     function onExplorationSliderInput() {
@@ -2055,8 +2055,8 @@
       if (!residualLine) return;
       const mSlider = document.getElementById('mSlider');
       const cSlider = document.getElementById('cSlider');
-      mSlider.value = residualLine.b.toFixed(2);
-      cSlider.value = residualLine.a.toFixed(2);
+      mSlider.value = residualLine.b.toFixed(4);
+      cSlider.value = residualLine.a.toFixed(4);
       onExplorationSliderInput();
     }
 
@@ -2066,8 +2066,8 @@
       if (!math) return;
       const mSlider = document.getElementById('mSlider');
       const cSlider = document.getElementById('cSlider');
-      mSlider.value = '0.00';
-      cSlider.value = math.yBar.toFixed(2);
+      mSlider.value = '0.0000';
+      cSlider.value = math.yBar.toFixed(4);
       onExplorationSliderInput();
     }
 
