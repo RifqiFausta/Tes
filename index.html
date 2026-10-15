@@ -231,30 +231,17 @@
               <span>📊</span> 1. Lembar Kerja Spreadsheet
             </h2>
 
-            <!-- Dataset Presets & Table Tools -->
-            <div class="flex flex-wrap items-center gap-2 no-print">
-              <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-300 rounded-lg px-2 py-1">
-                <span class="text-[11px] font-semibold text-slate-600">Preset:</span>
-                <select id="presetSelect" onchange="loadPresetData(this.value)" class="text-xs bg-transparent text-blue-800 font-bold focus:outline-none cursor-pointer">
-                  <option value="empty" selected>Spreadsheet Kosong (Isi Data Sendiri)</option>
-                  <option value="1">Data Pengamatan LKPD (n=20)</option>
-                  <option value="2">Contoh 1: Jam Belajar vs Nilai Ujian (n=6)</option>
-                  <option value="3">Contoh 2: Biaya Iklan vs Omzet Penjualan (n=5)</option>
-                  <option value="4">Contoh 3: Suhu Udara vs Es Terjual (n=6)</option>
-                </select>
-              </div>
-
-              <div class="flex items-center gap-1.5">
-                <button onclick="addRow()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300" title="Tambah baris data baru (data lama tetap aman)">
-                  + Baris
-                </button>
-                <button onclick="removeRow()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300" title="Hapus baris data terakhir">
-                  - Baris
-                </button>
-                <button onclick="resetSheet()" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition-colors border border-rose-200" title="Kosongkan seluruh data tabel">
-                  Reset
-                </button>
-              </div>
+            <!-- Table Tools -->
+            <div class="flex items-center gap-1.5 no-print">
+              <button onclick="addRow()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300" title="Tambah baris data baru (data lama tetap aman)">
+                + Baris
+              </button>
+              <button onclick="removeRow()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300" title="Hapus baris data terakhir">
+                - Baris
+              </button>
+              <button onclick="resetSheet()" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition-colors border border-rose-200" title="Kosongkan seluruh data tabel">
+                Reset
+              </button>
             </div>
           </div>
 
@@ -262,7 +249,7 @@
           <div id="formula-bar-container" class="flex items-center gap-2 bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs">
             <span id="active-cell-id" class="font-bold text-blue-700 min-w-[40px] text-center border-r border-slate-300 pr-2">B1</span>
             <span class="text-slate-400 font-semibold italic select-none">fx</span>
-            <input type="text" id="formula-input" placeholder="Ketik angka atau rumus diawali = (contoh: =B1-$B$7, =D1^2, =D1*E1, =SUM(F1:F6))" class="w-full bg-white border border-slate-200 rounded px-2.5 py-1 text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono text-xs">
+            <input type="text" id="formula-input" placeholder="Ketik angka atau rumus diawali = (contoh: =AVERAGE(B1:B6), =B1-$B$7, =D1^2, =D1*E1, =SUM(F1:F6))" class="w-full bg-white border border-slate-200 rounded px-2.5 py-1 text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500 font-mono text-xs">
           </div>
 
           <!-- Spreadsheet Viewport -->
@@ -292,22 +279,107 @@
             </div>
           </div>
 
-          <!-- Quick Tips -->
-          <div class="bg-blue-50/80 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-900 space-y-1.5">
-            <div class="font-bold flex items-center justify-between">
-              <span class="flex items-center gap-1.5">💡 Petunjuk Rumus &amp; Fitur Interaktif:</span>
-              <button onclick="autoFillDeviationsDemo()" class="no-print text-[11px] font-bold text-blue-600 hover:text-blue-800 underline">
-                Bantu Lengkapi Rumus Kolom D–G Otomatis
-              </button>
+          <!-- Panduan Lengkap Rumus Spreadsheet & Tips Interaktif -->
+          <div class="bg-gradient-to-br from-blue-50/90 via-slate-50 to-indigo-50/70 border border-blue-200 rounded-2xl p-4 text-xs text-blue-950 space-y-3.5">
+            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/80 pb-2.5">
+              <span class="font-extrabold text-sm text-blue-950 flex items-center gap-2">
+                <span>📖</span> Panduan Semua Fungsi Spreadsheet Regresi:
+              </span>
+              <span class="text-[11px] text-blue-700 font-semibold bg-blue-100/70 px-2.5 py-0.5 rounded-full">
+                Klik tombol "Gunakan" pada rumus untuk memasukkan ke sel aktif
+              </span>
             </div>
-            <ul class="list-disc list-inside space-y-1 text-blue-800 leading-relaxed">
-              <li>Saat mengetik rumus diawali <code>=</code>, <strong>klik sel di tabel</strong> untuk memasukkan alamat sel secara otomatis (contoh: klik <code>B1</code>, ketik <code>-</code>, lalu klik <code>B7</code>).</li>
-              <li>Gunakan <code>$</code> untuk mengunci sel absolut saat drag rumus ke bawah (contoh: <code>=B1-$B$7</code>).</li>
-              <li>Tarik kotak kecil biru di pojok kanan bawah sel (<em>fill handle</em>) untuk menyalin rumus ke baris di bawahnya.</li>
-              <li><strong>Fleksibilitas Desimal:</strong> Mendukung tanda koma (<code>,</code>) maupun titik (<code>.</code>), pembulatan ke atas (<em>round-up/ceil</em>) maupun ke bawah (<em>floor/trunc</em>), serta bebas berapa pun angka di belakang koma.</li>
-              <li><strong>Toleransi Pembulatan:</strong> Jawaban yang disalin langsung dari baris Rata-rata dan Total di tabel dijamin selalu benar!</li>
-              <li>Kolom <strong>H–J</strong> (oranye) terisi otomatis setelah Langkah 2 benar: <code>Ŷ = a + bX</code>, <code>e = Y − Ŷ</code>, dan <code>e²</code>. Baris Total kolom I bernilai &approx; 0 dan kolom J adalah &Sigma;e² (SSE).</li>
-            </ul>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <!-- Card 1: Rata-rata -->
+              <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-blue-400 transition-colors">
+                <div class="flex items-center justify-between font-bold text-blue-900">
+                  <span class="flex items-center gap-1.5 text-xs"><span class="text-blue-600 font-black">x̄</span> 1. Nilai Rata-rata (Mean)</span>
+                  <button type="button" onclick="insertQuickFormula('AVERAGE')" class="text-[11px] font-bold text-blue-600 hover:text-white hover:bg-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-md border border-blue-200 transition-colors">Gunakan</button>
+                </div>
+                <div class="font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-xs font-bold">=AVERAGE(B1:B6)</div>
+                <p class="text-[11px] text-slate-600 leading-snug">
+                  Letakkan di sel <strong>B (Rata-rata)</strong> untuk x̄, dan di sel <strong>C (Rata-rata)</strong> untuk ȳ. Mendukung juga <code>=JUMLAH/n</code>, <code>=TOTAL/n</code>, atau <code>=RATA_RATA(B1:B6)</code>.
+                </p>
+              </div>
+
+              <!-- Card 2: Deviasi -->
+              <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-amber-400 transition-colors">
+                <div class="flex items-center justify-between font-bold text-blue-900">
+                  <span class="flex items-center gap-1.5 text-xs"><span class="text-amber-600 font-black">↔️</span> 2. Deviasi (X − x̄) &amp; (Y − ȳ)</span>
+                  <div class="flex gap-1">
+                    <button type="button" onclick="insertQuickFormula('DEV_X')" class="text-[11px] font-bold text-amber-700 hover:text-white hover:bg-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 transition-colors">Kolom D</button>
+                    <button type="button" onclick="insertQuickFormula('DEV_Y')" class="text-[11px] font-bold text-amber-700 hover:text-white hover:bg-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 transition-colors">Kolom E</button>
+                  </div>
+                </div>
+                <div class="font-mono text-amber-800 bg-amber-50 border border-amber-200 px-2 py-1 rounded text-xs font-bold">=B1-$B$7 dan =C1-$C$7</div>
+                <p class="text-[11px] text-slate-600 leading-snug">
+                  Isi di kolom <strong>D</strong> dan <strong>E</strong>. Tanda dollar <code>$</code> mengunci baris rata-rata agar tidak bergeser saat ditarik ke bawah (<em>drag-fill</em>).
+                </p>
+              </div>
+
+              <!-- Card 3: Kuadrat Deviasi -->
+              <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-purple-400 transition-colors">
+                <div class="flex items-center justify-between font-bold text-blue-900">
+                  <span class="flex items-center gap-1.5 text-xs"><span class="text-purple-600 font-black">²</span> 3. Kuadrat Deviasi (X − x̄)²</span>
+                  <button type="button" onclick="insertQuickFormula('SQR')" class="text-[11px] font-bold text-purple-700 hover:text-white hover:bg-purple-600 bg-purple-50 px-2.5 py-0.5 rounded-md border border-purple-200 transition-colors">Gunakan</button>
+                </div>
+                <div class="font-mono text-purple-800 bg-purple-50 border border-purple-200 px-2 py-1 rounded text-xs font-bold">=D1^2 atau =D1*D1</div>
+                <p class="text-[11px] text-slate-600 leading-snug">
+                  Isi di kolom <strong>F</strong> untuk mengkuadratkan nilai deviasi X pada kolom D. Bisa juga menggunakan rumus <code>=POWER(D1; 2)</code>.
+                </p>
+              </div>
+
+              <!-- Card 4: Perkalian Deviasi -->
+              <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-indigo-400 transition-colors">
+                <div class="flex items-center justify-between font-bold text-blue-900">
+                  <span class="flex items-center gap-1.5 text-xs"><span class="text-indigo-600 font-black">✕</span> 4. Perkalian (X − x̄)(Y − ȳ)</span>
+                  <button type="button" onclick="insertQuickFormula('PROD')" class="text-[11px] font-bold text-indigo-700 hover:text-white hover:bg-indigo-600 bg-indigo-50 px-2.5 py-0.5 rounded-md border border-indigo-200 transition-colors">Gunakan</button>
+                </div>
+                <div class="font-mono text-indigo-800 bg-indigo-50 border border-indigo-200 px-2 py-1 rounded text-xs font-bold">=D1*E1</div>
+                <p class="text-[11px] text-slate-600 leading-snug">
+                  Isi di kolom <strong>G</strong> untuk mengalikan selisih deviasi kolom D dengan deviasi kolom E pada tiap baris.
+                </p>
+              </div>
+
+              <!-- Card 5: Jumlah Total SSxx & SSxy -->
+              <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-emerald-400 transition-colors">
+                <div class="flex items-center justify-between font-bold text-blue-900">
+                  <span class="flex items-center gap-1.5 text-xs"><span class="text-emerald-600 font-black">Σ</span> 5. Jumlah Total (SSxx &amp; SSxy)</span>
+                  <button type="button" onclick="insertQuickFormula('SUM')" class="text-[11px] font-bold text-emerald-700 hover:text-white hover:bg-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-200 transition-colors">Gunakan</button>
+                </div>
+                <div class="font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-xs font-bold">=SUM(F1:F6) dan =SUM(G1:G6)</div>
+                <p class="text-[11px] text-slate-600 leading-snug">
+                  Letakkan di baris <strong>Total</strong>: Kolom F menghasilkan <strong>SSxx</strong> dan Kolom G menghasilkan <strong>SSxy</strong>. Mendukung juga <code>=JUMLAH(...)</code> atau <code>=TOTAL(...)</code>.
+                </p>
+              </div>
+
+              <!-- Card 6: Persamaan Garis Regresi -->
+              <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-blue-400 transition-colors">
+                <div class="flex items-center justify-between font-bold text-blue-900 text-xs">
+                  <span class="flex items-center gap-1.5"><span>📈</span> 6. Kemiringan (b) &amp; Intersep (a)</span>
+                  <span class="text-[10px] text-blue-700 font-semibold bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Langkah 2 &amp; 3</span>
+                </div>
+                <div class="font-mono text-blue-900 bg-blue-50 border border-blue-200 px-2 py-1 rounded text-xs font-bold">b = SSxy / SSxx &nbsp;|&nbsp; a = ȳ − b(x̄)</div>
+                <p class="text-[11px] text-slate-600 leading-snug">
+                  Nilai SSxx dan SSxy dari baris Total langsung digunakan untuk menentukan koefisien garis regresi terbaik <code>Ŷ = a + bX</code>.
+                </p>
+              </div>
+            </div>
+
+            <!-- Petunjuk & Fitur Interaktif Tambahan -->
+            <div class="bg-white/80 rounded-xl p-3 text-[11px] text-slate-700 space-y-1.5 border border-blue-200/60 shadow-xs">
+              <div class="font-bold text-blue-950 flex items-center gap-1.5">
+                <span>💡</span> Tips Praktis Menghitung di Lembar Kerja:
+              </div>
+              <ul class="list-disc list-inside space-y-1 text-slate-600 leading-relaxed">
+                <li><strong>Klik Sel Langsung:</strong> Saat mengetik rumus diawali <code>=</code>, Anda cukup <strong>mengklik sel di tabel</strong> untuk memasukkan kodenya secara otomatis (misal: klik <code>B1</code>, ketik <code>-</code>, lalu klik <code>B7</code>).</li>
+                <li><strong>Salin Cepat:</strong> Setelah membuat rumus di baris 1, klik tombol <strong>⬇️ Salin ke Bawah</strong> atau tarik kotak biru kecil (<em>fill handle</em>) di sudut kanan bawah sel.</li>
+                <li><strong>Bantuan Otomatis Penuh:</strong> Jika murid kesulitan, klik tombol <strong>✨ Lengkapi Semua Rumus</strong> di atas tabel untuk mengisi seluruh kolom D sampai G, baris Rata-rata, dan baris Total dalam satu kali klik.</li>
+                <li><strong>Desimal Fleksibel:</strong> Sistem menerima pemisah desimal koma (<code>,</code>) maupun titik (<code>.</code>), serta pembulatan ke atas maupun ke bawah.</li>
+                <li>Kolom <strong>H–J</strong> (oranye) terisi otomatis setelah Langkah 2 benar: <code>Ŷ = a + bX</code>, <code>e = Y − Ŷ</code>, dan <code>e²</code>.</li>
+              </ul>
+            </div>
           </div>
         </div>
 
@@ -879,17 +951,166 @@
       hideExplorationPanel();
     }
 
-    /* Bantuan isi rumus otomatis untuk tujuan belajar / demonstrasi */
+    /* =========================================================================
+     * TOMBOL & BANTUAN RUMUS CEPAT UNTUK MURID
+     * ========================================================================= */
+
+    function insertQuickFormula(type) {
+      const dataRows = rowCount - 2;
+      const meanRow = rowCount - 1;
+      const totalRow = rowCount;
+
+      let r = selectedCell.r;
+      let c = selectedCell.c;
+      let colLetter = COLS[c - 1];
+
+      let formula = '';
+
+      switch (type) {
+        case 'AVERAGE':
+          if (colLetter === 'A') {
+            c = 2;
+            colLetter = 'B';
+            selectCell(r, c);
+          }
+          formula = `=AVERAGE(${colLetter}1:${colLetter}${dataRows})`;
+          break;
+
+        case 'SUM':
+          if (colLetter === 'A') {
+            c = 6;
+            colLetter = 'F';
+            selectCell(r, c);
+          }
+          formula = `=SUM(${colLetter}1:${colLetter}${dataRows})`;
+          break;
+
+        case 'DEV_X':
+          const rowX = (r > dataRows) ? 1 : r;
+          formula = `=B${rowX}-$B$${meanRow}`;
+          if (colLetter !== 'D') {
+            selectCell(rowX, 4);
+            r = rowX;
+            c = 4;
+            colLetter = 'D';
+          }
+          break;
+
+        case 'DEV_Y':
+          const rowY = (r > dataRows) ? 1 : r;
+          formula = `=C${rowY}-$C$${meanRow}`;
+          if (colLetter !== 'E') {
+            selectCell(rowY, 5);
+            r = rowY;
+            c = 5;
+            colLetter = 'E';
+          }
+          break;
+
+        case 'SQR':
+          const rowSqr = (r > dataRows) ? 1 : r;
+          formula = `=D${rowSqr}^2`;
+          if (colLetter !== 'F') {
+            selectCell(rowSqr, 6);
+            r = rowSqr;
+            c = 6;
+            colLetter = 'F';
+          }
+          break;
+
+        case 'PROD':
+          const rowProd = (r > dataRows) ? 1 : r;
+          formula = `=D${rowProd}*E${rowProd}`;
+          if (colLetter !== 'G') {
+            selectCell(rowProd, 7);
+            r = rowProd;
+            c = 7;
+            colLetter = 'G';
+          }
+          break;
+
+        case 'COUNT':
+          const countCol = (colLetter === 'A') ? 'B' : colLetter;
+          formula = `=COUNT(${countCol}1:${countCol}${dataRows})`;
+          break;
+
+        case 'POWER':
+          const rowPow = (r > dataRows) ? 1 : r;
+          formula = `=POWER(D${rowPow}; 2)`;
+          break;
+
+        case 'SQRT':
+          const rowSqrt = (r > dataRows) ? 1 : r;
+          formula = `=SQRT(F${rowSqrt})`;
+          break;
+
+        default:
+          return;
+      }
+
+      const key = `${COLS[selectedCell.c - 1]}${selectedCell.r}`;
+      rawData[key] = formula;
+
+      const formulaInput = document.getElementById('formula-input');
+      if (formulaInput) formulaInput.value = formula;
+
+      const activeTd = document.getElementById(`cell-${selectedCell.r}-${selectedCell.c}`);
+      if (activeTd) activeTd.textContent = formula;
+
+      reevaluateAll();
+      updateAllCellDOMs();
+      updateGeoGebraPlot();
+      saveToLocalStorage();
+    }
+
+    function onSelectFxDropdown(type) {
+      if (!type) return;
+      insertQuickFormula(type);
+    }
+
+    function fillCurrentFormulaDown() {
+      const dataRows = rowCount - 2;
+      const startR = selectedCell.r;
+      const c = selectedCell.c;
+      const colLetter = COLS[c - 1];
+      const sourceKey = `${colLetter}${startR}`;
+      const sourceExpr = rawData[sourceKey] || '';
+
+      if (!sourceExpr || !sourceExpr.startsWith('=')) {
+        alert(`Harap pilih sel yang berisi rumus (diawali =) terlebih dahulu, misalnya sel di baris 1 kolom ${colLetter}.`);
+        return;
+      }
+
+      for (let r = 1; r <= dataRows; r++) {
+        const offset = r - startR;
+        const targetKey = `${colLetter}${r}`;
+        rawData[targetKey] = adjustFormulaForOffset(sourceExpr, offset, 0);
+      }
+
+      reevaluateAll();
+      updateAllCellDOMs();
+      updateGeoGebraPlot();
+      saveToLocalStorage();
+
+      const formulaInput = document.getElementById('formula-input');
+      if (formulaInput) {
+        const origBg = formulaInput.style.backgroundColor;
+        formulaInput.style.backgroundColor = '#dcfce7';
+        setTimeout(() => { formulaInput.style.backgroundColor = origBg; }, 600);
+      }
+    }
+
+    /* Bantuan isi seluruh rumus otomatis untuk tujuan belajar / demonstrasi */
     function autoFillDeviationsDemo() {
       const dataRows = rowCount - 2;
       const meanRow = rowCount - 1;
       const totalRow = rowCount;
 
-      // Rumus rata-rata
+      // Rumus rata-rata di baris Mean
       rawData[`B${meanRow}`] = `=AVERAGE(B1:B${dataRows})`;
       rawData[`C${meanRow}`] = `=AVERAGE(C1:C${dataRows})`;
 
-      // Rumus deviasi tiap baris
+      // Rumus deviasi, kuadrat, dan perkalian tiap baris data
       for (let r = 1; r <= dataRows; r++) {
         rawData[`D${r}`] = `=B${r}-$B$${meanRow}`;
         rawData[`E${r}`] = `=C${r}-$C$${meanRow}`;
@@ -897,7 +1118,11 @@
         rawData[`G${r}`] = `=D${r}*E${r}`;
       }
 
-      // Rumus total
+      // Rumus total penjumlahan di baris Total
+      rawData[`B${totalRow}`] = `=SUM(B1:B${dataRows})`;
+      rawData[`C${totalRow}`] = `=SUM(C1:C${dataRows})`;
+      rawData[`D${totalRow}`] = `=SUM(D1:D${dataRows})`;
+      rawData[`E${totalRow}`] = `=SUM(E1:E${dataRows})`;
       rawData[`F${totalRow}`] = `=SUM(F1:F${dataRows})`;
       rawData[`G${totalRow}`] = `=SUM(G1:G${dataRows})`;
 
@@ -1429,6 +1654,41 @@
       return parseFloat(clean);
     }
 
+    /* Parsing argumen fungsi spreadsheet: mendukung range (B1:B6 atau B1..B6), koma, titik koma (;) */
+    function parseFunctionArgs(argsStr) {
+      const parts = (argsStr || '').split(/[,;]/);
+      const values = [];
+      for (let part of parts) {
+        part = part.trim();
+        if (!part) continue;
+        const rangeMatch = part.match(/^\$?([A-Ja-j])\$?([0-9]+)\s*(?::|\.\.)\s*\$?([A-Ja-j])\$?([0-9]+)$/);
+        if (rangeMatch) {
+          values.push(...getRangeValues(rangeMatch[1] + rangeMatch[2], rangeMatch[3] + rangeMatch[4]));
+        } else {
+          const cellMatch = part.match(/^\$?([A-Ja-j])\$?([0-9]+)$/);
+          if (cellMatch) {
+            const k = cellMatch[1].toUpperCase() + cellMatch[2];
+            const v = parseNum(evalData[k]);
+            if (!isNaN(v)) values.push(v);
+          } else {
+            const num = parseNum(part);
+            if (!isNaN(num)) values.push(num);
+          }
+        }
+      }
+      return values;
+    }
+
+    function evaluateInnerExpr(exprStr) {
+      let s = (exprStr || '').trim().replace(/(\d+),(\d+)/g, '$1.$2');
+      s = s.replace(/\$?([A-J])\$?([0-9]+)/gi, (match, col, row) => {
+        const k = col.toUpperCase() + row;
+        const v = parseNum(evalData[k]);
+        return `(${isNaN(v) ? 0 : v})`;
+      });
+      return s;
+    }
+
     function evaluateFormula(expr) {
       if (!expr || typeof expr !== 'string') return expr;
       if (!expr.startsWith('=')) {
@@ -1436,23 +1696,62 @@
       }
 
       let formula = expr.substring(1).trim();
-      // Konversi format angka desimal koma (misal: 2,5 -> 2.5) di luar separator fungsi
+      // Konversi format angka desimal koma (misal: 2,5 -> 2.5) jika diapit digit
       formula = formula.replace(/(\d+),(\d+)/g, '$1.$2');
 
       try {
-        // Dukungan SUM, JUMLAH, TOTAL
-        formula = formula.replace(/(?:SUM|JUMLAH|TOTAL)\(\$?([A-J])\$?([0-9]+):\$?([A-J])\$?([0-9]+)\)/gi, (match, c1, r1, c2, r2) => {
-          const vals = getRangeValues(`${c1}${r1}`, `${c2}${r2}`);
+        // 1. Dukungan SUM, JUMLAH, TOTAL
+        formula = formula.replace(/(?:SUM|JUMLAH|TOTAL)\s*\(([^)]+)\)/gi, (match, args) => {
+          const vals = parseFunctionArgs(args);
           return `(${vals.reduce((a, b) => a + b, 0)})`;
         });
 
-        // Dukungan AVERAGE, RATA_RATA, RATA2, RATARATA
-        formula = formula.replace(/(?:AVERAGE|RATA_RATA|RATARATA|RATA2)\(\$?([A-J])\$?([0-9]+):\$?([A-J])\$?([0-9]+)\)/gi, (match, c1, r1, c2, r2) => {
-          const vals = getRangeValues(`${c1}${r1}`, `${c2}${r2}`);
-          return `(${vals.length > 0 ? (vals.reduce((a, b) => a + b, 0) / vals.length) : 0})`;
+        // 2. Dukungan AVERAGE, RATA_RATA, RATARATA, RATA2, RATA, MEAN
+        formula = formula.replace(/(?:AVERAGE|RATA_RATA|RATARATA|RATA2|RATA|MEAN)\s*\(([^)]+)\)/gi, (match, args) => {
+          const vals = parseFunctionArgs(args);
+          const avg = vals.length > 0 ? (vals.reduce((a, b) => a + b, 0) / vals.length) : 0;
+          return `(${avg})`;
         });
 
-        // Dukungan referensi sel (A1, $B$7, dll)
+        // 3. Dukungan COUNT, BANYAK_DATA, CACAH
+        formula = formula.replace(/(?:COUNT|BANYAK_DATA|CACAH)\s*\(([^)]+)\)/gi, (match, args) => {
+          const vals = parseFunctionArgs(args);
+          return `(${vals.length})`;
+        });
+
+        // 4. Dukungan MIN & MAX
+        formula = formula.replace(/MIN\s*\(([^)]+)\)/gi, (match, args) => {
+          const vals = parseFunctionArgs(args);
+          return `(${vals.length > 0 ? Math.min(...vals) : 0})`;
+        });
+        formula = formula.replace(/MAX\s*\(([^)]+)\)/gi, (match, args) => {
+          const vals = parseFunctionArgs(args);
+          return `(${vals.length > 0 ? Math.max(...vals) : 0})`;
+        });
+
+        // 5. Dukungan SQRT & AKAR
+        formula = formula.replace(/(?:SQRT|AKAR)\s*\(([^)]+)\)/gi, (match, arg) => {
+          return `(Math.sqrt(${evaluateInnerExpr(arg)}))`;
+        });
+
+        // 6. Dukungan ABS & MUTLAK
+        formula = formula.replace(/(?:ABS|MUTLAK)\s*\(([^)]+)\)/gi, (match, arg) => {
+          return `(Math.abs(${evaluateInnerExpr(arg)}))`;
+        });
+
+        // 7. Dukungan POWER, POW, PANGKAT
+        formula = formula.replace(/(?:POWER|POW|PANGKAT)\s*\(([^,;]+)[,;]([^)]+)\)/gi, (match, base, exp) => {
+          return `(Math.pow(${evaluateInnerExpr(base)},${evaluateInnerExpr(exp)}))`;
+        });
+
+        // 8. Dukungan ROUND & BULAT
+        formula = formula.replace(/(?:ROUND|BULAT)\s*\(([^,;]+)(?:[,;]([^)]+))?\)/gi, (match, val, dec) => {
+          const v = evaluateInnerExpr(val);
+          const d = dec ? parseInt(evaluateInnerExpr(dec), 10) : 4;
+          return `(Number(Math.round(${v} + 'e' + ${d}) + 'e-' + ${d}))`;
+        });
+
+        // Referensi sel (A1, $B$7, dll)
         formula = formula.replace(/\$?([A-J])\$?([0-9]+)/gi, (match, col, row) => {
           const refKey = `${col.toUpperCase()}${row}`;
           const refVal = parseNum(evalData[refKey]);
