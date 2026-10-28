@@ -68,6 +68,41 @@
       background-color: #eff6ff !important;
     }
 
+    
+    #fill-handle::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      cursor: crosshair;
+    }
+
+    /* Toast notifikasi penyalinan rumus */
+    #fill-toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: rgba(15, 23, 42, 0.95);
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      pointer-events: none;
+    }
+    #fill-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
     /* Active cell border overlay & fill handle */
     #cell-overlay {
       position: absolute;
@@ -218,6 +253,46 @@
       </div>
     </section>
 
+    <!-- PANDUAN AWAL & ORIENTASI SISWA (Revisi Bagian B) -->
+    <section class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white p-4 md:p-5 rounded-2xl shadow-sm space-y-3" aria-labelledby="guideHeading">
+      <div class="flex items-center justify-between border-b border-blue-700/60 pb-2">
+        <h2 id="guideHeading" class="text-base md:text-lg font-bold flex items-center gap-2 text-white">
+          <span>📖</span> Panduan Singkat Alur &amp; Penggunaan E-LKM
+        </h2>
+        <span class="text-[11px] bg-blue-800/80 text-blue-200 px-2.5 py-0.5 rounded-full border border-blue-600/50">Baca Sebelum Memulai</span>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs leading-relaxed text-blue-100">
+        <div class="bg-white/10 p-3 rounded-xl border border-white/10 space-y-1.5">
+          <div class="font-bold text-white flex items-center gap-1.5">
+            <span>🔄</span> 1. Alur Aktivitas Belajar:
+          </div>
+          <ol class="list-decimal list-inside space-y-1 text-[11px]">
+            <li><strong>Input &amp; Amati:</strong> Ketik pasangan data X dan Y di tabel, lalu amati diagram pencar pada grafik GeoGebra.</li>
+            <li><strong>Duga Garis Terbaik:</strong> Buat hipotesis awal mengenai arah dan persamaan garis yang paling mewakili data.</li>
+            <li><strong>Pahami Residu &amp; Kuadrat Residu:</strong> Pahami mengapa kesalahan prediksi (residu) perlu dikuadratkan agar nilai positif dan negatif tidak saling meniadakan.</li>
+            <li><strong>Hitung Matematis:</strong> Hitung rata-rata, kuadrat deviasi (SSxx), dan perkalian deviasi (SSxy) pada spreadsheet.</li>
+            <li><strong>Verifikasi &amp; Buktikan:</strong> Cek kebenaran hitungan pada Langkah 1, 2, dan 3. Buktikan di GeoGebra bahwa jumlah kuadrat residu garis regresi selalu paling minimum!</li>
+            <li><strong>Refleksi &amp; Simpulan:</strong> Hubungkan dugaan awal dengan persamaan regresi linear, jawab refleksi, lalu kumpulkan LKPD.</li>
+          </ol>
+        </div>
+
+        <div class="bg-white/10 p-3 rounded-xl border border-white/10 space-y-1.5">
+          <div class="font-bold text-white flex items-center gap-1.5">
+            <span>🎨</span> 2. Panduan Warna Kolom &amp; Cara Mengisi Rumus:
+          </div>
+          <ul class="space-y-1 text-[11px]">
+            <li><span class="inline-block w-2.5 h-2.5 rounded-full bg-white mr-1.5 align-middle"></span><strong>Kolom Putih (A–C):</strong> Diisi manual oleh siswa (No, X, Y).</li>
+            <li><span class="inline-block w-2.5 h-2.5 rounded-full bg-blue-200 mr-1.5 align-middle"></span><strong>Kolom D–G:</strong> Diisi siswa menggunakan rumus spreadsheet (deviasi &amp; perkalian deviasi).</li>
+            <li><span class="inline-block w-2.5 h-2.5 rounded-full bg-orange-400 mr-1.5 align-middle"></span><strong>Kolom Oranye (H–J):</strong> <em>Terisi otomatis oleh sistem</em> setelah verifikasi Langkah 2 berhasil.</li>
+            <li><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 mr-1.5 align-middle"></span><strong>Menyalin Rumus:</strong> Di komputer tarik kotak biru (<em>fill handle</em>) ke bawah. Di HP / layar sentuh, pilih sel rumus di baris 1 lalu tekan tombol <strong>"📋 Salin Rumus ke Bawah"</strong>.</li>
+            <li><span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 mr-1.5 align-middle"></span><strong>Syarat Lanjut:</strong> Selesaikan Verifikasi Langkah 1 &amp; 2 untuk membuka garis regresi linear &amp; panel eksperimen residu.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+
     <!-- Main Grid Layout -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
@@ -232,14 +307,17 @@
             </h2>
 
             <!-- Table Tools -->
-            <div class="flex items-center gap-1.5 no-print">
-              <button onclick="addRow()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300" title="Tambah baris data baru (data lama tetap aman)">
+            <div class="flex flex-wrap items-center gap-1.5 no-print">
+              <button type="button" onclick="quickFillDown()" class="px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold rounded-lg transition-colors border border-blue-200 flex items-center gap-1 shadow-2xs" title="Salin rumus dari sel terpilih ke seluruh baris di bawahnya (sangat praktis di HP / layar sentuh)">
+                <span>📋</span> Salin Rumus ke Bawah
+              </button>
+              <button type="button" onclick="addRow()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300" title="Tambah baris data baru (data lama tetap aman)">
                 + Baris
               </button>
-              <button onclick="removeRow()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300" title="Hapus baris data terakhir">
+              <button type="button" onclick="removeRow()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors border border-slate-300" title="Hapus baris data terakhir">
                 - Baris
               </button>
-              <button onclick="resetSheet()" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition-colors border border-rose-200" title="Kosongkan seluruh data tabel">
+              <button type="button" onclick="resetSheet()" class="px-2.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-semibold rounded-lg transition-colors border border-rose-200" title="Kosongkan seluruh data tabel">
                 Reset
               </button>
             </div>
@@ -279,6 +357,56 @@
             </div>
           </div>
 
+          <!-- TAHAP PEMANTIK: AMATI DATA & DUGA GARIS TERBAIK (Revisi Bagian D & E) -->
+          <div class="bg-gradient-to-br from-amber-50 to-orange-50/60 p-4 rounded-xl border border-amber-200 space-y-3">
+            <div class="flex items-center justify-between border-b border-amber-200/70 pb-2">
+              <div class="font-bold text-amber-950 text-xs md:text-sm flex items-center gap-1.5">
+                <span>🎯</span> Tahap Penyelidikan: Amati Sebaran Titik &amp; Duga Garis Terbaik
+              </div>
+              <span class="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-100 text-amber-800 border border-amber-200">Tahap Pemantik</span>
+            </div>
+
+            <p class="text-xs text-amber-900/90 leading-relaxed">
+              Setelah mengisikan pasangan data X dan Y pada tabel di atas, amati sebaran titik-titik biru pada diagram pencar di panel grafik GeoGebra (sebelah kanan). Sebelum mempelajari rumus perhitungan matematis, selidiki dan diskusikan pertanyaan pemantik berikut:
+            </p>
+
+            <div class="space-y-3">
+              <div class="space-y-1">
+                <label for="dugaanPola" class="block text-xs font-semibold text-amber-950">
+                  1. Bagaimana kecenderungan pola sebaran titik data pada grafik? Apakah nilai Y cenderung naik atau turun saat nilai X bertambah besar?
+                </label>
+                <textarea id="dugaanPola" rows="2" placeholder="Tuliskan pengamatan pola sebaran titik di sini..." class="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all"></textarea>
+              </div>
+
+              <div class="space-y-1">
+                <label for="dugaanPersamaan" class="block text-xs font-semibold text-amber-950">
+                  2. Menurut dugaan awal Anda, bagaimanakah garis lurus yang paling cocok mewakili seluruh sebaran titik tersebut? Perkirakan arah kemiringannya (positif/negatif) dan tuliskan perkiraan persamaan garis dugaan Anda (misal: Y = 2X + 1 atau perkiraan bebas lainnya)!
+                </label>
+                <textarea id="dugaanPersamaan" rows="2" placeholder="Tuliskan persamaan garis dugaan awal Anda di sini..." class="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all"></textarea>
+              </div>
+
+              <div class="space-y-1">
+                <label for="dugaanKriteria" class="block text-xs font-semibold text-amber-950">
+                  3. Menurut Anda, apa kriteria suatu garis dapat disebut sebagai 'garis terbaik' (paling pas) untuk seluruh kumpulan data? Mengapa garis yang hanya pas untuk 2 atau 3 titik belum tentu baik untuk keseluruhan data?
+                </label>
+                <textarea id="dugaanKriteria" rows="2" placeholder="Jelaskan kriteria garis yang baik menurut pendapat Anda di sini..." class="w-full border border-amber-200 bg-white rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none transition-all"></textarea>
+              </div>
+            </div>
+
+            <!-- Jembatan Konseptual ke Residu & Kuadrat Terkecil -->
+            <div class="p-3 bg-white/85 rounded-lg border border-amber-200/80 text-[11px] text-amber-900 space-y-1.5 leading-relaxed">
+              <div class="font-bold flex items-center gap-1.5 text-amber-950">
+                <span>💡</span> Jembatan Konsep: Menghubungkan Garis Dugaan, Residu, dan Kuadrat Terkecil
+              </div>
+              <ul class="list-disc list-inside space-y-1 text-slate-700">
+                <li><strong>Residu (e):</strong> Jarak vertikal dari setiap titik data ke garis disebut <em>residu</em> (selisih antara nilai aktual Y dan nilai prediksi garis Ŷ). Semakin dekat garis ke titik-titik, semakin kecil nilai residunya.</li>
+                <li><strong>Mengapa Perlu Dikuadratkan (e²)?</strong> Titik data ada yang berada di atas garis (residu positif) dan di bawah garis (residu negatif). Jika hanya dijumlahkan biasa (Σe), nilai positif dan negatif akan <strong>saling meniadakan</strong> sehingga menghasilkan jumlah mendekati nol meskipun garisnya buruk! Dengan mengkuadratkannya, semua kesalahan bernilai positif dan kesalahan yang lebih besar akan diberi bobot penalti lebih berat.</li>
+                <li><strong>Metode Kuadrat Terkecil (Ordinary Least Squares):</strong> Garis terbaik (<em>line of best fit</em>) didefinisikan secara objektif sebagai garis yang meminimumkan <strong>jumlah kuadrat residu (Σe² &rarr; minimum)</strong>.</li>
+                <li><strong>Cara Matematis Menemukan Garis Terbaik:</strong> Agar kita tidak perlu menebak-nebak posisi garis, para ahli merumuskan nilai rata-rata (x̄, ȳ), jumlah kuadrat deviasi (<strong>SS<sub>xx</sub></strong>), dan jumlah perkalian deviasi (<strong>SS<sub>xy</sub></strong>) pada tabel spreadsheet di bawah ini untuk menentukan kemiringan (<em>b</em>) dan intersep (<em>a</em>) secara eksak!</li>
+              </ul>
+            </div>
+          </div>
+
           <!-- Panduan Rumus Spreadsheet & Tips Belajar -->
           <div class="bg-gradient-to-br from-blue-50/90 via-slate-50 to-indigo-50/70 border border-blue-200 rounded-2xl p-4 text-xs text-blue-950 space-y-3.5">
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/80 pb-2.5">
@@ -298,7 +426,7 @@
                 </div>
                 <div class="font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-xs font-bold">=AVERAGE(B1:B6)</div>
                 <p class="text-[11px] text-slate-600 leading-snug">
-                  Letakkan di baris <strong>Rata-rata</strong>: sel B untuk x̄, dan sel C untuk ȳ. Mendukung juga <code>=JUMLAH/n</code>, <code>=TOTAL/n</code>, atau <code>=RATA_RATA(B1:B6)</code>.
+                  Tuliskan di baris <strong>Rata-rata</strong>: gunakan pada sel B untuk menghitung nilai x̄, dan pada sel C untuk menghitung nilai ȳ. Anda juga dapat menggunakan penulisan fungsi bahasa Indonesia <code>=RATA_RATA(B1:B6)</code> atau rumus manual <code>=SUM(B1:B6)/6</code>.
                 </p>
               </div>
 
@@ -335,15 +463,22 @@
                 </p>
               </div>
 
-              <!-- Card 5: Jumlah Total SSxx & SSxy -->
+              <!-- Card 5: Jumlah Total SSxx & SSxy (Revisi Bagian F & G) -->
               <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-xs space-y-1.5 hover:border-emerald-400 transition-colors">
                 <div class="font-bold text-blue-900 flex items-center gap-1.5 text-xs">
                   <span class="text-emerald-600 font-black">Σ</span> 5. Jumlah Total (SSxx &amp; SSxy)
                 </div>
-                <div class="font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-xs font-bold">=SUM(F1:F6) dan =SUM(G1:G6)</div>
+                <div class="font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-xs font-bold leading-relaxed">
+                  SS<sub>xx</sub> = &Sigma;<sub>i=1</sub><sup>n</sup> (x<sub>i</sub> &minus; x̄)&sup2; &nbsp;|&nbsp; SS<sub>xy</sub> = &Sigma;<sub>i=1</sub><sup>n</sup> (x<sub>i</sub> &minus; x̄)(y<sub>i</sub> &minus; ȳ)
+                </div>
                 <p class="text-[11px] text-slate-600 leading-snug">
-                  Letakkan di baris <strong>Total</strong>: Kolom F menghasilkan <strong>SSxx</strong> dan Kolom G menghasilkan <strong>SSxy</strong>. Mendukung juga <code>=JUMLAH(...)</code> atau <code>=TOTAL(...)</code>.
+                  Tuliskan di baris <strong>Total</strong>: gunakan rumus <code>=SUM(F1:F6)</code> pada kolom F untuk menghasilkan nilai <strong>SS<sub>xx</sub></strong> dan <code>=SUM(G1:G6)</code> pada kolom G untuk menghasilkan <strong>SS<sub>xy</sub></strong> (bisa juga menggunakan penulisan fungsi bahasa Indonesia <code>=JUMLAH(...)</code>).
                 </p>
+                <div class="text-[10px] bg-slate-50 border border-slate-200 rounded p-1.5 text-slate-600 space-y-0.5">
+                  <div>&bull; <strong>x<sub>i</sub>, y<sub>i</sub></strong>: nilai pasangan data ke-<em>i</em></div>
+                  <div>&bull; <strong>x̄, ȳ</strong>: rata-rata dari masing-masing variabel</div>
+                  <div>&bull; <strong>n</strong>: banyak pasangan data (pada tabel ini, <em>n = 6</em>)</div>
+                </div>
               </div>
 
               <!-- Card 6: Persamaan Garis Regresi -->
@@ -352,7 +487,7 @@
                   <span class="flex items-center gap-1.5"><span>📈</span> 6. Kemiringan (b) &amp; Intersep (a)</span>
                   <span class="text-[10px] text-blue-700 font-semibold bg-blue-50 px-2 py-0.5 rounded border border-blue-200">Langkah 2 &amp; 3</span>
                 </div>
-                <div class="font-mono text-blue-900 bg-blue-50 border border-blue-200 px-2 py-1 rounded text-xs font-bold">b = SSxy / SSxx &nbsp;|&nbsp; a = ȳ − b(x̄)</div>
+                <div class="font-mono text-blue-900 bg-blue-50 border border-blue-200 px-2 py-1 rounded text-xs font-bold">b = SS<sub>xy</sub> / SS<sub>xx</sub> &nbsp;|&nbsp; a = ȳ &minus; b(x̄)</div>
                 <p class="text-[11px] text-slate-600 leading-snug">
                   Nilai SSxx dan SSxy dari baris Total langsung digunakan untuk menentukan koefisien garis regresi terbaik <code>Ŷ = a + bX</code>.
                 </p>
@@ -411,7 +546,9 @@
               <div class="font-bold text-blue-950 text-xs md:text-sm">Langkah 2 – Total SSxx dan SSxy</div>
               <span id="badgeStep2" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-slate-200 text-slate-600">Belum diverifikasi</span>
             </div>
-            <p class="text-xs text-slate-600">Masukkan nilai total <em>SS<sub>xx</sub> = &Sigma;(X − x̄)²</em> dan <em>SS<sub>xy</sub> = &Sigma;(X − x̄)(Y − ȳ)</em> dari baris Total di spreadsheet (bisa koma/titik, pembulatan ke atas/bawah, atau nilai eksak kalkulator):</p>
+            <p class="text-xs text-slate-600">
+              Masukkan nilai total <em>SS<sub>xx</sub> = &Sigma;<sub>i=1</sub><sup>n</sup> (x<sub>i</sub> &minus; x̄)&sup2;</em> dan <em>SS<sub>xy</sub> = &Sigma;<sub>i=1</sub><sup>n</sup> (x<sub>i</sub> &minus; x̄)(y<sub>i</sub> &minus; ȳ)</em> dari baris Total di spreadsheet (keterangan: <em>x<sub>i</sub>, y<sub>i</sub></em> adalah data ke-<em>i</em>; <em>x̄, ȳ</em> adalah rata-rata; <em>n = 6</em> pasangan data; format bisa koma/titik):
+            </p>
             <div class="flex flex-wrap items-center gap-3 pt-1">
               <label class="text-xs font-semibold">SSxx:</label>
               <input type="text" id="userSSxx" placeholder="contoh: 28,44 atau 28,4375" class="w-36 px-3 py-1 bg-white border border-slate-300 rounded-lg text-xs text-center focus:ring-2 focus:ring-blue-500 focus:outline-none">
@@ -483,7 +620,7 @@
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
           <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-100 pb-3">
             <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">
-              <span>🔬</span> 4. Eksperimen Residu
+              <span>🔬</span> 3. Eksperimen Residu &amp; Uji Kuadrat Terkecil
             </h2>
             <span id="residStatus" class="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 border border-slate-200">
               🔒 Terbuka setelah Langkah 2 benar
@@ -560,7 +697,7 @@
         <div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
           <div class="flex items-center justify-between border-b border-slate-100 pb-3">
             <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">
-              <span>📈</span> 3. Visualisasi Grafik (GeoGebra)
+              <span>📈</span> Visualisasi Grafik &amp; Eksplorasi Garis (GeoGebra)
             </h2>
             <div class="flex items-center gap-2">
               <label class="flex items-center gap-1 text-[11px] font-semibold text-amber-800 cursor-pointer bg-amber-50 px-2 py-0.5 rounded border border-amber-200" title="Tampilkan titik sentroid rata-rata data M(x̄, ȳ)">
@@ -583,11 +720,21 @@
               <h3 class="text-xs md:text-sm font-bold text-blue-900 flex items-center gap-2">
                 <span>🎚️</span> Eksplorasi Kemiringan &amp; Letak Garis
               </h3>
+              <span class="text-[10px] bg-blue-100 text-blue-800 font-bold px-2 py-0.5 rounded-full">Simulasi Interaktif</span>
             </div>
 
-            <p class="text-xs text-slate-500">
-              Ubah kemiringan (m) dan intersep (c) garis biru putus-putus. Bandingkan jumlah kuadrat residunya (&Sigma;e&sup2;) dengan garis regresi merah (garis terbaik).
-            </p>
+            <!-- Panduan Kontekstual Eksplorasi (Revisi Bagian C) -->
+            <div class="bg-blue-50/90 border border-blue-200 rounded-lg p-3 text-xs text-blue-950 space-y-2 leading-relaxed">
+              <div class="font-bold flex items-center gap-1.5 text-blue-900">
+                <span>🧭</span> Petunjuk Eksplorasi &amp; Pertanyaan Penyelidikan:
+              </div>
+              <ul class="list-disc list-inside space-y-1 text-slate-700 text-[11px]">
+                <li><strong>Kontrol Slider:</strong> Geser slider <em>Kemiringan (m)</em> untuk memutar arah garis dan slider <em>Intersep (c)</em> untuk menggeser garis ke atas/bawah.</li>
+                <li><strong>Apa yang Diamati:</strong> Perhatikan panjang segmen garis oranye vertikal (residu <em>e</em>) dan luas kotak kuadrat residu (<em>e²</em>) pada grafik.</li>
+                <li><strong>Perbandingan Model:</strong> Amati perubahan nilai <strong>&Sigma;e</strong> dan <strong>&Sigma;e²</strong> pada tabel di bawah setiap kali Anda menggeser garis.</li>
+                <li><strong>Pertanyaan Kritis:</strong> Garis mana yang menurut Anda paling sesuai dengan sebaran titik? Apakah ada posisi garis eksplorasi yang menghasilkan &Sigma;e² lebih kecil dari garis regresi (merah)? Mengapa demikian?</li>
+              </ul>
+            </div>
 
             <!-- Quick Action Preset Buttons for Reflection -->
             <div class="grid grid-cols-2 gap-2 pt-1">
@@ -708,39 +855,70 @@
       </div>
 
       <div class="space-y-4">
-        <div class="space-y-1.5">
-          <label for="aal1" class="block text-xs font-bold text-slate-800">
-            1. Apa yang kalian pahami tentang hubungan antara titik rata-rata (x̄, ȳ) dan garis regresi? Apakah garis regresi selalu melewati titik rata-rata tersebut?
+        <!-- Pertanyaan 1: Hubungan Garis Dugaan Awal vs Persamaan Regresi (Revisi Bagian E.1) -->
+        <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <label for="aal1" class="block text-xs font-bold text-indigo-950">
+            1. Hubungan Garis Dugaan Awal &amp; Garis Regresi Terbaik:
           </label>
-          <textarea id="aal1" rows="3" placeholder="Tuliskan pemahamanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+          <p class="text-[11px] text-slate-600">
+            Bandingkan garis yang Anda duga pada awal kegiatan (tahap pemantik) dengan persamaan garis regresi terbaik yang Anda peroleh dari perhitungan matematis (<strong>Ŷ = a + bX</strong>). Apakah arah kemiringan dan posisinya sesuai? Jelaskan mengapa perhitungan matematis menghasilkan garis yang lebih objektif dan presisi dibandingkan sekadar dugaan visual!
+          </p>
+          <textarea id="aal1" rows="3" placeholder="Tuliskan perbandingan dugaan awal Anda dengan hasil regresi di sini..." class="w-full border border-slate-300 bg-white rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
 
-        <div class="space-y-1.5">
-          <label for="aal2" class="block text-xs font-bold text-slate-800">
-            2. Apa yang kalian pelajari dari kegiatan mengubah-ubah posisi kemiringan (m) dan letak (c) garis pada simulasi slider?
+        <!-- Pertanyaan 2: Makna Gradien (b) dan Intersep (a) (Revisi Bagian E.2) -->
+        <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <label for="aal2" class="block text-xs font-bold text-indigo-950">
+            2. Makna Gradien / Kemiringan (b) dan Titik Potong / Intersep (a):
           </label>
-          <textarea id="aal2" rows="3" placeholder="Tuliskan pengalaman eksplorasimu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+          <p class="text-[11px] text-slate-600">
+            Dalam persamaan garis regresi <strong>Ŷ = a + bX</strong> yang Anda peroleh, jelaskan apa makna matematis dan praktis dari nilai gradien (<em>b</em>) dan titik potong sumbu Y (<em>a</em>) terhadap hubungan antara variabel X dan variabel Y!
+          </p>
+          <textarea id="aal2" rows="3" placeholder="Jelaskan peran serta makna gradien b dan intersep a di sini..." class="w-full border border-slate-300 bg-white rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
 
-        <div class="space-y-1.5">
-          <label for="aal3" class="block text-xs font-bold text-slate-800">
-            3. Mengapa garis regresi dikatakan sebagai garis yang menghasilkan jumlah kuadrat residu paling kecil (&Sigma;e² &rarr; minimum)? Jelaskan berdasarkan hasil eksperimen residu kalian.
+        <!-- Pertanyaan 3: Prediksi Variabel Respons dari Prediktor (Revisi Bagian E.3) -->
+        <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <label for="aal3" class="block text-xs font-bold text-indigo-950">
+            3. Memprediksi Nilai Variabel Respons (Y) Berdasarkan Nilai Prediktor (X):
           </label>
-          <textarea id="aal3" rows="3" placeholder="Jelaskan alasanmu berdasarkan eksperimen residu..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+          <p class="text-[11px] text-slate-600">
+            Bagaimanakah persamaan garis regresi tersebut dapat digunakan untuk memperkirakan atau memprediksi nilai variabel respons Y jika diberikan suatu nilai prediktor X tertentu di masa mendatang? Berikan satu contoh perhitungannya menggunakan persamaan regresi Anda!
+          </p>
+          <textarea id="aal3" rows="3" placeholder="Tuliskan cara prediksi dan contoh perhitungannya di sini..." class="w-full border border-slate-300 bg-white rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
 
-        <div class="space-y-1.5">
-          <label for="aal4" class="block text-xs font-bold text-slate-800">
-            4. Bagian mana dari kegiatan pada spreadsheet atau simulasi GeoGebra yang paling membantu kalian memahami konsep regresi linear?
+        <!-- Pertanyaan 4: Hubungan Garis Regresi dengan Prinsip Kuadrat Terkecil (Revisi Bagian E.4) -->
+        <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <label for="aal4" class="block text-xs font-bold text-indigo-950">
+            4. Hubungan Garis Regresi dengan Kriteria Jumlah Kuadrat Residu Minimum (&Sigma;e² &rarr; Minimum):
           </label>
-          <textarea id="aal4" rows="3" placeholder="Tuliskan bagian yang paling membantu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+          <p class="text-[11px] text-slate-600">
+            Berdasarkan hasil eksperimen residu pada slider GeoGebra, jelaskan mengapa garis regresi disebut sebagai garis terbaik (<em>line of best fit</em>). Apa hubungan antara garis regresi yang diperoleh dengan jumlah kuadrat residu (&Sigma;e²)?
+          </p>
+          <textarea id="aal4" rows="3" placeholder="Jelaskan hubungan garis regresi dengan jumlah kuadrat residu minimum..." class="w-full border border-slate-300 bg-white rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
 
-        <div class="space-y-1.5">
-          <label for="aal5" class="block text-xs font-bold text-slate-800">
-            5. Apa yang masih belum kalian pahami atau bagian mana yang masih membuat kalian kesulitan dalam menentukan garis regresi linear?
+        <!-- Pertanyaan 5: Titik Rata-rata Centroid M(x̄, ȳ) -->
+        <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <label for="aal5" class="block text-xs font-bold text-indigo-950">
+            5. Peran Titik Rata-rata M(x̄, ȳ) dalam Garis Regresi:
           </label>
-          <textarea id="aal5" rows="3" placeholder="Tuliskan hal yang masih membingungkan di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+          <p class="text-[11px] text-slate-600">
+            Apakah garis regresi linear selalu melewati titik rata-rata <strong>M(x̄, ȳ)</strong>? Jelaskan bagaimana titik rata-rata ini digunakan dalam menentukan rumus intersep <em>a = ȳ &minus; b(x̄)</em>!
+          </p>
+          <textarea id="aal5" rows="3" placeholder="Tuliskan penjelasan mengenai titik rata-rata di sini..." class="w-full border border-slate-300 bg-white rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+        </div>
+
+        <!-- Pertanyaan 6: Refleksi Metakognisi & Kendala Belajar -->
+        <div class="space-y-1.5 bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+          <label for="aal6" class="block text-xs font-bold text-indigo-950">
+            6. Evaluasi Proses Belajar &amp; Pemahaman Diri:
+          </label>
+          <p class="text-[11px] text-slate-600">
+            Bagian mana dari kegiatan ini yang paling membantu kalian memahami konsep regresi linear dan residu, serta bagian mana yang masih dirasa membingungkan atau memerlukan latihan lebih lanjut?
+          </p>
+          <textarea id="aal6" rows="3" placeholder="Tuliskan refleksi proses belajar Anda di sini..." class="w-full border border-slate-300 bg-white rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
         </div>
       </div>
 
@@ -1055,18 +1233,24 @@
       selectCell(1, 1);
     }
 
-    function isEditingFormula() {
+    // Memeriksa apakah pengguna sedang AKTIF mengetik rumus yang membutuhkan referensi sel (operand)
+    function isExpectingCellRef() {
       const formulaInput = document.getElementById('formula-input');
       const activeTd = document.getElementById(`cell-${selectedCell.r}-${selectedCell.c}`);
       
-      const currentVal = formulaInput.value || (activeTd ? activeTd.textContent : '');
       const isFocused = (document.activeElement === formulaInput) || (document.activeElement === activeTd);
-      
-      return isFocused && currentVal.trim().startsWith('=');
+      if (!isFocused) return false;
+
+      const currentVal = ((formulaInput ? formulaInput.value : '') || (activeTd ? activeTd.textContent : '')).trim();
+      if (!currentVal.startsWith('=')) return false;
+
+      // Hanya mengharapkan referensi sel jika karakter terakhir adalah operator atau pembuka kurung
+      return /[=\+\-\*/\(\^,;:]\s*$/.test(currentVal);
     }
 
     function onCellMouseDown(r, c, e) {
-      if (isEditingFormula()) {
+      // Jika sedang aktif mengetik rumus dan menanti operand sel (misal '=B1-')
+      if (isExpectingCellRef()) {
         const targetKey = `${COLS[c-1]}${r}`;
         const activeKey = `${COLS[selectedCell.c-1]}${selectedCell.r}`;
 
@@ -1078,10 +1262,12 @@
         }
       }
       lastInsertedRef = null;
+      // Pemilihan sel normal: selalu pilih sel yang diklik tanpa mengubah rumus
+      selectCell(r, c);
     }
 
     function onAutoCellMouseDown(r, c, e) {
-      if (isEditingFormula()) {
+      if (isExpectingCellRef()) {
         e.preventDefault();
         e.stopPropagation();
         insertCellRefIntoFormula(`${COLS[c-1]}${r}`);
@@ -1497,8 +1683,14 @@
         e.preventDefault();
         e.stopPropagation();
 
+        // Lepas fokus dari input teks agar rumus tidak terganggu
+        if (document.activeElement && typeof document.activeElement.blur === 'function') {
+          document.activeElement.blur();
+        }
+
         isDragging = true;
         dragStartCell = { ...selectedCell };
+        lastInsertedRef = null;
 
         try { fillHandle.setPointerCapture(e.pointerId); } catch (_) {}
         document.body.classList.add('is-drag-filling');
@@ -1507,40 +1699,78 @@
       });
 
       document.addEventListener('pointermove', (e) => {
-        if (!isDragging) return;
+        if (!isDragging || !dragStartCell) return;
+        e.preventDefault();
 
         const target = document.elementFromPoint(e.clientX, e.clientY);
         const cell = target && target.closest ? target.closest('.sheet-cell') : null;
 
         if (cell) {
-          const hoverR = parseInt(cell.dataset.r, 10);
-          const hoverC = parseInt(cell.dataset.c, 10);
-
-          if (Number.isFinite(hoverR) && Number.isFinite(hoverC)) {
-            highlightDragRange(dragStartCell.r, hoverR, dragStartCell.c, hoverC);
+          let hoverR = parseInt(cell.dataset.r, 10);
+          if (Number.isFinite(hoverR)) {
+            // Batasi pengisian hanya pada baris data, jangan sampai menimpa baris Rata-rata atau Total
+            const maxDataRow = rowCount - 2;
+            if (dragStartCell.r <= maxDataRow) {
+              hoverR = Math.max(1, Math.min(maxDataRow, hoverR));
+            }
+            // Kunci pada kolom yang sama (dragStartCell.c) agar rumus tidak melompat ke kolom lain
+            highlightDragRange(dragStartCell.r, hoverR, dragStartCell.c, dragStartCell.c);
           }
         }
       });
 
       document.addEventListener('pointerup', (e) => {
-        if (!isDragging) return;
+        if (!isDragging || !dragStartCell) return;
 
         const target = document.elementFromPoint(e.clientX, e.clientY);
         const cell = target && target.closest ? target.closest('.sheet-cell') : null;
 
+        const startR = dragStartCell.r;
+        const startC = dragStartCell.c;
+
         isDragging = false;
         document.body.classList.remove('is-drag-filling');
 
-        if (cell) {
-          const endR = parseInt(cell.dataset.r, 10);
-          const endC = parseInt(cell.dataset.c, 10);
+        try {
+          if (fillHandle && fillHandle.hasPointerCapture && fillHandle.hasPointerCapture(e.pointerId)) {
+            fillHandle.releasePointerCapture(e.pointerId);
+          }
+        } catch (_) {}
 
-          if (Number.isFinite(endR) && Number.isFinite(endC)) {
-            applyDragFill(dragStartCell.r, endR, dragStartCell.c, endC);
+        if (cell) {
+          let endR = parseInt(cell.dataset.r, 10);
+          if (Number.isFinite(endR)) {
+            const maxDataRow = rowCount - 2;
+            if (startR <= maxDataRow) {
+              endR = Math.max(1, Math.min(maxDataRow, endR));
+            }
+            if (endR !== startR) {
+              applyDragFill(startR, endR, startC, startC);
+            }
           }
         }
 
         clearDragHighlights();
+        dragStartCell = null;
+      });
+
+      document.addEventListener('pointercancel', () => {
+        if (isDragging) {
+          isDragging = false;
+          document.body.classList.remove('is-drag-filling');
+          clearDragHighlights();
+          dragStartCell = null;
+        }
+      });
+
+      // Batalkan drag-fill jika tombol Escape ditekan
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isDragging) {
+          isDragging = false;
+          document.body.classList.remove('is-drag-filling');
+          clearDragHighlights();
+          dragStartCell = null;
+        }
       });
     }
 
@@ -1569,6 +1799,7 @@
 
       const sourceKey = `${COLS[startC - 1]}${startR}`;
       const sourceExpr = rawData[sourceKey] || '';
+      if (!sourceExpr) return;
 
       const minR = Math.min(startR, endR);
       const maxR = Math.max(startR, endR);
@@ -1578,6 +1809,9 @@
       for (let r = minR; r <= maxR; r++) {
         for (let c = minC; c <= maxC; c++) {
           if (r === startR && c === startC) continue;
+
+          // Jangan pernah menimpa kolom No (A) atau kolom otomatis residu (H-J)
+          if (c < 2 || c > EDIT_COLS) continue;
 
           const rowOffset = r - startR;
           const colOffset = c - startC;
@@ -1592,6 +1826,41 @@
       updateGeoGebraPlot();
       selectCell(startR, startC);
       saveToLocalStorage();
+    }
+
+    /* ALTERNATIF PENGISIAN RUMUS UNTUK HP / LAYAR SENTUH (Revisi Bagian A.7) */
+    function quickFillDown() {
+      const r = selectedCell.r;
+      const c = selectedCell.c;
+      const maxDataRow = rowCount - 2;
+
+      if (c < 2 || c > EDIT_COLS) {
+        alert('Pilih sel pada kolom rumus atau data (kolom B hingga G) terlebih dahulu.');
+        return;
+      }
+
+      if (r >= maxDataRow) {
+        alert('Pilih sel baris data (misalnya baris 1) untuk menyalin rumus ke baris di bawahnya.');
+        return;
+      }
+
+      const sourceKey = `${COLS[c - 1]}${r}`;
+      const sourceExpr = (rawData[sourceKey] || '').trim();
+
+      if (!sourceExpr) {
+        alert(`Sel ${sourceKey} masih kosong. Tuliskan rumus atau nilai terlebih dahulu sebelum menyalin.`);
+        return;
+      }
+
+      applyDragFill(r, maxDataRow, c, c);
+
+      // Tampilkan toast konfirmasi yang ramah
+      const toast = document.getElementById('fill-toast');
+      if (toast) {
+        toast.textContent = `✓ Rumus dari sel ${sourceKey} berhasil disalin ke baris ${r + 1} s.d. ${maxDataRow}!`;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+      }
     }
 
     function adjustFormulaForOffset(expr, rowOffset, colOffset = 0) {
@@ -2492,7 +2761,7 @@
     const STORAGE_KEY = 'lkpd_regresi_digital_v4';
 
     function setupAutoSaveListeners() {
-      ['studentName', 'studentNumber', 'studentClass', 'refleksiResid1', 'refleksiResid2', 'refleksiResid3', 'refleksiSlider', 'aal1', 'aal2', 'aal3', 'aal4', 'aal5'].forEach(id => {
+      ['studentName', 'studentNumber', 'studentClass', 'dugaanPola', 'dugaanPersamaan', 'dugaanKriteria', 'refleksiResid1', 'refleksiResid2', 'refleksiResid3', 'refleksiSlider', 'aal1', 'aal2', 'aal3', 'aal4', 'aal5', 'aal6'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.addEventListener('input', saveToLocalStorage);
       });
@@ -2512,6 +2781,9 @@
           userSSxy: document.getElementById('userSSxy')?.value || '',
           userB: document.getElementById('userB')?.value || '',
           userA: document.getElementById('userA')?.value || '',
+          dugaanPola: document.getElementById('dugaanPola')?.value || '',
+          dugaanPersamaan: document.getElementById('dugaanPersamaan')?.value || '',
+          dugaanKriteria: document.getElementById('dugaanKriteria')?.value || '',
           refleksiResid1: document.getElementById('refleksiResid1')?.value || '',
           refleksiResid2: document.getElementById('refleksiResid2')?.value || '',
           refleksiResid3: document.getElementById('refleksiResid3')?.value || '',
@@ -2521,6 +2793,7 @@
           aal3: document.getElementById('aal3')?.value || '',
           aal4: document.getElementById('aal4')?.value || '',
           aal5: document.getElementById('aal5')?.value || '',
+          aal6: document.getElementById('aal6')?.value || '',
           verifiedPointsSnapshot
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -2545,7 +2818,7 @@
         rawData = state.rawData || {};
         verifiedPointsSnapshot = state.verifiedPointsSnapshot || null;
 
-        ['studentName', 'studentNumber', 'studentClass', 'userXbar', 'userYbar', 'userSSxx', 'userSSxy', 'userB', 'userA', 'refleksiResid1', 'refleksiResid2', 'refleksiResid3', 'refleksiSlider', 'aal1', 'aal2', 'aal3', 'aal4', 'aal5'].forEach(id => {
+        ['studentName', 'studentNumber', 'studentClass', 'userXbar', 'userYbar', 'userSSxx', 'userSSxy', 'userB', 'userA', 'dugaanPola', 'dugaanPersamaan', 'dugaanKriteria', 'refleksiResid1', 'refleksiResid2', 'refleksiResid3', 'refleksiSlider', 'aal1', 'aal2', 'aal3', 'aal4', 'aal5', 'aal6'].forEach(id => {
           const el = document.getElementById(id);
           if (el && state[id] !== undefined) el.value = state[id];
         });
@@ -2569,5 +2842,6 @@
       }
     }
   </script>
+  <div id="fill-toast">Rumus berhasil disalin ke seluruh baris data!</div>
 </body>
 </html>
