@@ -211,7 +211,7 @@
             LKPD DIGITAL: EKSPLORASI REGRESI LINEAR &amp; RESIDU
           </h1>
 <p class="text-blue-100 text-xs md:text-sm opacity-95 max-w-3xl leading-relaxed">
-            Eksplorasi garis regresi terbaik (<em>line of best fit</em>) dengan spreadsheet interaktif dan simulasi GeoGebra. Temukan mengapa jumlah kuadrat <strong>residu</strong> (Σe²) selalu mencapai nilai minimum pada garis regresi!
+            Eksplorasi garis regresi terbaik (<em>line of best fit</em>) dengan spreadsheet interaktif dan simulasi GeoGebra.
           </p>
 </div>
 <!-- Quick Action Bar -->
@@ -554,14 +554,6 @@
 <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">📊 Tabel Lengkap Perhitungan Regresi Linear</h2>
 <!-- Table Tools -->
 <div class="flex flex-wrap items-center gap-1.5 no-print">
-<div class="inline-flex rounded-lg shadow-2xs border border-blue-200 bg-blue-50/70 p-0.5">
-<button class="px-2.5 py-1 text-xs font-bold text-blue-700 hover:bg-white rounded-md transition-all flex items-center gap-1" onclick="loadPresetData('positive')" title="Muat contoh data hubungan positif: Lama Belajar vs Nilai Ujian" type="button">
-<span>📊</span> Contoh Positif
-                </button>
-<button class="px-2.5 py-1 text-xs font-bold text-indigo-700 hover:bg-white rounded-md transition-all flex items-center gap-1" onclick="loadPresetData('negative')" title="Muat contoh data hubungan negatif: Usia Kendaraan vs Harga Jual" type="button">
-<span>📉</span> Contoh Negatif
-                </button>
-</div>
 <button class="px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold rounded-lg transition-colors border border-blue-200 flex items-center gap-1 shadow-2xs" onclick="quickFillDown()" title="Salin rumus dari sel terpilih ke seluruh baris di bawahnya (sangat praktis di HP / layar sentuh)" type="button">
 <span>📋</span> Salin Rumus ke Bawah
               </button>
@@ -652,8 +644,7 @@
                 </div>
 <div class="font-mono text-blue-800 bg-blue-50 border border-blue-200 px-2 py-1 rounded text-xs font-bold">=AVERAGE(B1:B6)  |  =AVERAGE(C1:C6)</div>
 <p class="text-[11px] text-slate-600 leading-snug">
-                  Tuliskan di baris <strong>Rata-rata</strong> kolom B untuk nilai <strong>x̄</strong> dan kolom C untuk nilai <strong>ȳ</strong>. Garis regresi selalu melewati titik rata-rata <em>M(x̄, ȳ)</em>.
-                </p>
+                  Tuliskan di baris <strong>Rata-rata</strong> kolom B untuk nilai <strong>x̄</strong> dan kolom C untuk nilai <strong>ȳ</strong>.
 </div>
 <!-- Card 2: Deviasi -->
 <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-2xs space-y-1.5 hover:border-emerald-400 transition-colors">
@@ -859,7 +850,7 @@
 <span>💡</span> Prinsip Kuadrat Terkecil: Mengapa Garis Terbaik Bukan Sekadar Kedekatan Visual?
             </div>
 <p class="text-xs text-slate-700 leading-relaxed">
-              Jika hanya mengandalkan perkiraan mata, setiap orang bisa memiliki garis dugaan yang berbeda dan subjektif. Para ahli matematika merumuskan bahwa garis terbaik (<em>line of best fit</em>) didefinisikan secara <strong>objektif</strong> sebagai garis yang menghasilkan <strong>jumlah kuadrat residu (Σe²) paling minimum</strong> di antara seluruh kemungkinan garis di bidang koordinat.
+              Jika hanya mengandalkan perkiraan mata, setiap orang bisa memiliki garis dugaan yang berbeda dan subjektif. 
             </p>
 <div class="flex flex-wrap gap-2 pt-1 no-print">
 <button class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg border border-blue-200 transition-colors flex items-center gap-1" onclick="setExplorationToRegression()" type="button">
@@ -954,34 +945,12 @@
 
     // Pemuatan data contoh kontekstual atau inisialisasi tabel kosong
     function loadPresetData(key) {
-      if (!key || key === 'empty') {
-        initEmptySpreadsheet(6);
-        return;
-      }
+  // Hanya mendukung inisialisasi tabel kosong.
+  if (key !== 'empty') return;
 
-      let presetPoints = [];
-      if (key === 'positive') {
-        // Contoh 1: Waktu Belajar (jam) vs Nilai Ujian (skala 100)
-        presetPoints = [
-          { x: 1.5, y: 60 },
-          { x: 2.5, y: 68 },
-          { x: 3.0, y: 75 },
-          { x: 4.0, y: 82 },
-          { x: 5.0, y: 88 },
-          { x: 6.0, y: 95 }
-        ];
-      } else if (key === 'negative') {
-        // Contoh 2: Usia Kendaraan (tahun) vs Harga Jual (juta rupiah)
-        presetPoints = [
-          { x: 1, y: 195 },
-          { x: 2, y: 175 },
-          { x: 3, y: 160 },
-          { x: 4, y: 140 },
-          { x: 5, y: 125 },
-          { x: 6, y: 110 }
-        ];
-      }
-
+  initEmptySpreadsheet(6);
+}
+ 
       const count = presetPoints.length;
       initSpreadsheetData(count);
       clearVerificationInputs();
