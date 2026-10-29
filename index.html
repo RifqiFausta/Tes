@@ -292,11 +292,7 @@
 <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2"><span>📋</span> Tahap 1 — Mengisi Tabel Data X dan Y</h2>
 <p class="text-xs text-slate-600 mt-2">Masukkan pasangan data X dan Y saja. Gunakan data ini untuk mengamati pola sebaran dan mengeksplorasi garis pada Tahap 2 dan 3. Kolom perhitungan regresi baru digunakan pada Tahap 4.</p>
 </div>
-<div class="flex flex-wrap gap-2 no-print">
-<button class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg border border-blue-200" onclick="loadPresetData('positive')" type="button">📈 Contoh Data Positif</button>
-<button class="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold rounded-lg border border-indigo-200" onclick="loadPresetData('negative')" type="button">📉 Contoh Data Negatif</button>
-<button class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-lg border border-slate-300" onclick="loadPresetData('empty')" type="button">Kosongkan Data</button>
-</div>
+
 <div class="overflow-x-auto border border-slate-200 rounded-xl">
 <table class="w-full text-sm" id="stage1XYTable">
 <thead><tr class="bg-blue-50 text-blue-900"><th class="p-2 text-center w-14">No.</th><th class="p-2 text-left">X</th><th class="p-2 text-left">Y</th></tr></thead>
@@ -305,6 +301,7 @@
 </tbody>
 </table>
 </div>
+<div class="flex justify-end mt-2 no-print"><button type="button" onclick="addStage1Row()" class="px-3 py-2 rounded-lg border border-blue-300 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-bold">+ Tambah baris</button></div>
 <p class="text-[11px] text-slate-500">Catatan: tabel ini hanya untuk memasukkan data. Rumus, deviasi, SSxx, SSxy, dan koefisien regresi tersedia pada tabel lengkap di Tahap 4.</p>
 </div>
 
@@ -1446,10 +1443,31 @@
       setupResidualControls();
       setupAutoSaveListeners();
 
+      // Tata letak Tahap 2: slider di kiri dan grafik di kanan agar perubahan mudah diamati.
+      const stage2Slider = document.getElementById('dugaanSliderA');
+      const graphTarget = document.getElementById('ggb-element');
+      if (stage2Slider && graphTarget) {
+        let sliderCard = stage2Slider.parentElement;
+        while (sliderCard && !(sliderCard.classList.contains('bg-white') && sliderCard.classList.contains('p-3.5'))) sliderCard = sliderCard.parentElement;
+        const graphBox = graphTarget.parentElement;
+        if (sliderCard && graphBox && !document.getElementById('stage2ExploreLayout')) {
+          const layout = document.createElement('div');
+          layout.id = 'stage2ExploreLayout';
+          layout.className = 'grid grid-cols-1 lg:grid-cols-2 gap-4 items-start';
+          sliderCard.parentNode.insertBefore(layout, sliderCard);
+          layout.appendChild(sliderCard);
+          layout.appendChild(graphBox);
+          graphBox.classList.add('min-w-0');
+          graphBox.style.minHeight = '440px';
+          graphTarget.style.width = '100%';
+          graphTarget.style.maxWidth = '100%';
+        }
+      }
+
       // Inisialisasi GeoGebra
       var params = {
         "appName": "classic",
-        "width": 480,
+        "width": 700,
         "height": 440,
         "showToolBar": false,
         "showAlgebraInput": false,
@@ -1464,7 +1482,12 @@
 
     // Sinkronisasi tabel data awal (X dan Y) dengan mesin spreadsheet untuk Tahap 4.
     function syncStage1InputsFromRawData() {
-      for (let i = 1; i <= 6; i++) {
+      const tbody = document.querySelector('#stage1XYTable tbody');
+      if (!tbody) return;
+      const needed = Math.max(2, rowCount - 2);
+      while (tbody.rows.length < needed) appendStage1Row(tbody.rows.length + 1);
+      while (tbody.rows.length > needed) tbody.deleteRow(tbody.rows.length - 1);
+      for (let i = 1; i <= needed; i++) {
         const x = document.getElementById(`stage1X${i}`);
         const y = document.getElementById(`stage1Y${i}`);
         if (x) x.value = rawData[`B${i}`] || '';
@@ -1472,8 +1495,26 @@
       }
     }
 
+    function appendStage1Row(index) {
+      const tbody = document.querySelector('#stage1XYTable tbody');
+      if (!tbody) return;
+      const tr = document.createElement('tr');
+      tr.className = 'border-t border-slate-200';
+      tr.innerHTML = `<td class="p-2 text-center text-slate-500">${index}</td><td class="p-1"><input aria-label="X data ke-${index}" class="w-full border border-slate-200 rounded-md p-2 text-sm" id="stage1X${index}" oninput="updateXYFromStage1()" step="any" type="number"></td><td class="p-1"><input aria-label="Y data ke-${index}" class="w-full border border-slate-200 rounded-md p-2 text-sm" id="stage1Y${index}" oninput="updateXYFromStage1()" step="any" type="number"></td>`;
+      tbody.appendChild(tr);
+    }
+
+    function addStage1Row() {
+      // Tambah baris pada mesin spreadsheet Tahap 4, lalu cerminkan ke tabel X-Y Tahap 1.
+      addRow();
+      syncStage1InputsFromRawData();
+      saveToLocalStorage();
+    }
+
     function updateXYFromStage1() {
-      for (let i = 1; i <= 6; i++) {
+      const tbody = document.querySelector('#stage1XYTable tbody');
+      const count = tbody ? tbody.rows.length : 0;
+      for (let i = 1; i <= count; i++) {
         const x = document.getElementById(`stage1X${i}`);
         const y = document.getElementById(`stage1Y${i}`);
         rawData[`B${i}`] = x ? x.value : '';
