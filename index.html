@@ -346,10 +346,9 @@
 <span>🧭</span> Petunjuk Eksplorasi &amp; Pertanyaan Penyelidikan:
                         </div>
 <ul class="list-disc list-inside space-y-1 text-slate-700 text-[11px]">
-<li>Kontrol Garis: Gunakan slider pada Tahap 2 untuk mengubah intersep dan gradien. Grafik serta perbandingan residu mengikuti garis tersebut.</li>
-<li><strong>Apa yang Diamati:</strong> Perhatikan panjang segmen garis oranye vertikal (residu <em>e</em>) dan luas kotak kuadrat residu (<em>e²</em>) pada grafik.</li>
-<li><strong>Perbandingan Model:</strong> Amati perubahan nilai <strong>Σe</strong> dan <strong>Σe²</strong> pada tabel di bawah setiap kali Anda menggeser garis.</li>
-<li><strong>Pertanyaan Kritis:</strong> Garis mana yang menurut Anda paling sesuai dengan sebaran titik? Apakah ada posisi garis eksplorasi yang menghasilkan Σe² lebih kecil dari garis regresi (merah)? Mengapa demikian?</li>
+<li>Gunakan hanya slider intersep (<em>a</em>) dan gradien (<em>b</em>) pada Tahap 2 untuk mengubah garis dugaan.</li>
+<li>Amati posisi dan kemiringan garis terhadap kumpulan titik data. Pada tahap eksplorasi ini, grafik hanya menampilkan garis dugaan siswa.</li>
+<li>Belum ada perhitungan residu atau kuadrat residu. Perhitungan dan perbandingan garis baru dibuka setelah verifikasi Tahap 4.</li>
 </ul>
 </div>
 <!-- Tombol cepat untuk eksplorasi garis -->
@@ -364,7 +363,7 @@
 <span class="text-sm font-bold block mt-1 font-mono" id="persamaanEksplorasi">Y = 0.0000X + 0.0000</span>
 </div>
 <!-- Panel Residu -->
-<div class="p-3 bg-orange-50/70 rounded-xl border border-orange-200 space-y-3" id="residualPanel">
+<div class="hidden p-3 bg-orange-50/70 rounded-xl border border-orange-200 space-y-3" id="residualPanel">
 <h4 class="text-xs font-bold text-orange-800 flex items-center gap-1.5">
 <span>📏</span> Residu: Selisih Titik Data terhadap Garis
                         </h4>
@@ -546,7 +545,14 @@
 <span>📝</span> Tahap 4 — Verifikasi Pengolahan Data Regresi Linear
             </h2>
 <span class="text-xs text-slate-500 font-medium">Bisa koma/titik, wajib setidaknya 2 angka di belakang koma</span>
-</div><div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+</div>
+<div id="stage4ComparisonGraphCard" class="hidden rounded-xl border border-emerald-200 bg-emerald-50/50 p-3 space-y-2">
+  <h3 class="font-bold text-sm text-emerald-950">📈 Perbandingan Garis Dugaan dan Garis Best Fit</h3>
+  <p class="text-xs text-slate-700">Grafik ini muncul setelah verifikasi Tahap 4 berhasil. Garis ungu menunjukkan dugaan siswa, sedangkan garis merah menunjukkan garis best fit hasil perhitungan regresi.</p>
+  <div id="stage4ComparisonGraph" class="w-full overflow-hidden rounded-lg border border-slate-200 bg-white" role="img" aria-label="Grafik perbandingan garis dugaan siswa dan garis best fit"></div>
+  <div class="flex flex-wrap gap-4 text-xs"><span class="text-violet-700 font-semibold">━ Garis dugaan siswa</span><span class="text-rose-700 font-semibold">━ Garis best fit hasil perhitungan</span><span class="text-blue-700 font-semibold">● Data</span></div>
+</div>
+<div class="bg-white p-4 md:p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
 <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
 <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">📊 Tabel Lengkap Perhitungan Regresi Linear</h2>
 <!-- Table Tools -->
@@ -1202,15 +1208,34 @@
       // Slider Tahap 2 menjadi satu-satunya kontrol; perbarui juga statistik residu.
       if (typeof updateResidualStats === 'function') updateResidualStats(b, a);
 
-      // Gambar garis dugaan di GeoGebra
+      // Perbarui parameter yang menjadi ketergantungan garis GeoGebra.
+      // Jangan hapus-buat ulang garis pada setiap input: garis terhubung ke
+      // mSlope dan cIntercept sehingga setValue akan memperbaruinya secara reaktif.
       if (ggbApi) {
         try {
-          ggbApi.setValue('mSlope', b);
-          ggbApi.setValue('cIntercept', a);
-        } catch (_) {}
+          const hasLine = typeof ggbApi.exists === 'function' && ggbApi.exists('GarisEksplorasi');
+          if (hasLine) {
+            ggbApi.setValue('mSlope', b);
+            ggbApi.setValue('cIntercept', a);
+          } else {
+            ggbApi.evalCommand(`mSlope = ${Number(b).toFixed(8)}`);
+            ggbApi.evalCommand(`cIntercept = ${Number(a).toFixed(8)}`);
+            ggbApi.evalCommand('GarisEksplorasi: y = mSlope * x + cIntercept');
+            ggbApi.setColor('GarisEksplorasi', 124, 58, 237);
+            ggbApi.setLineStyle('GarisEksplorasi', 1);
+            ggbApi.setLineThickness('GarisEksplorasi', 3);
+            ggbApi.setCaption('GarisEksplorasi', 'Garis Dugaan Siswa');
+            ggbApi.setLabelVisible('GarisEksplorasi', true);
+          }
+        } catch (err) {
+          console.error('Gagal memperbarui garis eksplorasi GeoGebra:', err);
+          const status = document.getElementById('submitStatus');
+          if (status) status.textContent = 'Grafik belum siap diperbarui. Coba muat ulang halaman.';
+        }
       }
 
       updateComparisonTable();
+      drawStage4ComparisonGraph();
       saveToLocalStorage();
     }
 
@@ -2398,18 +2423,63 @@
           ggbApi.setLabelVisible('GarisRegresi', true);
         }
 
-        residualPoints = points;
-        residualLine = math ? { a: math.a, b: math.b } : null;
-        try {
-          buildResidualObjects(points, math, view);
-        } catch (err) {
-          console.error('Gagal membuat objek residu:', err);
+        if (isVerified) {
+          residualPoints = points;
+          residualLine = math ? { a: math.a, b: math.b } : null;
+          const residualPanel = document.getElementById('residualPanel');
+          if (residualPanel) residualPanel.classList.remove('hidden');
+          try {
+            buildResidualObjects(points, math, view);
+          } catch (err) {
+            console.error('Gagal membuat objek residu:', err);
+            residualBuilt = false;
+          }
+          setupExplorationPanel(mVal, cVal, points);
+          applyResidualVisibility();
+        } else {
+          residualPoints = [];
+          residualLine = null;
           residualBuilt = false;
+          const residualPanel = document.getElementById('residualPanel');
+          if (residualPanel) residualPanel.classList.add('hidden');
+          hideExplorationPanel();
         }
-
-        setupExplorationPanel(mVal, cVal, points);
-        applyResidualVisibility();
+        drawStage4ComparisonGraph();
       }
+    }
+
+    function drawStage4ComparisonGraph() {
+      const card = document.getElementById('stage4ComparisonGraphCard');
+      const target = document.getElementById('stage4ComparisonGraph');
+      if (!card || !target) return;
+      const points = getRawDataPoints();
+      const isVerified = verifiedPointsSnapshot !== null && verifiedPointsSnapshot === JSON.stringify(points);
+      if (!isVerified || points.length < 2) {
+        card.classList.add('hidden');
+        target.innerHTML = '';
+        return;
+      }
+      const math = calculateMathFromData();
+      if (!math || math.isZeroVarX) { card.classList.add('hidden'); return; }
+      card.classList.remove('hidden');
+      const dug = getDugaanValues();
+      const W = 760, H = 340, L = 54, R = 20, T = 18, B = 42;
+      const xs = points.map(p => p.x), ys = points.map(p => p.y);
+      const xMin0 = Math.min(...xs), xMax0 = Math.max(...xs);
+      const yValues = ys.concat([dug.a + dug.b*xMin0, dug.a + dug.b*xMax0, math.a + math.b*xMin0, math.a + math.b*xMax0]);
+      const xPad = Math.max((xMax0-xMin0)*0.12, 1), yMin0 = Math.min(...yValues), yMax0 = Math.max(...yValues);
+      const yPad = Math.max((yMax0-yMin0)*0.12, 1);
+      const xMin=xMin0-xPad, xMax=xMax0+xPad, yMin=yMin0-yPad, yMax=yMax0+yPad;
+      const X=x=>L+(x-xMin)/(xMax-xMin)*(W-L-R);
+      const Y=y=>H-B-(y-yMin)/(yMax-yMin)*(H-T-B);
+      let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" style="display:block;max-height:420px" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Titik data dan dua garis regresi">`;
+      for(let i=0;i<=5;i++){ const gx=L+i*(W-L-R)/5, gy=T+i*(H-T-B)/5; const xv=xMin+i*(xMax-xMin)/5, yv=yMax0+yPad-i*(yMax-yMin)/5; svg += `<line x1="${gx}" y1="${T}" x2="${gx}" y2="${H-B}" stroke="#e2e8f0"/><line x1="${L}" y1="${gy}" x2="${W-R}" y2="${gy}" stroke="#e2e8f0"/><text x="${gx}" y="${H-15}" font-size="11" fill="#64748b" text-anchor="middle">${xv.toFixed(1)}</text><text x="${L-8}" y="${gy+4}" font-size="11" fill="#64748b" text-anchor="end">${yv.toFixed(1)}</text>`; }
+      svg += `<line x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}" stroke="#64748b"/><line x1="${L}" y1="${T}" x2="${L}" y2="${H-B}" stroke="#64748b"/>`;
+      svg += `<line x1="${X(xMin)}" y1="${Y(dug.a+dug.b*xMin)}" x2="${X(xMax)}" y2="${Y(dug.a+dug.b*xMax)}" stroke="#7c3aed" stroke-width="3" stroke-dasharray="8 5"/>`;
+      svg += `<line x1="${X(xMin)}" y1="${Y(math.a+math.b*xMin)}" x2="${X(xMax)}" y2="${Y(math.a+math.b*xMax)}" stroke="#e11d48" stroke-width="3"/>`;
+      points.forEach(p=>{svg += `<circle cx="${X(p.x)}" cy="${Y(p.y)}" r="5" fill="#2563eb" stroke="white" stroke-width="1.5"><title>(${p.x}, ${p.y})</title></circle>`;});
+      svg += `<text x="${(L+W-R)/2}" y="${H-2}" font-size="12" fill="#334155" text-anchor="middle">X</text><text x="15" y="${(T+H-B)/2}" font-size="12" fill="#334155" text-anchor="middle" transform="rotate(-90 15 ${(T+H-B)/2})">Y</text></svg>`;
+      target.innerHTML = svg;
     }
 
     function toggleMeanVisibility() {
@@ -2609,10 +2679,18 @@
     }
 
     function updateExplorationLabels(m, c) {
-      document.getElementById('mSliderVal').textContent = m.toFixed(4);
-      document.getElementById('cSliderVal').textContent = c.toFixed(4);
-      const sign = c >= 0 ? '+' : '−';
-      document.getElementById('persamaanEksplorasi').textContent = `Y = ${m.toFixed(4)}X ${sign} ${Math.abs(c).toFixed(4)}`;
+      // Elemen mSliderVal/cSliderVal berasal dari panel slider lama dan tidak
+      // ada pada tampilan Tahap 2. Gunakan pengecekan agar tidak memutus handler.
+      const mLabel = document.getElementById('mSliderVal');
+      const cLabel = document.getElementById('cSliderVal');
+      if (mLabel) mLabel.textContent = Number(m).toFixed(4);
+      if (cLabel) cLabel.textContent = Number(c).toFixed(4);
+
+      const equation = document.getElementById('persamaanEksplorasi');
+      if (equation) {
+        const sign = c >= 0 ? '+' : '−';
+        equation.textContent = `Y = ${Number(m).toFixed(4)}X ${sign} ${Math.abs(Number(c)).toFixed(4)}`;
+      }
     }
 
     function onExplorationSliderInput() {
