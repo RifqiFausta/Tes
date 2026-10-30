@@ -219,9 +219,6 @@
 <button class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-lg border border-white/20 transition-all flex items-center gap-1.5 shadow-sm" onclick="window.print()" title="Cetak atau simpan LKPD sebagai file PDF">
 <span>🖨️</span> Cetak / Simpan PDF
           </button>
-<button class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white text-xs font-semibold rounded-lg border border-white/20 transition-all flex items-center gap-1.5 shadow-sm" onclick="downloadHtmlBackup()" title="Unduh file salinan pengerjaan LKPD Anda">
-<span>💾</span> Unduh HTML
-          </button>
 </div>
 </div>
 </header>
@@ -262,11 +259,11 @@
 <span>🔄</span> Alur 5 Tahap Pembelajaran Matematika:
           </div>
 <ol class="list-decimal list-inside space-y-1 text-[11px]">
-<li>Tahap 1 — Mengisi Tabel Data: Masukkan pasangan X dan Y saja; gunakan data untuk eksplorasi pola sebelum perhitungan.</li>
-<li><strong>Tahap 2 — Eksplorasi Garis dan Dugaan:</strong> Gunakan slider untuk mengeksplorasi letak dan kemiringan garis, lalu tuliskan dugaan nilai parameter dan persamaan garis.</li>
-<li><strong>Tahap 3 — Hasil Pengamatan:</strong> Tuliskan hasil pengamatan terhadap pola data dan eksplorasi visual garis.</li>
-<li>Tahap 4 — Verifikasi: Gunakan tabel lengkap dan bantuan rumus untuk menghitung rata-rata, SSxx, SSxy, gradien, dan intersep.</li>
-<li><strong>Tahap 5 — Evaluasi dan Kesimpulan:</strong> Bandingkan garis dugaan dengan garis regresi, evaluasi jumlah kuadrat residu, lalu tuliskan kesimpulan berdasarkan hasil kegiatan.</li>
+<li><strong>Tahap 1 </strong>Mengisi Tabel Data: Masukkan pasangan X dan Y saja; gunakan data untuk eksplorasi pola sebelum perhitungan.</li>
+<li><strong>Tahap 2 </strong>Eksplorasi Garis dan Dugaan: Gunakan slider untuk mengeksplorasi letak dan kemiringan garis, lalu tuliskan dugaan nilai parameter dan persamaan garis.</li>
+<li><strong>Tahap 3</strong> Hasil Pengamatan: Tuliskan hasil pengamatan terhadap pola data dan eksplorasi visual garis.</li>
+<li><strong>Tahap 4</strong>Verifikasi: Gunakan tabel lengkap dan bantuan rumus untuk menghitung rata-rata, SSxx, SSxy, gradien, dan intersep.</li>
+<li><strong>Tahap 5</strong>Evaluasi dan Kesimpulan: Bandingkan garis dugaan dengan garis regresi, evaluasi jumlah kuadrat residu, lalu tuliskan kesimpulan berdasarkan hasil kegiatan.</li>
 </ol>
 </div>
 <div class="bg-white/10 p-3 rounded-xl border border-white/10 space-y-1.5">
@@ -274,11 +271,11 @@
 <span>🎨</span> Panduan Warna Tabel &amp; Tips Praktis:
           </div>
 <ul class="space-y-1 text-[11px]">
-<li>Kolom putih (A–C) pada tabel lengkap Tahap 4 memuat nomor/keterangan serta data X dan Y.</li>
-<li>Kolom biru muda (D–G) pada tabel lengkap Tahap 4 digunakan untuk deviasi dan perhitungan SSxx serta SSxy.</li>
-<li>Kolom oranye (H–J) pada tabel lengkap Tahap 4 memuat nilai prediksi, residu, dan kuadrat residu setelah verifikasi.</li>
+<li><strong>Kolom putih (A–C)</strong> pada tabel lengkap Tahap 4 memuat nomor/keterangan serta data X dan Y.</li>
+<li><strong>Kolom biru muda (D–G)</strong> pada tabel lengkap Tahap 4 digunakan untuk deviasi dan perhitungan SSxx serta SSxy.</li>
+<li><strong>Kolom oranye (H–J) </strong> pada tabel lengkap Tahap 4 memuat nilai prediksi, residu, dan kuadrat residu setelah verifikasi.</li>
 <li><span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 mr-1.5 align-middle"></span><strong>Salin Rumus Cepat:</strong> Tarik kotak biru (<em>fill handle</em>) ke bawah atau tekan tombol <strong>"📋 Salin Rumus ke Bawah"</strong> (sangat praktis di HP / layar sentuh).</li>
-<li><span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 mr-1.5 align-middle"></span><strong>Autosave &amp; Cadangan:</strong> Pengerjaan Anda otomatis tersimpan di browser. Anda juga bisa mengunduh file HTML kapan pun secara offline.</li>
+<li><span class="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 mr-1.5 align-middle"></span><strong>Autosave:</strong> Pengerjaan Anda otomatis tersimpan di browser yang sedang digunakan.</li>
 </ul>
 </div>
 </div>
@@ -302,7 +299,7 @@
 </table>
 </div>
 <div class="flex justify-end mt-2 no-print"><button type="button" onclick="addStage1Row()" class="px-3 py-2 rounded-lg border border-blue-300 bg-blue-50 hover:bg-blue-100 text-blue-800 text-xs font-bold">+ Tambah baris</button></div>
-<p class="text-[11px] text-slate-500">Catatan: tabel ini hanya untuk memasukkan data. Rumus, deviasi, SSxx, SSxy, dan koefisien regresi tersedia pada tabel lengkap di Tahap 4.</p>
+<p class="text-[11px] text-slate-500"><strong>Catatan:</strong> tabel ini hanya untuk memasukkan data. Rumus, deviasi, SSxx, SSxy, dan koefisien regresi tersedia pada tabel lengkap di Tahap 4.</p>
 </div>
 
 <!-- SPREADSHEET CARD -->
@@ -554,6 +551,9 @@
 <h2 class="text-base md:text-lg font-bold text-blue-900 flex items-center gap-2">📊 Tabel Lengkap Perhitungan Regresi Linear</h2>
 <!-- Table Tools -->
 <div class="flex flex-wrap items-center gap-1.5 no-print">
+<div class="inline-flex rounded-lg shadow-2xs border border-blue-200 bg-blue-50/70 p-0.5">
+
+</div>
 <button class="px-2.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-semibold rounded-lg transition-colors border border-blue-200 flex items-center gap-1 shadow-2xs" onclick="quickFillDown()" title="Salin rumus dari sel terpilih ke seluruh baris di bawahnya (sangat praktis di HP / layar sentuh)" type="button">
 <span>📋</span> Salin Rumus ke Bawah
               </button>
@@ -642,17 +642,16 @@
 <div class="font-bold text-blue-900 flex items-center gap-1.5 text-xs">
 <span class="text-blue-600 font-black">∑</span> 1. Nilai Rata-rata (x̄ dan ȳ)
                 </div>
-<div class="font-mono text-blue-800 bg-blue-50 border border-blue-200 px-2 py-1 rounded text-xs font-bold">=AVERAGE(B1:B6)  |  =AVERAGE(C1:C6)</div>
+<div class="font-mono text-blue-800 bg-blue-50 border border-blue-200 px-2 py-1 rounded text-xs font-bold">=AVERAGE(B1:B6)  |  =AVERAGE(C1:C6)</div>
 <p class="text-[11px] text-slate-600 leading-snug">
-                  Tuliskan di baris <strong>Rata-rata</strong> kolom B untuk nilai <strong>x̄</strong> dan kolom C untuk nilai <strong>ȳ</strong>. 
-                </p>
+                  Tuliskan di baris <strong>Rata-rata</strong> kolom B untuk nilai <strong>x̄</strong> dan kolom C untuk nilai <strong>ȳ</strong>.   </p>
 </div>
 <!-- Card 2: Deviasi -->
 <div class="bg-white p-3 rounded-xl border border-blue-200/80 shadow-2xs space-y-1.5 hover:border-emerald-400 transition-colors">
 <div class="font-bold text-blue-900 flex items-center gap-1.5 text-xs">
 <span class="text-emerald-600 font-black">Δ</span> 2. Selisih Deviasi (X − x̄) &amp; (Y − ȳ)
                 </div>
-<div class="font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-xs font-bold">=B1-$B$7  |  =C1-$C$7</div>
+<div class="font-mono text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded text-xs font-bold">=B1-$B$7  |  =C1-$C$7</div>
 <p class="text-[11px] text-slate-600 leading-snug">
                   Isi di kolom <strong>D</strong> untuk deviasi X dan kolom <strong>E</strong> untuk deviasi Y. Simbol <code>$</code> digunakan agar baris rata-rata terkunci saat rumus disalin ke bawah.
                 </p>
@@ -662,9 +661,9 @@
 <div class="font-bold text-blue-900 flex items-center gap-1.5 text-xs">
 <span class="text-purple-600 font-black">²</span> 3. Kuadrat Deviasi (X − x̄)² (SSxx)
                 </div>
-<div class="font-mono text-purple-800 bg-purple-50 border border-purple-200 px-2 py-1 rounded text-xs font-bold">=D1^2  |  Total: =SUM(F1:F6)</div>
+<div class="font-mono text-purple-800 bg-purple-50 border border-purple-200 px-2 py-1 rounded text-xs font-bold">=D1^2  |  Total: =SUM(F1:F6)</div>
 <p class="text-[11px] text-slate-600 leading-snug">
-                  Isi di kolom <strong>F</strong> untuk mengkuadratkan deviasi X. Jumlahkan seluruh hasilnya pada baris Total untuk memperoleh nilai <strong>SS<sub>xx</sub></strong> (variansi total X).
+                  Isi di kolom <strong>F</strong> untuk menghtung kuadrat deviasi X. Jumlahkan seluruh hasilnya pada baris Total untuk memperoleh nilai <strong>SS<sub>xx</sub></strong> (variansi total X).
                 </p>
 </div>
 <!-- Card 4: Perkalian Deviasi -->
@@ -672,9 +671,9 @@
 <div class="font-bold text-blue-900 flex items-center gap-1.5 text-xs">
 <span class="text-indigo-600 font-black">✕</span> 4. Perkalian Deviasi (SSxy)
                 </div>
-<div class="font-mono text-indigo-800 bg-indigo-50 border border-indigo-200 px-2 py-1 rounded text-xs font-bold">=D1*E1  |  Total: =SUM(G1:G6)</div>
+<div class="font-mono text-indigo-800 bg-indigo-50 border border-indigo-200 px-2 py-1 rounded text-xs font-bold">=D1*E1  |  Total: =SUM(G1:G6)</div>
 <p class="text-[11px] text-slate-600 leading-snug">
-                  Isi di kolom <strong>G</strong> untuk mengalikan deviasi X dengan deviasi Y. Jumlahkan seluruh hasilnya pada baris Total untuk memperoleh nilai <strong>SS<sub>xy</sub></strong> (kovariansi total X dan Y).
+                  Isi di kolom <strong>G</strong> untuk menghitung hasil kali deviasi X dan deviasi Y pada setiap baris. Jumlahkan seluruh hasilnya pada baris Total untuk memperoleh nilai <strong>SS<sub>xy</sub></strong> (kovariansi total X dan Y).
                 </p>
 </div>
 <!-- Card 5: Koefisien Regresi OLS -->
@@ -839,7 +838,7 @@
 <tr class="bg-amber-50/40">
 <td class="px-3 py-2 font-bold text-amber-950" title="Jumlah Kuadrat Residu (Sum of Squared Errors)">Σe² (Jumlah Kuadrat Residu)</td>
 <td class="px-3 py-2 text-center font-mono font-extrabold text-violet-800" id="cmpSumE2Exp">0.0000</td>
-<td class="px-3 py-2 text-center font-mono font-extrabold text-rose-700" id="cmpSumE2Reg">0.0000 (MINIMUM)</td>
+<td class="px-3 py-2 text-center font-mono font-extrabold text-rose-700" id="cmpSumE2Reg">—</td>
 <td class="px-3 py-2 text-center font-mono font-bold text-rose-600" id="cmpDiffE2">+0.0000</td>
 </tr>
 </tbody>
@@ -848,31 +847,23 @@
 <!-- Jembatan Konseptual: Mengapa Kuadrat Terkecil? -->
 <div class="bg-slate-50 border-l-4 border-orange-500 p-3.5 rounded-r-xl border border-slate-200 space-y-2">
 <div class="font-bold text-blue-950 text-xs md:text-sm flex items-center gap-1.5">
-<span>💡</span> Prinsip Kuadrat Terkecil: Mengapa Garis Terbaik Bukan Sekadar Kedekatan Visual?
-            </div>
-<p class="text-xs text-slate-700 leading-relaxed">
-              Jika hanya mengandalkan perkiraan mata, setiap orang bisa memiliki garis dugaan yang berbeda dan subjektif.
-            </p>
+
 <div class="flex flex-wrap gap-2 pt-1 no-print">
 <button class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold rounded-lg border border-blue-200 transition-colors flex items-center gap-1" onclick="setExplorationToRegression()" type="button">
-<span>🎯</span> Samakan Garis Dugaan ke Garis Regresi
+<span>🎯</span> Samakah Garis Dugaan dengan Garis Regresimu?
               </button>
-
+<div class="space-y-1">
+<label class="block text-xs font-bold text-slate-800" for="evaluasi1">
+             Berdasarkan Tahap 5, Manakah yang memiliki jumlah kuadrat residu terkecil? Garis Dugaanmu atau Garis Regresimu?
+              </label>
+<textarea class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" id="evaluasi1" placeholder=" "2"></textarea>
+</div>
+<label class="block text-xs font-bold text-slate-800" for="evaluasi1">
+             Apa hubungan jumlah kuadrat residu dengan grafik yang tergambar pada tahap-tahap sebelumnya?
+              </label>
+<textarea class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" id="evaluasi1" placeholder=" kaitkan dengan jarak antar titik pasangan data dengan garis "2"></textarea>
 </div>
 </div>
-<!-- Rangkuman Konsep Residu & Kuadrat Terkecil -->
-<div class="bg-blue-50/80 border border-blue-200 rounded-xl p-3.5 text-xs text-blue-900 space-y-2" id="conceptSummary">
-<div class="font-bold flex items-center gap-1.5 text-blue-950">
-<span>📌</span> Rangkuman Prinsip Kuadrat Terkecil (Ordinary Least Squares):
-            </div>
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] pt-1">
-<div class="bg-white p-2.5 rounded-lg border border-blue-100">
-<span class="font-bold text-slate-700">Rumus Residu Tiap Titik:</span>
-<span class="block text-center text-xs font-bold font-mono py-1 text-blue-800"><em>e<sub>i</sub> = y<sub>i</sub> − ŷ<sub>i</sub></em></span>
-</div>
-<div class="bg-white p-2.5 rounded-lg border border-blue-100">
-<span class="font-bold text-slate-700">Kriteria Garis Terbaik:</span>
-<span class="block text-center text-xs font-bold font-mono py-1 text-rose-700">Σe² → MINIMUM GLOBAL</span>
 </div>
 </div>
 </div>
@@ -894,7 +885,7 @@
 <label class="block text-xs font-bold text-slate-800" for="evaluasi3">
                 3. Mengapa kita perlu mengkuadratkan nilai residu (e²) alih-alih hanya menjumlahkan residu biasa (Σe)? Amati apa yang terjadi pada nilai Σe saat menguji Garis Datar (b = 0, a = ȳ)!
               </label>
-<textarea class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" id="evaluasi3" placeholder="Jelaskan mengapa residu positif dan negatif saling meniadakan jika tidak dikuadratkan..." rows="2"></textarea>
+<textarea class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all" id="evaluasi3" placeholder="kaitkan dengan jumlah bila residu positif dan negatif" rows="2"></textarea>
 </div>
 </div>
 </div>
@@ -912,40 +903,50 @@
 </div>
 <div class="space-y-1.5">
 <label class="block text-xs font-bold text-emerald-950" for="conclusionText">
-          Apa kesimpulan Anda tentang hubungan X dan Y serta alasan garis regresi disebut garis terbaik?
+          Bagaimana hubungan persamaan garis regresi (best fit) dengan jumlah kuadrat residu dan titik rata-rata?
         </label>
-<textarea class="w-full border border-emerald-200 bg-white rounded-lg p-3 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" id="conclusionText" placeholder="Tuliskan kesimpulan berdasarkan arah pola data, persamaan garis regresi, dan perbandingan jumlah kuadrat residu (Σe²)..." rows="4"></textarea>
+<textarea class="w-full border border-emerald-200 bg-white rounded-lg p-3 text-xs focus:ring-2 focus:ring-emerald-500 focus:outline-none" id="conclusionText" placeholder="kaitkan dengan hasil pengamatan grafik dan jawaban atas pertanyaan pertanyaan sebelumnya..." rows="4"></textarea>
 </div>
-<!-- REFLEKSI: ditampilkan setelah siswa menekan tombol Lanjut Refleksi -->
-<div class="pt-4 border-t border-slate-200 space-y-4" id="reflectionGate">
-  <div class="flex flex-wrap items-center justify-between gap-3">
-    <div>
-      <h3 class="text-base font-extrabold text-indigo-900">🧠 Mari Refleksi!</h3>
-      <p class="text-xs text-slate-600 mt-1">Jawablah pertanyaan refleksi (Assessment as Learning) untuk mengevaluasi pemahaman tentang regresi linear dan residu.</p>
+<div class="pt-4 border-t border-slate-200">
+  <button type="button" onclick="showReflectionSection()" class="px-5 py-3 bg-indigo-700 hover:bg-indigo-800 text-white text-sm font-bold rounded-xl shadow-md transition-all flex items-center gap-2">
+    <span>🧠</span> Selesai Mengerjakan — Lanjut Refleksi
+  </button>
+  <p class="text-xs text-slate-500 mt-2">Setelah menyelesaikan kesimpulan, tekan tombol ini untuk membuka refleksi akhir.</p>
+</div>
+</section>
+
+<!-- REFLEKSI AKHIR: DIBUKA SETELAH MURID MENYELESAIKAN LKPD -->
+<section id="reflectionSection" class="hidden bg-white p-5 md:p-6 rounded-2xl border border-indigo-200 shadow-md space-y-5 mt-5">
+  <div class="border-b border-indigo-100 pb-3">
+    <h2 class="text-lg md:text-xl font-extrabold text-indigo-900 flex items-center gap-2"><span>🧠</span> Mari Refleksi!</h2>
+    <p class="text-xs text-slate-600 mt-1">Jawablah pertanyaan berikut untuk mengevaluasi pemahamanmu tentang regresi linear dan residu.</p>
+  </div>
+  <div class="space-y-4">
+    <div class="space-y-1.5">
+      <label for="aal1" class="block text-xs font-bold text-slate-800">1. Apa hubungan titik rata-rata (x̄, ȳ) dengan garis regresi? Apakah garis regresi selalu melewati titik rata-rata tersebut?</label>
+      <textarea id="aal1" rows="3" placeholder="Tuliskan pemahamanmu di sini..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
     </div>
-    <button class="px-5 py-2.5 bg-indigo-700 hover:bg-indigo-800 text-white text-sm font-bold rounded-xl shadow-sm" id="showReflectionBtn" onclick="showReflection()" type="button">Lanjut refleksi →</button>
+    <div class="space-y-1.5">
+      <label for="aal2" class="block text-xs font-bold text-slate-800">2. Apa yang kamu pelajari saat mengubah kemiringan (b) dan intersep (a) garis pada simulasi?</label>
+      <textarea id="aal2" rows="3" placeholder="Tuliskan hasil eksplorasimu..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+    </div>
+    <div class="space-y-1.5">
+      <label for="aal3" class="block text-xs font-bold text-slate-800">3. Mengapa garis regresi menghasilkan jumlah kuadrat residu (Σe²) minimum? Jelaskan berdasarkan hasil pengamatanmu.</label>
+      <textarea id="aal3" rows="3" placeholder="Jelaskan berdasarkan hasil pengamatan..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+    </div>
+    <div class="space-y-1.5">
+      <label for="aal4" class="block text-xs font-bold text-slate-800">4. Bagian mana dari kegiatan spreadsheet atau simulasi yang paling membantumu memahami regresi linear? Mengapa?</label>
+      <textarea id="aal4" rows="3" placeholder="Tuliskan bagian yang paling membantu..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+    </div>
+    <div class="space-y-1.5">
+      <label for="aal5" class="block text-xs font-bold text-slate-800">5. Apa yang masih belum kamu pahami atau bagian mana yang masih membuatmu kesulitan?</label>
+      <textarea id="aal5" rows="3" placeholder="Tuliskan hal yang masih membingungkan..." class="w-full border border-slate-300 rounded-lg p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none"></textarea>
+    </div>
   </div>
-  <div class="hidden space-y-5" id="reflectionSection">
-    <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-800" for="reflection1">1. Apa yang kalian pahami tentang hubungan antara titik rata-rata (x̄, ȳ) dan garis regresi? Apakah garis regresi selalu melewati titik rata-rata tersebut?</label><textarea class="reflection-answer w-full border border-slate-300 rounded-lg p-3 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none" id="reflection1" placeholder="Tuliskan pemahamanmu di sini..." rows="3"></textarea></div>
-    <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-800" for="reflection2">2. Apa yang kalian pelajari dari kegiatan mengubah-ubah posisi kemiringan (m) dan letak (c) garis pada simulasi slider?</label><textarea class="reflection-answer w-full border border-slate-300 rounded-lg p-3 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none" id="reflection2" placeholder="Tuliskan pengalaman eksplorasimu di sini..." rows="3"></textarea></div>
-    <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-800" for="reflection3">3. Mengapa garis regresi dikatakan sebagai garis yang menghasilkan jumlah kuadrat residu paling kecil (Σe² → minimum)? Jelaskan berdasarkan hasil eksperimen residu kalian.</label><textarea class="reflection-answer w-full border border-slate-300 rounded-lg p-3 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none" id="reflection3" placeholder="Jelaskan alasanmu berdasarkan eksperimen residu..." rows="3"></textarea></div>
-    <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-800" for="reflection4">4. Bagian mana dari kegiatan pada spreadsheet atau simulasi GeoGebra yang paling membantu kalian memahami konsep regresi linear?</label><textarea class="reflection-answer w-full border border-slate-300 rounded-lg p-3 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none" id="reflection4" placeholder="Tuliskan bagian yang paling membantu di sini..." rows="3"></textarea></div>
-    <div class="space-y-1.5"><label class="block text-xs font-bold text-slate-800" for="reflection5">5. Apa yang masih belum kalian pahami atau bagian mana yang masih membuat kalian kesulitan dalam menentukan garis regresi linear?</label><textarea class="reflection-answer w-full border border-slate-300 rounded-lg p-3 text-xs focus:ring-2 focus:ring-indigo-500 focus:outline-none" id="reflection5" placeholder="Tuliskan hal yang masih membingungkan di sini..." rows="3"></textarea></div>
-    <p class="text-xs font-semibold text-amber-700" id="reflectionStatus" aria-live="polite">Isi semua jawaban refleksi untuk membuka tombol pengumpulan dan penyimpanan.</p>
+  <div class="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+    <button class="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white text-sm font-bold rounded-xl shadow-md transition-all flex items-center gap-2" id="submitLkpdBtn" onclick="submitLKPD()" type="button"><span>🚀</span> Submit LKPD (Google Drive)</button>
+    <span aria-live="polite" class="text-xs font-semibold text-slate-600" id="submitStatus" role="status"></span>
   </div>
-</div>
-<!-- PENGUMPULAN LKPD: baru tersedia setelah semua refleksi diisi -->
-<div class="hidden pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3" id="submissionActions" style="display:none;">
-<div class="flex flex-wrap items-center gap-3">
-<button class="px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white text-sm font-bold rounded-xl shadow-md transition-all flex items-center gap-2" id="submitLkpdBtn" onclick="submitLKPD()" type="button">
-<span>🚀</span> Submit LKPD (Google Drive)
-          </button>
-<button class="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-300 transition-all flex items-center gap-1.5" onclick="downloadHtmlBackup()" type="button">
-<span>💾</span> Unduh Cadangan Jawaban (.html)
-          </button>
-</div>
-<span aria-live="polite" class="text-xs font-semibold text-slate-600" id="submitStatus" role="status"></span>
-</div>
 </section>
 </div>
 <script>
@@ -967,6 +968,29 @@
       if (!key || key === 'empty') {
         initEmptySpreadsheet(6);
         return;
+      }
+
+      let presetPoints = [];
+      if (key === 'positive') {
+        // Contoh 1: Waktu Belajar (jam) vs Nilai Ujian (skala 100)
+        presetPoints = [
+          { x: 1.5, y: 60 },
+          { x: 2.5, y: 68 },
+          { x: 3.0, y: 75 },
+          { x: 4.0, y: 82 },
+          { x: 5.0, y: 88 },
+          { x: 6.0, y: 95 }
+        ];
+      } else if (key === 'negative') {
+        // Contoh 2: Usia Kendaraan (tahun) vs Harga Jual (juta rupiah)
+        presetPoints = [
+          { x: 1, y: 195 },
+          { x: 2, y: 175 },
+          { x: 3, y: 160 },
+          { x: 4, y: 140 },
+          { x: 5, y: 125 },
+          { x: 6, y: 110 }
+        ];
       }
 
       const count = presetPoints.length;
@@ -1016,35 +1040,64 @@
 
     
 
-    function showReflection() {
+    function showReflectionSection() {
       const section = document.getElementById('reflectionSection');
-      const button = document.getElementById('showReflectionBtn');
-      if (section) section.classList.remove('hidden');
-      if (button) button.classList.add('hidden');
-      updateReflectionGate();
-      const first = document.getElementById('reflection1');
-      if (first) first.focus();
-    }
+      if (!section) return;
 
-    function updateReflectionGate() {
-      const answers = Array.from(document.querySelectorAll('.reflection-answer'));
-      const allFilled = answers.length === 5 && answers.every(el => el.value.trim().length > 0);
-      const actions = document.getElementById('submissionActions');
-      const status = document.getElementById('reflectionStatus');
-      if (actions) actions.style.display = allFilled ? 'flex' : 'none';
-      if (status) {
-        status.textContent = allFilled
-          ? 'Semua refleksi sudah terisi. Sekarang kamu bisa mengumpulkan LKPD atau mengunduh salinan jawaban.'
-          : `Refleksi terisi: ${answers.filter(el => el.value.trim()).length} dari 5. Isi semua jawaban untuk membuka tombol pengumpulan dan penyimpanan.`;
-        status.className = allFilled ? 'text-xs font-semibold text-emerald-700' : 'text-xs font-semibold text-amber-700';
+      // Pastikan data X dan Y sudah diisi pada minimal dua pasangan data.
+      const dataRows = Object.keys(rawData || {})
+        .filter(key => /^B\d+$/.test(key))
+        .map(key => key.match(/^B(\d+)$/)[1])
+        .filter(row => {
+          const x = Number(rawData['B' + row]);
+          const y = Number(rawData['C' + row]);
+          return String(rawData['B' + row] ?? '').trim() !== '' &&
+                 String(rawData['C' + row] ?? '').trim() !== '' &&
+                 Number.isFinite(x) && Number.isFinite(y);
+        });
+      if (dataRows.length < 2) {
+        alert('Masukkan minimal dua pasangan data X dan Y pada spreadsheet sebelum membuka refleksi.');
+        const spreadsheet = document.getElementById('spreadsheetContainer') || document.getElementById('spreadsheet');
+        if (spreadsheet) spreadsheet.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
       }
-      if (typeof saveToLocalStorage === 'function') saveToLocalStorage();
-    }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      document.querySelectorAll('.reflection-answer').forEach(el => el.addEventListener('input', updateReflectionGate));
-      updateReflectionGate();
-    });
+      // Jangan buka refleksi jika aktivitas LKPD yang sedang terlihat masih kosong.
+      // Kolom refleksi akhir sendiri dikecualikan dari pemeriksaan.
+      const unfinished = Array.from(document.querySelectorAll('textarea'))
+        .filter(el => !section.contains(el))
+        .filter(el => el.getClientRects().length > 0)
+        .filter(el => !el.value.trim());
+
+      if (unfinished.length > 0) {
+        const first = unfinished[0];
+        const label = first.id
+          ? document.querySelector(`label[for="${first.id}"]`)
+          : null;
+
+        alert(
+          'Refleksi belum bisa dibuka karena masih ada bagian LKPD yang belum diisi.' +
+          (label ? '\\n\\nBagian yang perlu dilengkapi: ' + label.innerText.trim() : '') +
+          '\\n\\nLengkapi bagian yang masih kosong, lalu tekan tombol ini kembali.'
+        );
+        first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        first.focus();
+        return;
+      }
+
+      // Pastikan kesimpulan akhir juga terisi sebelum refleksi dibuka.
+      const conclusion = document.getElementById('conclusionText');
+      if (conclusion && !conclusion.value.trim()) {
+        alert('Tuliskan Kesimpulan Akhir terlebih dahulu sebelum membuka refleksi.');
+        conclusion.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        conclusion.focus();
+        return;
+      }
+
+      section.classList.remove('hidden');
+      saveToLocalStorage();
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
 
     async function submitLKPD() {
       const name = document.getElementById('studentName');
@@ -1118,12 +1171,7 @@
           <div class="text-slate-600">
             Data pengerjaan telah dikirimkan ke server. Namun, karena pembatasan keamanan lintas domain (CORS) browser pada mode <em>no-cors</em>, respons server berstatus <em>opaque</em> sehingga keberhasilan penyimpanan di Google Drive tidak dapat dikonfirmasi 100% oleh peramban.
           </div>
-          <div class="pt-1">
-            <strong class="text-indigo-900">Penting:</strong> Harap unduh cadangan file jawaban dengan mengeklik 
-            <a href="javascript:downloadHtmlBackup()" class="inline-flex items-center gap-1 font-bold text-indigo-700 underline hover:text-indigo-900">
-              💾 Unduh Cadangan Jawaban (.html)
-            </a> untuk bukti pengerjaan Anda.
-          </div>
+          <div class="pt-1 text-slate-600">Jika status penyimpanan belum dapat dipastikan, periksa kembali hasil pengumpulan melalui guru pengajar.</div>
         `;
       } catch (error) {
         console.error('Error Submit:', error);
@@ -1132,39 +1180,11 @@
         status.className = 'text-xs font-semibold text-rose-600 bg-rose-50 border border-rose-200 p-3 rounded-xl leading-relaxed';
         status.innerHTML = `
           ❌ <strong>Gagal terhubung ke Google Apps Script:</strong> ${error.message || 'Koneksi jaringan terputus atau URL tidak dapat diakses'}.<br>
-          Silakan <a href="javascript:downloadHtmlBackup()" class="underline font-bold text-rose-800">Unduh Cadangan File HTML</a> sekarang dan kirimkan langsung file tersebut kepada guru pengajar.
+          Periksa koneksi internet, lalu coba kirim kembali LKPD Anda.
         `;
       }
     }
 
-    function downloadHtmlBackup() {
-      document.querySelectorAll('input').forEach(input => {
-        if (input.type === 'checkbox' || input.type === 'radio') {
-          if (input.checked) input.setAttribute('checked', 'checked');
-          else input.removeAttribute('checked');
-        } else {
-          input.setAttribute('value', input.value);
-        }
-      });
-
-      document.querySelectorAll('textarea').forEach(textarea => {
-        textarea.textContent = textarea.value;
-      });
-
-      const name = (document.getElementById('studentName').value.trim() || 'Murid').replace(/\s+/g, '_');
-      const cls = (document.getElementById('studentClass').value.trim() || 'Kelas').replace(/\s+/g, '_');
-      const filename = `LKPD_Regresi_${name}_${cls}.html`;
-
-      const fullHtml = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
-      const blob = new Blob([fullHtml], { type: 'text/html;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = filename;
-      link.click();
-      URL.revokeObjectURL(link.href);
-    }
-
-    
     /* =========================================================================
      * SINKRONISASI DUA ARAH: SLIDER DUGAAN, FORMULIR, & TABEL PERBANDINGAN
      * ========================================================================= */
@@ -1387,7 +1407,7 @@
         const cellSumEReg = document.getElementById('cmpSumEReg');
         if (cellSumEReg) cellSumEReg.textContent = fmt4(sumEReg) + ' (≈ 0)';
         const cellSumE2Reg = document.getElementById('cmpSumE2Reg');
-        if (cellSumE2Reg) cellSumE2Reg.textContent = fmt4(sumE2Reg) + ' (MINIMUM)';
+        if (cellSumE2Reg) cellSumE2Reg.textContent = fmt4(sumE2Reg) + (math.n >= 2 && !math.isZeroVarX ? ' (MINIMUM)' : '');
 
         const diffE2 = Math.max(0, sumE2Exp - sumE2Reg);
         const cellDiffE2 = document.getElementById('cmpDiffE2');
@@ -3224,7 +3244,7 @@
     const STORAGE_KEY = 'lkpd_regresi_digital_v4';
 
     function setupAutoSaveListeners() {
-      ['studentName', 'studentNumber', 'studentClass', 'dugaanA', 'dugaanB', 'dugaanPersamaan', 'dugaanAlasan', 'dugaanPola', 'dugaanBentuk', 'dugaanKriteria', 'evaluasi1', 'evaluasi2', 'evaluasi3', 'refleksiSlider', 'conclusionText', 'reflection1', 'reflection2', 'reflection3', 'reflection4', 'reflection5'].forEach(id => {
+      ['studentName', 'studentNumber', 'studentClass', 'dugaanA', 'dugaanB', 'dugaanPersamaan', 'dugaanAlasan', 'dugaanPola', 'dugaanBentuk', 'dugaanKriteria', 'evaluasi1', 'evaluasi2', 'evaluasi3', 'refleksiSlider', 'conclusionText', 'aal1', 'aal2', 'aal3', 'aal4', 'aal5'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.addEventListener('input', saveToLocalStorage);
       });
@@ -3256,11 +3276,11 @@
           evaluasi3: document.getElementById('evaluasi3')?.value || '',
           refleksiSlider: document.getElementById('refleksiSlider')?.value || '',
           conclusionText: document.getElementById('conclusionText')?.value || '',
-          reflection1: document.getElementById('reflection1')?.value || '',
-          reflection2: document.getElementById('reflection2')?.value || '',
-          reflection3: document.getElementById('reflection3')?.value || '',
-          reflection4: document.getElementById('reflection4')?.value || '',
-          reflection5: document.getElementById('reflection5')?.value || '',
+          aal1: document.getElementById('aal1')?.value || '',
+          aal2: document.getElementById('aal2')?.value || '',
+          aal3: document.getElementById('aal3')?.value || '',
+          aal4: document.getElementById('aal4')?.value || '',
+          aal5: document.getElementById('aal5')?.value || '',
           verifiedPointsSnapshot
         };
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
@@ -3285,7 +3305,7 @@
         rawData = state.rawData || {};
         verifiedPointsSnapshot = state.verifiedPointsSnapshot || null;
 
-        ['studentName', 'studentNumber', 'studentClass', 'userXbar', 'userYbar', 'userSSxx', 'userSSxy', 'userB', 'userA', 'dugaanA', 'dugaanB', 'dugaanPersamaan', 'dugaanAlasan', 'dugaanPola', 'dugaanBentuk', 'dugaanKriteria', 'evaluasi1', 'evaluasi2', 'evaluasi3', 'refleksiSlider', 'conclusionText', 'reflection1', 'reflection2', 'reflection3', 'reflection4', 'reflection5'].forEach(id => {
+        ['studentName', 'studentNumber', 'studentClass', 'userXbar', 'userYbar', 'userSSxx', 'userSSxy', 'userB', 'userA', 'dugaanA', 'dugaanB', 'dugaanPersamaan', 'dugaanAlasan', 'dugaanPola', 'dugaanBentuk', 'dugaanKriteria', 'evaluasi1', 'evaluasi2', 'evaluasi3', 'refleksiSlider', 'conclusionText', 'aal1', 'aal2', 'aal3', 'aal4', 'aal5'].forEach(id => {
           const el = document.getElementById(id);
           if (el && state[id] !== undefined) el.value = state[id];
         });
@@ -3311,6 +3331,7 @@
         return false;
       }
     }
+
   </script>
 <div id="fill-toast">Rumus berhasil disalin ke seluruh baris data!</div>
 </body>
